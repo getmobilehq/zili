@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.48.1",
     "@zili/brand-tokens": "workspace:*",
     "@zili/shared-types": "workspace:*",
     "next": "^15.1.6",
