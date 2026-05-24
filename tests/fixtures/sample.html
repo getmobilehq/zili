@@ -73,8 +73,9 @@
     </div>
     <script>
       // Proves the sandbox allows scripts (allow-scripts) while CSP allows inline.
-      document.querySelector('.badge').textContent =
-        'Sprint 1 · sandboxed render · JS ran at ' + new Date().toISOString().slice(11, 19);
+      // Deterministic on purpose — no timestamps — so visual-regression diffs
+      // are stable.
+      document.querySelector('.badge').textContent = 'Sprint 1 · sandboxed render · JS ran';
     </script>
   </body>
 </html>

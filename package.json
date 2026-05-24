@@ -12,9 +12,12 @@
     "lint": "pnpm -r --if-present lint && prettier --check \"{apps,packages}/**/*.{ts,tsx,css}\"",
     "format": "prettier --write \"{apps,packages}/**/*.{ts,tsx,css}\"",
     "typecheck": "pnpm -r --if-present typecheck",
-    "test": "pnpm -r --if-present test"
+    "test": "pnpm -r --if-present test",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "prettier": "^3.3.3"
   }
 }
