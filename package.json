@@ -1,0 +1,19 @@
+{
+  "name": "zili",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.15.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @zili/web dev",
+    "build": "pnpm --filter @zili/web build",
+    "lint": "pnpm -r --if-present lint && prettier --check \"{apps,packages}/**/*.{ts,tsx,css}\"",
+    "format": "prettier --write \"{apps,packages}/**/*.{ts,tsx,css}\"",
+    "typecheck": "pnpm -r --if-present typecheck"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}
