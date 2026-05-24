@@ -1,1 +1,32 @@
-/* Brand tokens — populated in Commit 2 from docs/zili-brand.html. */
+/**
+ * Zili brand tokens — verbatim from docs/zili-brand.html :root.
+ * Single source of truth for palette, type, and spacing primitives.
+ * Do not invent values here; the brand canvas is authoritative.
+ */
+
+:root {
+  /* Paper & ink (warm achromatic base) */
+  --paper: #faf9f5;
+  --paper-deep: #f2f0e8;
+  --ink: #1a1815;
+  --ink-soft: #3a3733;
+
+  /* Warm-tinted gray scale (1 = lightest, 4 = darkest) */
+  --gray-1: #ece9e0;
+  --gray-2: #d6d2c7;
+  --gray-3: #a8a39a;
+  --gray-4: #6e6a62;
+
+  /* Amber — the single warm accent */
+  --amber: #d26b2c;
+  --amber-deep: #b25620;
+  --amber-tint: #f8e8d8;
+
+  /* Type families */
+  --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Responsive container gutter */
+  --gutter: clamp(24px, 5vw, 64px);
+}

@@ -1,3 +1,6 @@
+import '@zili/brand-tokens/tokens.css';
+import '../styles/globals.css';
+
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
