@@ -15,7 +15,7 @@ Zili is a platform for presenting and sharing LLM-generated HTML artifacts — t
 ## Start-of-session checklist (from AGENT.md)
 
 1. `docs/zili-claude-code-handoff.md` — skim §3 (rules of engagement), §4 (locked decisions), §7 (build sequence).
-2. `docs/sprints/sprint-N.md` — the current sprint brief, if one exists (only a template exists today).
+2. `docs/sprints/sprint-N.md` — the current sprint brief. **`docs/zili-sprint-plan.html` is the canonical source for the scope, tasks, points, DoD, and demo of *every* sprint — always read the relevant sprint card there; each `sprint-N.md` brief mirrors it and the plan wins on any conflict.** (`sprint-1.md` exists; later sprints get a brief when they start.)
 3. `LOOP.md` — most recent 2 entries (sprint memory).
 4. `SKILLS.md` — skim the SK-01…SK-15 index before reinventing any pattern.
 5. `git status` / `git log` — orient (note: not currently a git repo).
