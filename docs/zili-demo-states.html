@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zili — Demo flow states</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F5;
+    --paper-deep: #F2F0E8;
+    --ink: #1A1815;
+    --ink-soft: #3A3733;
+    --gray-1: #ECE9E0;
+    --gray-2: #D6D2C7;
+    --gray-3: #A8A39A;
+    --gray-4: #6E6A62;
+    --amber: #D26B2C;
+    --amber-deep: #B25620;
+    --amber-tint: #F8E8D8;
+    --green-ink: #4A6B3A;
+    --green-tint: #E6EDDE;
+    --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+    --gutter: clamp(20px, 5vw, 56px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: var(--font-ui);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .container { max-width: 1180px; margin: 0 auto; padding: var(--gutter); }
+
+  /* Meta */
+  .meta-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--gray-4);
+    padding-bottom: 48px; border-bottom: 1px solid var(--gray-1);
+  }
+  .meta-bar .dot {
+    display: inline-block; width: 6px; height: 6px;
+    background: var(--amber); border-radius: 50%;
+    margin-right: 8px; vertical-align: middle;
+  }
+
+  /* Hero */
+  .hero { padding: 64px 0 80px; border-bottom: 1px solid var(--gray-1); }
+  .hero h1 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.95; letter-spacing: -0.02em;
+  }
+  .hero h1 em { color: var(--amber); font-style: italic; }
+  .hero .tagline {
+    font-family: var(--font-display); font-style: italic;
+    font-size: clamp(18px, 2.2vw, 24px); color: var(--ink-soft);
+    margin-top: 20px; max-width: 720px;
+  }
+  .hero .statement {
+    margin-top: 40px; max-width: 720px; color: var(--ink-soft);
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .hero .statement { grid-template-columns: 120px 1fr; gap: 32px; align-items: start; }
+  }
+  .hero .statement .label {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.06em; text-transform: uppercase;
+    padding-top: 4px;
+  }
+
+  /* State sections */
+  section.state {
+    padding: 72px 0; border-bottom: 1px solid var(--gray-1);
+  }
+  section.state:last-of-type { border-bottom: none; }
+
+  .state-head {
+    display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 32px;
+  }
+  @media (min-width: 720px) {
+    .state-head { grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .state-head .label {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .state-head h2 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.01em; line-height: 1.05;
+  }
+  .state-head h2 em { color: var(--amber); font-style: italic; }
+  .state-head .desc {
+    grid-column: 1 / -1; max-width: 640px; color: var(--ink-soft);
+    font-size: 14px; margin-top: 8px;
+  }
+  @media (min-width: 720px) {
+    .state-head .desc { grid-column: 2 / -1; margin-top: 16px; }
+  }
+
+  /* Demo frame (matches marketing site) */
+  .demo-frame {
+    background: var(--paper);
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .demo-chrome {
+    background: var(--paper);
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--gray-1);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .demo-chrome .left {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.04em;
+  }
+  .demo-chrome .dots { display: flex; gap: 5px; }
+  .demo-chrome .dots span {
+    width: 9px; height: 9px; border-radius: 50%; background: var(--gray-2);
+  }
+  .demo-chrome .right {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.04em;
+  }
+  .demo-chrome .right .badge {
+    display: inline-block; padding: 2px 8px;
+    background: var(--amber-tint); color: var(--amber-deep);
+    border-radius: 3px; text-transform: uppercase;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+  }
+  .demo-chrome .right .badge.processing {
+    background: var(--gray-1); color: var(--gray-4);
+  }
+  .demo-chrome .right .badge.ready {
+    background: var(--green-tint); color: var(--green-ink);
+  }
+
+  /* ===== STATE 01 — LOADING ===== */
+  .loading-area {
+    padding: 64px 24px;
+    text-align: center;
+    background: var(--paper-deep);
+  }
+  .loading-display {
+    font-family: var(--font-display); font-style: italic;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.05; letter-spacing: -0.01em;
+    color: var(--ink); margin-bottom: 32px;
+  }
+  .loading-display em { color: var(--amber); }
+  .loading-display .cursor {
+    display: inline-block; width: 2px; height: 0.9em;
+    background: var(--amber); vertical-align: -0.1em;
+    margin-left: 2px; animation: blink 1.1s infinite;
+  }
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  .progress-bar {
+    max-width: 380px; margin: 0 auto;
+    height: 3px; background: var(--gray-1);
+    border-radius: 2px; overflow: hidden;
+    position: relative;
+  }
+  .progress-bar::after {
+    content: '';
+    position: absolute; top: 0; left: -30%;
+    width: 30%; height: 100%;
+    background: var(--amber);
+    animation: progress 2s ease-in-out infinite;
+  }
+  @keyframes progress {
+    0% { left: -30%; }
+    100% { left: 100%; }
+  }
+
+  .loading-steps {
+    margin-top: 36px;
+    display: flex; gap: 18px; justify-content: center;
+    flex-wrap: wrap;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .loading-steps .step {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .loading-steps .step .check {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid var(--gray-2); background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px;
+  }
+  .loading-steps .step.done .check {
+    background: var(--ink); border-color: var(--ink); color: var(--paper);
+  }
+  .loading-steps .step.done .check::after { content: '✓'; }
+  .loading-steps .step.active .check {
+    border-color: var(--amber);
+    position: relative;
+  }
+  .loading-steps .step.active .check::after {
+    content: ''; width: 6px; height: 6px;
+    background: var(--amber); border-radius: 50%;
+    animation: blink 1.1s infinite;
+  }
+  .loading-steps .step.done { color: var(--ink); }
+  .loading-steps .step.active { color: var(--amber-deep); }
+
+  /* ===== STATE 02 — SUCCESS / RENDERED ===== */
+  .rendered-area {
+    position: relative;
+    background: var(--paper-deep);
+    min-height: 480px;
+    padding: 0;
+  }
+
+  /* Mock rendered artifact — looks like a real LLM-generated slide */
+  .rendered-artifact {
+    aspect-ratio: 16/10;
+    background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+    color: #fff;
+    margin: 32px;
+    border-radius: 6px;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .rendered-artifact .header {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #94A3B8;
+    text-transform: uppercase;
+  }
+  .rendered-artifact .title {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    max-width: 70%;
+  }
+  .rendered-artifact .title .accent {
+    color: #FBBF24;
+  }
+  .rendered-artifact .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #94A3B8;
+  }
+  .rendered-artifact .footer .page {
+    color: #FBBF24;
+  }
+
+  /* Presenter chrome over the render */
+  .presenter-chrome {
+    background: rgba(26, 24, 21, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--paper);
+    margin: 0 32px 32px;
+    border-radius: 6px;
+    padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .presenter-chrome .pc-left {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--font-mono); font-size: 12px;
+  }
+  .presenter-chrome .pc-left .slash { color: var(--gray-3); }
+  .presenter-chrome .pc-left .total { color: var(--gray-3); }
+  .presenter-chrome .pc-title {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 15px; color: var(--gray-3);
+  }
+  .presenter-chrome .controls { display: flex; gap: 4px; }
+  .presenter-chrome .ctrl {
+    width: 28px; height: 28px; border-radius: 4px;
+    background: rgba(255,255,255,0.06); color: var(--paper);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 13px;
+  }
+  .presenter-chrome .ctrl:hover { background: rgba(255,255,255,0.12); }
+
+  /* Success banner above the rendered artifact */
+  .success-banner {
+    background: var(--ink); color: var(--paper);
+    padding: 16px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .success-banner .sb-left {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .success-banner .sb-check {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--amber); color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+  }
+  .success-banner .sb-text {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 18px;
+  }
+  .success-banner .sb-text em { color: var(--amber); }
+  .success-banner .sb-meta {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-3); letter-spacing: 0.04em;
+  }
+
+  /* ===== STATE 03 — SAVE PROMPT ===== */
+  .save-prompt-area {
+    background: var(--paper-deep);
+    padding: 0;
+    position: relative;
+  }
+
+  /* The rendered artifact stays visible but dimmed in background */
+  .save-prompt-area .rendered-artifact {
+    opacity: 0.35;
+    transform: scale(0.96);
+    transition: all 300ms ease-out;
+    pointer-events: none;
+  }
+  .save-prompt-area .presenter-chrome {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  /* The save modal floats over */
+  .save-modal {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--paper);
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    padding: 36px;
+    max-width: 460px;
+    width: calc(100% - 64px);
+    box-shadow: 0 8px 32px rgba(26, 24, 21, 0.16);
+    z-index: 10;
+  }
+  .save-modal .modal-meta {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .save-modal .modal-meta .dot {
+    display: inline-block; width: 5px; height: 5px;
+    background: var(--amber); border-radius: 50%;
+    margin-right: 8px; vertical-align: middle;
+  }
+  .save-modal h3 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: 32px; line-height: 1.05;
+    letter-spacing: -0.01em; margin-bottom: 12px;
+  }
+  .save-modal h3 em { color: var(--amber); font-style: italic; }
+  .save-modal .modal-body {
+    font-size: 14px; color: var(--ink-soft); line-height: 1.55;
+    margin-bottom: 24px;
+  }
+  .save-modal .modal-body strong {
+    color: var(--ink); font-weight: 500;
+  }
+
+  /* Save form */
+  .save-form { display: grid; gap: 12px; }
+  .save-form input {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid var(--gray-2); border-radius: 4px;
+    background: var(--paper); color: var(--ink);
+    font-family: var(--font-ui); font-size: 14px;
+    transition: border-color 150ms ease-out;
+  }
+  .save-form input:focus {
+    outline: none; border-color: var(--ink);
+  }
+  .save-form input::placeholder { color: var(--gray-3); }
+
+  .save-form .or {
+    text-align: center;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 4px 0;
+    position: relative;
+  }
+  .save-form .or::before, .save-form .or::after {
+    content: ''; position: absolute; top: 50%;
+    width: 35%; height: 1px; background: var(--gray-1);
+  }
+  .save-form .or::before { left: 0; }
+  .save-form .or::after { right: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 10px; padding: 12px 18px;
+    border-radius: 4px; font-family: var(--font-ui);
+    font-size: 14px; font-weight: 500; border: none;
+    cursor: pointer; transition: all 150ms ease-out;
+    line-height: 1;
+  }
+  .btn-primary { background: var(--ink); color: var(--paper); width: 100%; }
+  .btn-primary:hover { background: var(--ink-soft); }
+  .btn-google {
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--gray-2); width: 100%;
+  }
+  .btn-google:hover { border-color: var(--ink); }
+  .btn-google .g-mark {
+    width: 16px; height: 16px;
+    background: linear-gradient(45deg, #4285F4 0%, #EA4335 50%, #FBBC04 100%);
+    border-radius: 50%; flex-shrink: 0;
+  }
+
+  .save-modal .dismiss {
+    margin-top: 20px;
+    text-align: center;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.04em;
+  }
+  .save-modal .dismiss a {
+    color: var(--ink-soft); text-decoration: underline;
+    text-decoration-color: var(--gray-2); cursor: pointer;
+  }
+  .save-modal .dismiss a:hover { text-decoration-color: var(--ink); }
+
+  /* ===== STATE 04 — DISMISSED / PERSISTENT CTA ===== */
+  .dismissed-area {
+    position: relative;
+    background: var(--paper-deep);
+    padding: 0;
+  }
+  .dismissed-area .rendered-artifact { margin-bottom: 0; }
+
+  /* Persistent floating CTA after dismiss */
+  .floating-cta {
+    position: absolute;
+    bottom: 24px; right: 24px;
+    background: var(--ink); color: var(--paper);
+    padding: 14px 18px;
+    border-radius: 6px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 4px 16px rgba(26, 24, 21, 0.16);
+    max-width: 320px;
+  }
+  .floating-cta .fc-text {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 14px; line-height: 1.3;
+    flex: 1;
+  }
+  .floating-cta .fc-text em { color: var(--amber); }
+  .floating-cta .fc-cta {
+    background: var(--amber); color: var(--paper);
+    padding: 6px 12px; border-radius: 3px;
+    font-family: var(--font-ui); font-size: 12px;
+    font-weight: 500; text-decoration: none;
+    flex-shrink: 0;
+  }
+  .floating-cta .fc-close {
+    background: none; border: none; color: var(--gray-3);
+    font-size: 14px; cursor: pointer; padding: 0;
+    margin-left: -4px;
+  }
+
+  /* ===== STATE 05 — ERROR ===== */
+  .error-area {
+    background: var(--paper-deep);
+    padding: 64px 24px;
+    text-align: center;
+  }
+  .error-area .error-icon {
+    width: 48px; height: 48px;
+    border: 1px solid var(--gray-2); border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-style: italic;
+    font-size: 24px; color: var(--gray-4);
+  }
+  .error-area h3 {
+    font-family: var(--font-display); font-style: italic;
+    font-weight: 400; font-size: 32px;
+    letter-spacing: -0.01em; margin-bottom: 12px;
+  }
+  .error-area .error-text {
+    color: var(--ink-soft); margin-bottom: 24px;
+    max-width: 420px; margin-left: auto; margin-right: auto;
+    font-size: 14px;
+  }
+  .error-area .error-cta {
+    display: inline-flex; gap: 8px;
+  }
+  .error-area .error-cta .btn {
+    width: auto;
+  }
+
+  /* ===== ANNOTATIONS ===== */
+  .annotations {
+    display: grid; grid-template-columns: 1fr; gap: 14px;
+    margin-top: 32px;
+  }
+  @media (min-width: 720px) {
+    .annotations { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  }
+  .ann {
+    background: var(--paper);
+    border: 1px solid var(--gray-1);
+    border-left: 2px solid var(--amber);
+    padding: 16px 20px;
+    border-radius: 0 4px 4px 0;
+  }
+  .ann .ann-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--amber-deep); letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ann h4 {
+    font-family: var(--font-display); font-style: italic;
+    font-weight: 400; font-size: 17px; margin-bottom: 6px;
+    letter-spacing: -0.005em;
+  }
+  .ann p {
+    font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+  }
+
+  /* Sequence diagram */
+  .sequence {
+    background: var(--ink); color: var(--paper);
+    padding: 32px; border-radius: 8px;
+    margin: 32px 0;
+  }
+  .sequence-title {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 22px; margin-bottom: 24px;
+    color: var(--paper);
+  }
+  .sequence-title em { color: var(--amber); }
+  .sequence-steps {
+    display: flex; gap: 16px; align-items: stretch;
+    overflow-x: auto;
+  }
+  .seq-step {
+    flex: 1; min-width: 140px;
+    padding: 16px; background: rgba(255,255,255,0.04);
+    border-radius: 4px; border-left: 2px solid var(--amber);
+  }
+  .seq-step .seq-time {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--amber); letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .seq-step .seq-name {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 17px; margin-bottom: 4px;
+  }
+  .seq-step .seq-desc {
+    font-size: 11px; color: var(--gray-3); line-height: 1.4;
+  }
+
+  /* Footer */
+  footer {
+    padding: 56px 0 24px;
+    border-top: 1px solid var(--gray-1);
+    margin-top: 64px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--gray-4); flex-wrap: wrap; gap: 12px;
+  }
+  footer .credit em {
+    font-style: italic; color: var(--amber);
+    font-family: var(--font-display); text-transform: none;
+    letter-spacing: 0; font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<main class="container">
+
+  <div class="meta-bar">
+    <div><span class="dot"></span>Zili · Demo Flow States</div>
+    <div>v0.1 · May 2026</div>
+  </div>
+
+  <header class="hero">
+    <h1>The <em>moment</em>.</h1>
+    <p class="tagline">After they drop the file is where conversion happens. Five states. One flow.</p>
+    <div class="statement">
+      <div class="label">— Purpose</div>
+      <p>Most demos throw away the work the visitor put in. Zili's demo flow keeps it — and uses the wow moment to ask for the signup. The states below show the full post-drop experience: loading, success, save prompt, dismissed, and error. Each is designed to feel like one continuous flow, not a sequence of screens.</p>
+    </div>
+  </header>
+
+  <!-- ============ SEQUENCE OVERVIEW ============ -->
+  <div class="sequence">
+    <div class="sequence-title">The flow, in <em>five seconds</em></div>
+    <div class="sequence-steps">
+      <div class="seq-step">
+        <div class="seq-time">T+0s</div>
+        <div class="seq-name">Drop</div>
+        <div class="seq-desc">File hits the drop zone</div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-time">T+0.2s</div>
+        <div class="seq-name">Loading</div>
+        <div class="seq-desc">Upload → parse → render. Step-by-step shown.</div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-time">T+2-4s</div>
+        <div class="seq-name">Rendered</div>
+        <div class="seq-desc">Wow moment. Live artifact + presenter chrome.</div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-time">T+8s</div>
+        <div class="seq-name">Save prompt</div>
+        <div class="seq-desc">Modal slides in. "Save what you just made."</div>
+      </div>
+      <div class="seq-step">
+        <div class="seq-time">T+∞</div>
+        <div class="seq-name">Persistent CTA</div>
+        <div class="seq-desc">If dismissed, gentle floating CTA stays.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STATE 01 — LOADING ============ -->
+  <section class="state">
+    <div class="state-head">
+      <div class="label">— State 01</div>
+      <h2><em>Loading.</em> 2 to 4 seconds.</h2>
+      <p class="desc">First, manage perceived speed. The visitor's confidence builds when they can see what's happening. Show step-by-step progress, not just a spinner. Generic spinners read as "broken or slow"; itemised progress reads as "working hard for me."</p>
+    </div>
+
+    <div class="demo-frame">
+      <div class="demo-chrome">
+        <div class="left">
+          <div class="dots"><span></span><span></span><span></span></div>
+          zili.xyz · demo
+        </div>
+        <div class="right">
+          <span class="badge processing">Processing</span>
+        </div>
+      </div>
+      <div class="loading-area">
+        <div class="loading-display">Reading your <em>artifact</em><span class="cursor"></span></div>
+        <div class="progress-bar"></div>
+        <div class="loading-steps">
+          <div class="step done"><span class="check"></span>Upload</div>
+          <div class="step done"><span class="check"></span>Validate</div>
+          <div class="step active"><span class="check"></span>Parse DOM</div>
+          <div class="step"><span class="check"></span>Detect mode</div>
+          <div class="step"><span class="check"></span>Render</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Why this works</div>
+        <h4>Itemised progress > spinner</h4>
+        <p>A spinner means nothing. A list of completed steps tells the user the system is working *for them*, not just *at them*. Every ✓ is a small win.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Brand discipline</div>
+        <h4>The cursor is the only animation</h4>
+        <p>One amber cursor blink, one amber progress bar. No spinners, no bouncing dots, no skeleton screens. Restraint reads as confidence.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Copy strategy</div>
+        <h4>"Reading", not "Loading"</h4>
+        <p>"Loading" is generic SaaS. "Reading your artifact" personalises the moment — Zili is paying attention to what you uploaded.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Failure mode handled</div>
+        <h4>If a step fails, this is where it surfaces</h4>
+        <p>The active step turns red instead of green. The progress bar stops. Error state (State 05) takes over. No mystery silence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATE 02 — SUCCESS / RENDERED ============ -->
+  <section class="state">
+    <div class="state-head">
+      <div class="label">— State 02</div>
+      <h2><em>Rendered.</em> The wow moment.</h2>
+      <p class="desc">The artifact appears, pixel-perfect, with the Zili presenter chrome already wrapped around it. A brief success banner at the top confirms what just happened. The visitor can navigate, fullscreen, and interact — exactly as if they were already a customer.</p>
+    </div>
+
+    <div class="demo-frame">
+      <div class="demo-chrome">
+        <div class="left">
+          <div class="dots"><span></span><span></span><span></span></div>
+          zili.xyz · demo
+        </div>
+        <div class="right">
+          <span class="badge ready">Ready</span>
+        </div>
+      </div>
+
+      <div class="success-banner">
+        <div class="sb-left">
+          <div class="sb-check">✓</div>
+          <div class="sb-text">Rendered in <em>2.3 seconds</em>. Every pixel preserved.</div>
+        </div>
+        <div class="sb-meta">14 SLIDES · CLAUDE</div>
+      </div>
+
+      <div class="rendered-area">
+        <div class="rendered-artifact">
+          <div class="header">Q2 STRATEGY · 04 OF 14</div>
+          <div class="title">From roadmap to <span class="accent">execution</span>.</div>
+          <div class="footer">
+            <span>Strategy team</span>
+            <span class="page">04 / 14</span>
+          </div>
+        </div>
+        <div class="presenter-chrome">
+          <div class="pc-left">
+            <span style="color: var(--paper); font-weight: 500;">04</span>
+            <span class="slash">/</span>
+            <span class="total">14</span>
+          </div>
+          <div class="pc-title">Quarterly strategy</div>
+          <div class="controls">
+            <button class="ctrl" aria-label="Previous">←</button>
+            <button class="ctrl" aria-label="Next">→</button>
+            <button class="ctrl" aria-label="Fullscreen">⛶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Why this works</div>
+        <h4>Show the time, name the proof</h4>
+        <p>"Rendered in 2.3 seconds" turns an abstract claim into specific evidence. The exact duration is more persuasive than "fast." Adding the slide count makes the detection feel intelligent.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Interaction works</div>
+        <h4>This isn't a screenshot — it's the product</h4>
+        <p>The presenter chrome is live. Arrow keys advance slides. F enters fullscreen. The visitor experiences the actual product, not a recorded demo. Their muscle memory begins forming.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Banner copy</div>
+        <h4>Past tense, not future tense</h4>
+        <p>"Rendered" is done. "Now rendering" or "Render complete" hedges. Editorial confidence: name the accomplishment plainly.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">No CTA yet</div>
+        <h4>Let them play, then ask</h4>
+        <p>The save prompt does NOT appear immediately. The visitor gets ~8 seconds to navigate, click around, fullscreen. The wow needs space before the ask.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATE 03 — SAVE PROMPT ============ -->
+  <section class="state">
+    <div class="state-head">
+      <div class="label">— State 03</div>
+      <h2>The <em>save prompt</em>. ~8 seconds after render.</h2>
+      <p class="desc">The most important moment of the entire marketing site. The artifact dims to 35% opacity (still visible — it's *their* work, not Zili's). A focused modal appears with a specific ask: keep this, get a shareable link, in two clicks. Google OAuth is primary; email is the alternative.</p>
+    </div>
+
+    <div class="demo-frame">
+      <div class="demo-chrome">
+        <div class="left">
+          <div class="dots"><span></span><span></span><span></span></div>
+          zili.xyz · demo
+        </div>
+        <div class="right">
+          <span class="badge ready">Ready</span>
+        </div>
+      </div>
+
+      <div class="save-prompt-area">
+        <div class="success-banner" style="opacity: 0.35;">
+          <div class="sb-left">
+            <div class="sb-check">✓</div>
+            <div class="sb-text">Rendered in <em>2.3 seconds</em>. Every pixel preserved.</div>
+          </div>
+          <div class="sb-meta">14 SLIDES · CLAUDE</div>
+        </div>
+
+        <div class="rendered-area">
+          <div class="rendered-artifact">
+            <div class="header">Q2 STRATEGY · 04 OF 14</div>
+            <div class="title">From roadmap to <span class="accent">execution</span>.</div>
+            <div class="footer">
+              <span>Strategy team</span>
+              <span class="page">04 / 14</span>
+            </div>
+          </div>
+          <div class="presenter-chrome">
+            <div class="pc-left">
+              <span style="color: var(--paper); font-weight: 500;">04</span>
+              <span class="slash">/</span>
+              <span class="total">14</span>
+            </div>
+            <div class="pc-title">Quarterly strategy</div>
+            <div class="controls">
+              <button class="ctrl">←</button>
+              <button class="ctrl">→</button>
+              <button class="ctrl">⛶</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="save-modal">
+          <div class="modal-meta">
+            <span class="dot"></span>Don't lose this
+          </div>
+          <h3>Save it. Share it. <em>Free.</em></h3>
+          <p class="modal-body">
+            You just rendered <strong>14 slides</strong> in seconds. Sign up to keep this artifact in your library and get a shareable link to send your team. Free for 3 months, no card needed.
+          </p>
+          <div class="save-form">
+            <button class="btn btn-google">
+              <span class="g-mark"></span>
+              Continue with Google
+            </button>
+            <div class="or">Or</div>
+            <input type="email" placeholder="alex@yourcompany.com">
+            <button class="btn btn-primary">Save & get my link</button>
+          </div>
+          <div class="dismiss">
+            <a>Skip for now — just exploring</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Why this works</div>
+        <h4>The artifact stays visible</h4>
+        <p>Dimming the background to 35% (not 0% black overlay) keeps their work in view. The visitor sees what they're being asked to save. Removing it entirely would feel transactional.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Specific over generic</h4>
+        <h4>"You just rendered 14 slides"</h4>
+        <p>Reference the specific count of what they uploaded. Personalisation costs nothing and tells the visitor the system is paying attention.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Two paths, one is faster</h4>
+        <h4>Google is primary, email is secondary</h4>
+        <p>Google OAuth converts ~2x better than email-then-verify flows. Email is present for those who prefer it but ranked below.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Honest dismiss</div>
+        <h4>"Just exploring" is the dignified out</h4>
+        <p>Most dismiss links are guilt-trippy ("No thanks, I'll keep doing things the hard way"). Honest, non-judgmental dismiss copy preserves goodwill for the next visit.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATE 04 — DISMISSED / PERSISTENT CTA ============ -->
+  <section class="state">
+    <div class="state-head">
+      <div class="label">— State 04</div>
+      <h2><em>Dismissed.</em> Soft persistent reminder.</h2>
+      <p class="desc">If they dismiss, the modal disappears and the artifact returns to full opacity. A small floating CTA stays in the corner — present but not nagging. They can keep exploring. The CTA only re-prompts the full modal if they try to leave the page or refresh.</p>
+    </div>
+
+    <div class="demo-frame">
+      <div class="demo-chrome">
+        <div class="left">
+          <div class="dots"><span></span><span></span><span></span></div>
+          zili.xyz · demo
+        </div>
+        <div class="right">
+          <span class="badge ready">Ready</span>
+        </div>
+      </div>
+
+      <div class="dismissed-area">
+        <div class="rendered-artifact">
+          <div class="header">Q2 STRATEGY · 04 OF 14</div>
+          <div class="title">From roadmap to <span class="accent">execution</span>.</div>
+          <div class="footer">
+            <span>Strategy team</span>
+            <span class="page">04 / 14</span>
+          </div>
+        </div>
+        <div class="presenter-chrome">
+          <div class="pc-left">
+            <span style="color: var(--paper); font-weight: 500;">04</span>
+            <span class="slash">/</span>
+            <span class="total">14</span>
+          </div>
+          <div class="pc-title">Quarterly strategy</div>
+          <div class="controls">
+            <button class="ctrl">←</button>
+            <button class="ctrl">→</button>
+            <button class="ctrl">⛶</button>
+          </div>
+        </div>
+
+        <div class="floating-cta">
+          <div class="fc-text">Don't lose <em>this artifact</em></div>
+          <a class="fc-cta">Save</a>
+          <button class="fc-close">×</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Why this works</div>
+        <h4>Soft presence, not nagging</h4>
+        <p>The dismissed user keeps full agency — artifact at full opacity, all controls working. The floating CTA is small, in the corner, dismissable. It earns trust by not being aggressive.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Re-prompt trigger</div>
+        <h4>On page-leave intent, the modal returns</h4>
+        <p>If the visitor moves to close the tab or hit refresh, the full save modal returns ("Wait — you'll lose this"). One re-prompt only. Annoying past that.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Behind the scenes</div>
+        <h4>The artifact is stored for 24h</h4>
+        <p>Even if they walk away, the upload is retained for 24 hours under a temporary token. If they come back via the same browser, the same artifact is still there. Implementation note for engineering.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Floating CTA position</div>
+        <h4>Bottom-right, never blocking content</h4>
+        <p>Out of the visual centre. Easy to dismiss. Auto-hides if the user enters fullscreen. Re-appears on exit.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATE 05 — ERROR ============ -->
+  <section class="state">
+    <div class="state-head">
+      <div class="label">— State 05</div>
+      <h2><em>Couldn't render.</em> Honest, useful, recoverable.</h2>
+      <p class="desc">When a render fails — file too large, malformed HTML, security violation, server error — the response is straightforward. Name the problem, suggest the fix, offer a retry path. Never let the visitor blame themselves for what's actually a Zili limitation.</p>
+    </div>
+
+    <div class="demo-frame">
+      <div class="demo-chrome">
+        <div class="left">
+          <div class="dots"><span></span><span></span><span></span></div>
+          zili.xyz · demo
+        </div>
+        <div class="right">
+          <span class="badge" style="background: #F5E2DE; color: #C9483A;">Failed</span>
+        </div>
+      </div>
+
+      <div class="error-area">
+        <div class="error-icon">!</div>
+        <h3>That file is over 10MB.</h3>
+        <p class="error-text">Zili currently accepts HTML files up to 10MB. Most LLM artifacts are well under this — yours is probably bundled with images or a large CSS file. Try uploading the HTML alone, or split out the assets.</p>
+        <div class="error-cta">
+          <button class="btn btn-primary" style="width: auto;">Try another file</button>
+          <button class="btn btn-google" style="width: auto;">Read about file limits</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Why this works</div>
+        <h4>Specific, not generic</h4>
+        <p>"That file is over 10MB" tells them exactly what went wrong. "Something went wrong" is useless and erodes trust. Every error message is rewritten to be specific.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Suggest the fix</div>
+        <h4>Don't just name the problem</h4>
+        <p>Every error message includes the most likely fix ("try uploading the HTML alone"). The user shouldn't have to figure out how to recover.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Recovery is one click</div>
+        <h4>"Try another file" is the primary CTA</h4>
+        <p>The error state doesn't dead-end. The drop zone is one click away. No re-loading the page, no losing context.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Tone</div>
+        <h4>Honest, not apologetic</h4>
+        <p>No "Oops!" No emoji. No "We're so sorry!" The error is what it is. Editorial restraint applies even in failure states.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ENGINEERING NOTES ============ -->
+  <section class="state">
+    <div class="state-head">
+      <div class="label">— For engineering</div>
+      <h2>Implementation <em>notes</em>.</h2>
+      <p class="desc">Specifics that Claude Code will need when building this flow. These are the small decisions that, if guessed wrong, would require redoing the work.</p>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Timing</div>
+        <h4>Save prompt delay: 8 seconds</h4>
+        <p>Tunable in feature flags. Initial value 8s. If user interacts with the presenter chrome (clicks next/prev), reset the timer. Don't interrupt active exploration.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Temporary storage</div>
+        <h4>Demo artifacts retain 24h, by browser cookie</h4>
+        <p>No DB user record. Cookie holds a temp token mapping to R2 storage path. Cookie expires 24h. Object purges 25h. If user signs up within 24h, transfer ownership.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Re-prompt trigger</div>
+        <h4>One re-prompt on beforeunload</h4>
+        <p>If user dismissed save modal then attempts to leave page, beforeunload listener triggers the full modal once. Subsequent leave attempts go through without intercept.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Persistent CTA visibility</div>
+        <h4>Hides in fullscreen, reappears on exit</h4>
+        <p>Fullscreen API event listener toggles floating CTA visibility. Restore on fullscreenchange exit.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Error messages</div>
+        <h4>All error copy in a dedicated dictionary</h4>
+        <p>errors.ts file. Every error has a code, a user-facing title, a user-facing body, a suggested fix CTA. Centralised so copy iteration doesn't require finding it scattered in handler code.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Analytics events</div>
+        <h4>Instrument every state transition</h4>
+        <p>demo_drop, demo_render_success, demo_render_fail (with reason), demo_save_modal_shown, demo_save_modal_dismissed, demo_signup_completed, demo_reprompt_shown, demo_reprompt_signup. PostHog funnel = conversion truth.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="credit">Zili — Demo Flow States v0.1 · <em>The moment</em></div>
+    <div>Draft · Iterate · Lock</div>
+  </footer>
+
+</main>
+</body>
+</html>

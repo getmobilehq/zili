@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zili — Present every pixel of what your LLM made.</title>
+<meta name="description" content="Upload the HTML your LLM generated. Zili presents it like a slide deck, document, or anything in between — without losing the design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F5;
+    --paper-deep: #F2F0E8;
+    --ink: #1A1815;
+    --ink-soft: #3A3733;
+    --gray-1: #ECE9E0;
+    --gray-2: #D6D2C7;
+    --gray-3: #A8A39A;
+    --gray-4: #6E6A62;
+    --amber: #D26B2C;
+    --amber-deep: #B25620;
+    --amber-tint: #F8E8D8;
+    --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+    --gutter: clamp(20px, 5vw, 64px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-ui);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.55;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250, 249, 245, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .nav-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+  .wordmark em { color: var(--amber); font-style: italic; }
+
+  .nav-links {
+    display: none;
+    align-items: center;
+    gap: 28px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  @media (min-width: 720px) { .nav-links { display: flex; } }
+  .nav-links a { transition: color 150ms ease-out; }
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-cta .signin {
+    font-size: 14px;
+    color: var(--ink-soft);
+    padding: 8px 12px;
+    transition: color 150ms ease-out;
+  }
+  .nav-cta .signin:hover { color: var(--ink); }
+  @media (max-width: 480px) { .nav-cta .signin { display: none; } }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background 150ms ease-out, transform 150ms ease-out, border-color 150ms ease-out;
+    line-height: 1;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn-primary:hover { background: var(--ink-soft); }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-accent {
+    background: var(--amber);
+    color: var(--paper);
+  }
+  .btn-accent:hover { background: var(--amber-deep); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--gray-2);
+  }
+  .btn-secondary:hover { border-color: var(--ink); }
+  .btn-large { padding: 14px 22px; font-size: 15px; }
+
+  .btn .kbd {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.6;
+    background: rgba(255,255,255,0.12);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 80px 0 64px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  @media (min-width: 720px) { .hero { padding: 120px 0 96px; } }
+
+  .hero-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero-meta .dot {
+    display: inline-block;
+    width: 5px; height: 5px;
+    background: var(--amber);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    max-width: 920px;
+  }
+  .hero h1 em { color: var(--amber); font-style: italic; }
+  .hero h1 .strike {
+    color: var(--gray-3);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--gray-3);
+  }
+
+  .hero .subhead {
+    margin-top: 32px;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 620px;
+  }
+
+  .hero-cta {
+    margin-top: 40px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .hero-cta .micro {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.04em;
+    margin-left: 4px;
+  }
+
+  /* ============ LIVE DEMO ============ */
+  .demo-section {
+    padding: 80px 0 96px;
+    border-bottom: 1px solid var(--gray-1);
+    background: var(--paper-deep);
+  }
+  .demo-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  @media (min-width: 720px) {
+    .demo-head { grid-template-columns: 140px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .demo-head .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .demo-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .demo-head h2 em { color: var(--amber); font-style: italic; }
+  .demo-head .desc {
+    grid-column: 1 / -1;
+    max-width: 580px;
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+  @media (min-width: 720px) {
+    .demo-head .desc { grid-column: 2 / -1; margin-top: 16px; }
+  }
+
+  .demo-frame {
+    background: var(--paper);
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .demo-chrome {
+    background: var(--paper);
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--gray-1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .demo-chrome .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.04em;
+  }
+  .demo-chrome .dots {
+    display: flex; gap: 5px;
+  }
+  .demo-chrome .dots span {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--gray-2);
+  }
+  .demo-chrome .right {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.04em;
+  }
+  .demo-chrome .right .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--amber-tint);
+    color: var(--amber-deep);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+
+  .drop-zone {
+    padding: 64px 24px;
+    text-align: center;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 12px,
+      var(--gray-1) 12px,
+      var(--gray-1) 13px
+    );
+    background-size: 18px 18px;
+    transition: background 200ms ease-out;
+    cursor: pointer;
+  }
+  .drop-zone:hover {
+    background: var(--amber-tint);
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 12px,
+      rgba(210, 107, 44, 0.15) 12px,
+      rgba(210, 107, 44, 0.15) 13px
+    );
+  }
+  .drop-zone .drop-display {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .drop-zone .drop-display em { color: var(--amber); }
+  .drop-zone .drop-meta {
+    margin-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-4);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .drop-zone .drop-meta span { margin: 0 6px; color: var(--gray-3); }
+  .drop-zone .drop-cta {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 10px 18px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+  }
+
+  .demo-footer {
+    padding: 14px 18px;
+    background: var(--paper);
+    border-top: 1px solid var(--gray-1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.04em;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .demo-footer .promise {
+    color: var(--ink-soft);
+  }
+  .demo-footer .checks span { margin: 0 8px; color: var(--gray-3); }
+
+  /* ============ TRUST STRIP ============ */
+  .trust {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--gray-1);
+    background: var(--paper);
+  }
+  .trust-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  @media (min-width: 720px) {
+    .trust-inner { grid-template-columns: 140px 1fr; gap: 32px; }
+  }
+  .trust-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .trust-logos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px 36px;
+    align-items: center;
+  }
+  .trust-logos .logo {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--gray-4);
+    letter-spacing: -0.005em;
+    transition: color 200ms ease-out;
+  }
+  .trust-logos .logo:hover { color: var(--ink); }
+
+  /* ============ HOW IT WORKS ============ */
+  .how {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  @media (min-width: 720px) {
+    .section-head { grid-template-columns: 140px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .section-head .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+  .section-head h2 em { color: var(--amber); font-style: italic; }
+  .section-head .desc {
+    grid-column: 1 / -1;
+    max-width: 620px;
+    color: var(--ink-soft);
+    font-size: 16px;
+  }
+  @media (min-width: 720px) {
+    .section-head .desc { grid-column: 2 / -1; margin-top: 16px; }
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--gray-1);
+  }
+  @media (min-width: 720px) {
+    .steps { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .step {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  @media (min-width: 720px) {
+    .step {
+      border-bottom: none;
+      border-right: 1px solid var(--gray-1);
+      padding: 32px 32px 32px 0;
+    }
+    .step:nth-child(2) { padding-left: 32px; }
+    .step:nth-child(3) { padding-left: 32px; border-right: none; }
+  }
+  .step .step-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .step h3 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .step h3 em { color: var(--amber); }
+  .step p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ============ EXAMPLES ============ */
+  .examples-section {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--gray-1);
+    background: var(--paper-deep);
+  }
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .filter {
+    padding: 6px 12px;
+    border: 1px solid var(--gray-2);
+    background: var(--paper);
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 150ms ease-out;
+  }
+  .filter.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .filter:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 600px) {
+    .gallery { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 900px) {
+    .gallery { grid-template-columns: repeat(3, 1fr); }
+  }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 200ms ease-out, border-color 200ms ease-out;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--ink);
+  }
+  .card .thumb {
+    aspect-ratio: 16 / 10;
+    border-bottom: 1px solid var(--gray-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Thumbnails — each one designed to feel like an actual rendered artifact */
+  .thumb-1 {
+    background:
+      linear-gradient(135deg, #2D3142 0%, #4F5D75 100%);
+    color: #fff;
+  }
+  .thumb-1::before {
+    content: 'Q2 STRATEGY';
+    position: absolute;
+    top: 14px; left: 16px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+  }
+  .thumb-1::after {
+    content: 'Roadmap → execution';
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+
+  .thumb-2 {
+    background: #F5F2EA;
+    color: #1A1815;
+    flex-direction: column;
+  }
+  .thumb-2::before {
+    content: 'CLIENT MEMO';
+    position: absolute;
+    top: 14px; left: 16px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #6E6A62;
+  }
+  .thumb-2::after {
+    content: 'Recommendation';
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    color: #D26B2C;
+  }
+
+  .thumb-3 {
+    background: #0F172A;
+    color: #fff;
+    flex-direction: column;
+  }
+  .thumb-3::before {
+    content: 'PITCH DECK · v0';
+    position: absolute;
+    top: 14px; left: 16px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #94A3B8;
+  }
+  .thumb-3::after {
+    content: '$2.1M ARR';
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    color: #FBBF24;
+  }
+
+  .thumb-4 {
+    background: linear-gradient(180deg, #FFE5D9 0%, #F5C7A9 100%);
+    color: #1A1815;
+  }
+  .thumb-4::before {
+    content: 'ONBOARDING';
+    position: absolute;
+    top: 14px; left: 16px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+  }
+  .thumb-4::after {
+    content: 'Hello, friend.';
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+  }
+
+  .thumb-5 {
+    background: #064E3B;
+    color: #fff;
+  }
+  .thumb-5::before {
+    content: 'METRICS · Q4';
+    position: absolute;
+    top: 14px; left: 16px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #6EE7B7;
+  }
+  .thumb-5::after {
+    content: '↑ 47%';
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: #6EE7B7;
+  }
+
+  .thumb-6 {
+    background: #FAF9F5;
+    color: #1A1815;
+    border: 1px solid var(--gray-1);
+  }
+  .thumb-6::before {
+    content: 'ESSAY';
+    position: absolute;
+    top: 14px; left: 16px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #6E6A62;
+  }
+  .thumb-6::after {
+    content: 'On the craft of writing';
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+
+  .card .info {
+    padding: 14px 18px;
+  }
+  .card .info .title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .card .info .meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card .info .meta .source {
+    display: inline-block;
+    padding: 2px 6px;
+    background: var(--amber-tint);
+    color: var(--amber-deep);
+    border-radius: 2px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  /* ============ COMPARISON ============ */
+  .compare {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  @media (min-width: 720px) {
+    .compare-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .col {
+    padding: 40px;
+    background: var(--paper);
+  }
+  .col-bad { border-bottom: 1px solid var(--gray-1); }
+  @media (min-width: 720px) {
+    .col-bad { border-bottom: none; border-right: 1px solid var(--gray-1); }
+  }
+  .col-good { background: var(--paper-deep); }
+
+  .col .col-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .col-good .col-label { color: var(--amber-deep); }
+
+  .col h3 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 28px;
+  }
+  .col h3 em { color: var(--amber); }
+
+  .col ul {
+    list-style: none;
+    padding: 0;
+  }
+  .col ul li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--gray-1);
+    font-size: 14px;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .col ul li:last-child { border-bottom: none; }
+  .col ul li .marker {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    flex-shrink: 0;
+    min-width: 14px;
+  }
+  .col-bad ul li .marker { color: var(--gray-3); }
+  .col-good ul li .marker { color: var(--amber); }
+
+  /* ============ TESTIMONIAL ============ */
+  .testimonial {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--gray-1);
+    background: var(--paper-deep);
+  }
+  .quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    max-width: 860px;
+    color: var(--ink);
+  }
+  .quote::before {
+    content: '"';
+    color: var(--amber);
+    font-size: 1.2em;
+    line-height: 0;
+    margin-right: 4px;
+    vertical-align: -0.1em;
+  }
+  .quote::after {
+    content: '"';
+    color: var(--amber);
+    font-size: 1.2em;
+    line-height: 0;
+    margin-left: 4px;
+    vertical-align: -0.1em;
+  }
+  .attribution {
+    margin-top: 32px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .attribution .name { color: var(--ink); font-weight: 500; }
+
+  /* ============ PRICING ============ */
+  .pricing {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .pricing-promo {
+    text-align: center;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 18px 24px;
+    border-radius: 6px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .pricing-promo .promo-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: var(--amber);
+    color: var(--paper);
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .pricing-promo .promo-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 18px;
+  }
+  .pricing-promo .promo-text em { color: var(--amber); }
+
+  .plans {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .plans { grid-template-columns: 1fr 1fr; }
+  }
+  .plan {
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    padding: 32px;
+    background: var(--paper);
+    position: relative;
+  }
+  .plan.featured {
+    border: 1px solid var(--ink);
+    background: var(--paper);
+  }
+  .plan.featured::before {
+    content: 'RECOMMENDED';
+    position: absolute;
+    top: -10px; right: 20px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .plan .plan-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .plan .plan-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .plan .price {
+    display: baseline;
+    margin-bottom: 8px;
+  }
+  .plan .price .amount {
+    font-family: var(--font-display);
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .plan .price .unit {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--gray-4);
+    margin-left: 4px;
+    letter-spacing: 0.04em;
+  }
+  .plan .price-note {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .plan .price-note em {
+    font-family: var(--font-display);
+    color: var(--amber-deep);
+    font-style: italic;
+  }
+  .plan ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 28px;
+  }
+  .plan ul li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .plan ul li::before {
+    content: '✓';
+    color: var(--amber);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .plan .plan-cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ============ FAQ ============ */
+  .faq {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .faq-list {
+    border-top: 1px solid var(--gray-1);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--gray-1);
+    padding: 28px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .faq-item { grid-template-columns: 1fr 1.5fr; gap: 48px; align-items: baseline; }
+  }
+  .faq-item .q {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+  }
+  .faq-item .a {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  /* ============ FINAL CTA ============ */
+  .final-cta {
+    padding: 120px 0;
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+  }
+  .final-cta h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(40px, 7vw, 88px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .final-cta h2 em { color: var(--amber); font-style: italic; }
+  .final-cta .subhead {
+    margin-top: 24px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(18px, 2.2vw, 24px);
+    color: var(--gray-3);
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .final-cta .cta-row {
+    margin-top: 40px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .final-cta .cta-row .btn-secondary {
+    color: var(--paper);
+    border-color: rgba(255,255,255,0.2);
+  }
+  .final-cta .cta-row .btn-secondary:hover {
+    border-color: var(--paper);
+  }
+  .final-cta .micro {
+    margin-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-3);
+    letter-spacing: 0.04em;
+  }
+
+  /* ============ FOOTER ============ */
+  footer.site-footer {
+    padding: 48px 0 32px;
+    background: var(--paper);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  @media (min-width: 720px) {
+    .footer-top { grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
+  }
+  .footer-brand .wordmark { font-size: 32px; }
+  .footer-brand p {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+    max-width: 280px;
+  }
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+  }
+  .footer-col ul li {
+    padding: 4px 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .footer-col ul li a:hover { color: var(--ink); }
+
+  .footer-bottom {
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-bottom .credit em {
+    font-style: italic;
+    color: var(--amber);
+    font-family: var(--font-display);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="wordmark">Zili<em>.</em></a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#examples">Examples</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="signin">Sign in</a>
+      <a href="#demo" class="btn btn-primary">Try the demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-meta">
+      <span class="dot"></span>Now in private beta · 3 months free at launch
+    </div>
+    <h1>Present every <em>pixel</em> of what your LLM made.</h1>
+    <p class="subhead">Drop the HTML. Zili renders it like a slide deck, document, or anything in between — pixel-perfect, no cleanup, no porting into <span style="text-decoration: line-through; text-decoration-color: var(--gray-3);">PowerPoint</span> anything that strips the design.</p>
+    <div class="hero-cta">
+      <a href="#demo" class="btn btn-primary btn-large">Try with your own artifact <span class="kbd">↓</span></a>
+      <a href="#how" class="btn btn-secondary btn-large">See how it works</a>
+      <span class="micro">— No signup to try</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE DEMO ============ -->
+<section class="demo-section" id="demo">
+  <div class="container">
+    <div class="demo-head">
+      <div class="label">— Live demo</div>
+      <h2>Drop your HTML below.<br>Render it in <em>five seconds</em>.</h2>
+      <p class="desc">Use the artifact Claude or ChatGPT just made you. We'll render it in a sandboxed iframe with full CSS fidelity. If you like what you see, sign up to keep it.</p>
+    </div>
+
+    <div class="demo-frame">
+      <div class="demo-chrome">
+        <div class="left">
+          <div class="dots"><span></span><span></span><span></span></div>
+          zili.xyz · demo
+        </div>
+        <div class="right">
+          <span class="badge">No signup needed</span>
+        </div>
+      </div>
+
+      <div class="drop-zone">
+        <div class="drop-display">Drop an <em>HTML file</em> here</div>
+        <div class="drop-meta">
+          .html · max 10MB
+          <span>·</span>
+          paste raw HTML
+          <span>·</span>
+          or paste a URL
+        </div>
+        <div class="drop-cta">Choose a file</div>
+      </div>
+
+      <div class="demo-footer">
+        <div class="promise">All CSS preserved. No re-rendering. Pixel-perfect.</div>
+        <div class="checks">
+          Tailwind <span>·</span> Google Fonts <span>·</span> Custom CSS <span>·</span> SVG <span>·</span> Animations
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST STRIP ============ -->
+<section class="trust">
+  <div class="container">
+    <div class="trust-inner">
+      <div class="trust-label">Works with output from</div>
+      <div class="trust-logos">
+        <span class="logo">Claude</span>
+        <span class="logo">ChatGPT</span>
+        <span class="logo">v0</span>
+        <span class="logo">Lovable</span>
+        <span class="logo">Bolt</span>
+        <span class="logo">Cursor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-head">
+      <div class="label">— How it works</div>
+      <h2>Upload. Present. <em>Share.</em></h2>
+      <p class="desc">Three steps from raw HTML to a shareable presentation. No editor, no template, no porting. The artifact you uploaded is the artifact your audience sees.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">Step 01</div>
+        <h3>Upload your <em>HTML</em></h3>
+        <p>Drag a file, paste raw HTML, or point to a public URL. Single-file artifacts work out of the box. Multi-file uploads with assets ship in V1.5.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 02</div>
+        <h3>We render it <em>faithfully</em></h3>
+        <p>Your artifact runs in a sandboxed iframe with full CSS fidelity. We detect whether it's a slide deck or a document, and present accordingly. One-click override if we guess wrong.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 03</div>
+        <h3>Share or <em>present</em></h3>
+        <p>Get a public link with a beautiful Open Graph preview. Present in fullscreen with keyboard navigation. Embed it anywhere. Send it to your client, your team, or your audience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXAMPLES ============ -->
+<section class="examples-section" id="examples">
+  <div class="container">
+    <div class="section-head">
+      <div class="label">— Examples</div>
+      <h2>Real <em>artifacts</em>. Real LLMs. Real fidelity.</h2>
+      <p class="desc">A small selection of decks and documents made in Claude, ChatGPT, v0, and others — presented through Zili exactly as their authors intended.</p>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter active">All</button>
+      <button class="filter">Claude</button>
+      <button class="filter">ChatGPT</button>
+      <button class="filter">v0</button>
+      <button class="filter">Lovable</button>
+      <button class="filter">Decks</button>
+      <button class="filter">Docs</button>
+    </div>
+
+    <div class="gallery">
+      <div class="card">
+        <div class="thumb thumb-1"></div>
+        <div class="info">
+          <div class="title">Q2 Strategy — Internal review</div>
+          <div class="meta"><span class="source">Claude</span> 14 slides</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb thumb-2"></div>
+        <div class="info">
+          <div class="title">Client recommendation memo</div>
+          <div class="meta"><span class="source">Claude</span> 1-pager</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb thumb-3"></div>
+        <div class="info">
+          <div class="title">Series A pitch deck</div>
+          <div class="meta"><span class="source">v0</span> 18 slides</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb thumb-4"></div>
+        <div class="info">
+          <div class="title">Onboarding microsite</div>
+          <div class="meta"><span class="source">Lovable</span> Scrolling doc</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb thumb-5"></div>
+        <div class="info">
+          <div class="title">Q4 metrics review</div>
+          <div class="meta"><span class="source">ChatGPT</span> 9 slides</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb thumb-6"></div>
+        <div class="info">
+          <div class="title">On the craft of writing</div>
+          <div class="meta"><span class="source">Claude</span> Long-form essay</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPARISON ============ -->
+<section class="compare">
+  <div class="container">
+    <div class="section-head">
+      <div class="label">— Why Zili</div>
+      <h2>Stop <em>fighting</em> your tools.</h2>
+      <p class="desc">The traditional path from LLM to presentation throws away most of what made the LLM useful. Zili is the path that doesn't.</p>
+    </div>
+
+    <div class="compare-grid">
+      <div class="col col-bad">
+        <div class="col-label">Without Zili</div>
+        <h3>Spend an hour porting.</h3>
+        <ul>
+          <li><span class="marker">×</span><span>Import HTML into PowerPoint — gradients lost, fonts wrong, layout broken</span></li>
+          <li><span class="marker">×</span><span>Manually rebuild every slide as an object-based deck</span></li>
+          <li><span class="marker">×</span><span>Lose interactive elements, hover states, animations</span></li>
+          <li><span class="marker">×</span><span>Spend more time porting than you saved using the LLM</span></li>
+          <li><span class="marker">×</span><span>Final deck looks worse than the original artifact</span></li>
+        </ul>
+      </div>
+      <div class="col col-good">
+        <div class="col-label">With Zili</div>
+        <h3>Upload. <em>Present.</em></h3>
+        <ul>
+          <li><span class="marker">✓</span><span>Drop the HTML, see it rendered pixel-perfect in seconds</span></li>
+          <li><span class="marker">✓</span><span>Slide and document modes auto-detected from the content</span></li>
+          <li><span class="marker">✓</span><span>Every CSS gradient, font, animation, and interaction preserved</span></li>
+          <li><span class="marker">✓</span><span>Share a public link, embed it, or present in fullscreen</span></li>
+          <li><span class="marker">✓</span><span>Your audience sees exactly what your LLM created</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIAL ============ -->
+<section class="testimonial">
+  <div class="container">
+    <p class="quote">I used to spend 40 minutes rebuilding Claude decks in PowerPoint before every client meeting. Now I just send the Zili link. They open it, it looks exactly like Claude made it, and I get my afternoon back.</p>
+    <div class="attribution">
+      <span class="name">M. Adeola</span> · Strategy consultant · Beta user
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-head">
+      <div class="label">— Pricing</div>
+      <h2>Free for the <em>first three months</em>. Then simple.</h2>
+      <p class="desc">Launch promo: everything's free until month four. After that, free tier stays free (with a small watermark), and Pro unlocks the rest.</p>
+    </div>
+
+    <div class="pricing-promo">
+      <span class="promo-tag">Launch promo</span>
+      <span class="promo-text">Sign up now, get <em>50% off Pro for life</em> when the promo ends.</span>
+    </div>
+
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name">Free</div>
+        <div class="plan-tag">Always</div>
+        <div class="price">
+          <span class="amount">$0</span>
+          <span class="unit">/ month</span>
+        </div>
+        <p class="price-note">Unlimited uploads, unlimited shared links. Small "Made with Zili" watermark on shared decks. <em>No watermark during the launch promo.</em></p>
+        <ul>
+          <li>Unlimited artifacts (cap of 25 after promo)</li>
+          <li>Unlimited public shared links</li>
+          <li>Slide & document presentation modes</li>
+          <li>Open Graph preview cards</li>
+          <li>Embed code for shared decks</li>
+        </ul>
+        <a href="#" class="btn btn-secondary plan-cta">Get started, free</a>
+      </div>
+
+      <div class="plan featured">
+        <div class="plan-name">Pro</div>
+        <div class="plan-tag">For power users</div>
+        <div class="price">
+          <span class="amount">$12</span>
+          <span class="unit">/ month</span>
+        </div>
+        <p class="price-note">Or $108/year (save ~25%). <em>Grandfather cohort pays $6/month for life.</em></p>
+        <ul>
+          <li>Everything in Free</li>
+          <li>No watermark on shared decks</li>
+          <li>Unlimited library, no caps</li>
+          <li>Custom slug for share URLs</li>
+          <li>View analytics (count, time, devices)</li>
+          <li>Speaker view with notes (V1.5)</li>
+          <li>Password-protected share links (V1.5)</li>
+        </ul>
+        <a href="#" class="btn btn-accent plan-cta">Start Pro, free for 3 months</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="label">— FAQ</div>
+      <h2>Questions, <em>answered</em>.</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="q">Why not just use PowerPoint or Google Slides?</div>
+        <div class="a">They were designed for object-based slides — text frames, shapes, images. LLMs generate HTML and CSS. The import path is lossy by design: gradients vanish, fonts swap, layouts break. Zili renders the HTML directly, so what your LLM produced is what your audience sees.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">Which LLMs work with Zili?</div>
+        <div class="a">Any tool that outputs HTML — Claude, ChatGPT, v0, Lovable, Bolt, Cursor, hand-written, anything. If it's valid HTML in a single file (or a zip with assets, in V1.5), Zili will render it.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">Is it secure to upload my HTML to your servers?</div>
+        <div class="a">Yes. Every artifact renders in a sandboxed iframe with strict Content Security Policy and no parent-frame access. Your scripts can't see anything outside their sandbox. We scan uploads for known-malicious patterns before render.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">Can I edit artifacts in Zili?</div>
+        <div class="a">Not in V1. Zili is a renderer and presenter, not an editor. We're shipping "regenerate with a prompt" in V2.5 — describe a change, the LLM rewrites the relevant section, Zili re-renders. For now: iterate in your LLM of choice, re-upload to Zili. Your share URL stays the same.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">What happens after the 3-month free promo?</div>
+        <div class="a">You keep using Zili. Free tier stays free (with a small watermark on shared decks and a 25-artifact cap). Pro is $12/month. If you signed up during the promo and upgrade within 30 days of its end, you lock in 50% off Pro for life — $6/month, forever.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">Can my audience see the deck without an account?</div>
+        <div class="a">Yes. Public share links work for anyone — no signup, no friction. They get a presenter UI with keyboard nav, fullscreen, and mobile swipe gestures.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">What about teams?</div>
+        <div class="a">V1 is individual-only. Team workspaces with shared libraries and collaboration arrive in V2 (around 3 months post-launch). If you need it sooner, let us know — we're prioritising based on demand.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Stop rebuilding. Start <em>presenting.</em></h2>
+    <p class="subhead">Three months free, no card required, no commitment. Lock in 50% off Pro for life if you sign up before launch promo ends.</p>
+    <div class="cta-row">
+      <a href="#" class="btn btn-accent btn-large">Get started, free</a>
+      <a href="#demo" class="btn btn-secondary btn-large">Try the demo first</a>
+    </div>
+    <div class="micro">No signup to demo. No card to start. No watermark during promo.</div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="wordmark">Zili<em>.</em></a>
+        <p>Present every pixel of what your LLM made.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#examples">Examples</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Roadmap</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">DMCA policy</a></li>
+          <li><a href="#">Security</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="credit">Made with care · <em>zili.xyz</em></div>
+      <div>© 2026 Zili</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

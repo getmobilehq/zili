@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zili — Journey Map v0.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F5;
+    --paper-deep: #F2F0E8;
+    --ink: #1A1815;
+    --ink-soft: #3A3733;
+    --gray-1: #ECE9E0;
+    --gray-2: #D6D2C7;
+    --gray-3: #A8A39A;
+    --gray-4: #6E6A62;
+    --amber: #D26B2C;
+    --amber-deep: #B25620;
+    --amber-tint: #F8E8D8;
+    --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+    --gutter: clamp(20px, 5vw, 56px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+  body {
+    font-family: var(--font-ui);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.55;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: var(--gutter);
+  }
+
+  /* Meta bar */
+  .meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    padding-bottom: 64px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .meta-bar .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* Hero */
+  .hero { padding: 80px 0 96px; border-bottom: 1px solid var(--gray-1); }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(56px, 10vw, 120px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  .hero h1 em { font-style: italic; color: var(--amber); }
+  .hero .tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(18px, 2.2vw, 26px);
+    color: var(--ink-soft);
+    margin-top: 24px;
+    max-width: 620px;
+  }
+  .hero .statement {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 680px;
+    color: var(--ink-soft);
+  }
+  @media (min-width: 720px) {
+    .hero .statement { grid-template-columns: 120px 1fr; gap: 32px; align-items: start; }
+  }
+  .hero .statement .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    padding-top: 4px;
+  }
+
+  /* Overview / stakeholder map */
+  .overview { padding: 72px 0; border-bottom: 1px solid var(--gray-1); }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  @media (min-width: 720px) {
+    .section-head { grid-template-columns: 120px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .section-head .num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+  }
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .section-head h2 em { color: var(--amber); font-style: italic; }
+  .section-head .desc {
+    grid-column: 1 / -1;
+    max-width: 620px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+  @media (min-width: 720px) {
+    .section-head .desc { grid-column: 2 / -1; margin-top: 16px; }
+  }
+
+  /* Stakeholder cards (overview) */
+  .stakeholders {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .stakeholders { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1000px) {
+    .stakeholders { grid-template-columns: repeat(4, 1fr); }
+  }
+  .stk {
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    padding: 24px;
+    background: var(--paper);
+  }
+  .stk .stk-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .stk h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 24px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .stk p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .stk .stk-volume {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--amber);
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--gray-1);
+    letter-spacing: 0.02em;
+  }
+
+  /* Legend */
+  .legend {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 32px;
+    padding: 20px 24px;
+    background: var(--paper-deep);
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  @media (min-width: 720px) {
+    .legend { grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); }
+  .legend-item .swatch {
+    width: 12px; height: 12px; border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .lg-action { background: var(--gray-2); }
+  .lg-touch { background: var(--ink); }
+  .lg-thought { background: transparent; border: 1px dashed var(--gray-3); }
+  .lg-pain { background: #C9483A; }
+  .lg-opp { background: var(--amber); }
+
+  /* Journey section */
+  .journey {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .journey:last-of-type { border-bottom: none; }
+
+  .journey-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  @media (min-width: 720px) {
+    .journey-head { grid-template-columns: 200px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .journey-head .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .journey-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+  .journey-head h2 em { color: var(--amber); font-style: italic; }
+  .journey-head .desc {
+    grid-column: 1 / -1;
+    max-width: 680px;
+    color: var(--ink-soft);
+  }
+  @media (min-width: 720px) {
+    .journey-head .desc { grid-column: 2 / -1; margin-top: 12px; }
+  }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 0; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-bottom: 32px;
+    position: relative;
+  }
+  @media (min-width: 720px) {
+    .stage {
+      grid-template-columns: 80px 1fr;
+      gap: 24px;
+      padding-bottom: 40px;
+    }
+  }
+  .stage:not(:last-child) .stage-marker::after {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 38px;
+    bottom: -32px;
+    width: 1px;
+    background: var(--gray-2);
+  }
+  @media (min-width: 720px) {
+    .stage:not(:last-child) .stage-marker::after {
+      left: 18px;
+      top: 40px;
+      bottom: -16px;
+    }
+  }
+  .stage-marker {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .stage-num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .stage-name-mobile {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-style: italic;
+  }
+  @media (min-width: 720px) {
+    .stage-name-mobile { display: none; }
+  }
+
+  .stage-body {
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    padding: 20px 24px;
+    background: var(--paper);
+  }
+  .stage-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--gray-1);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .stage-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  @media (max-width: 719px) {
+    .stage-name { display: none; }
+  }
+  .stage-meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .stage-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  @media (min-width: 600px) {
+    .stage-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .stage-grid .full { grid-column: 1 / -1; }
+
+  .item {
+    padding: 0;
+  }
+  .item-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .item-label .marker {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gray-3);
+  }
+  .item-text { font-size: 14px; color: var(--ink-soft); }
+
+  .item-action .marker { background: var(--gray-2); }
+  .item-touch .marker { background: var(--ink); }
+  .item-thought .marker { background: transparent; border: 1px dashed var(--gray-3); }
+  .item-thought .item-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .item-thought .item-text::before { content: '"'; color: var(--gray-3); }
+  .item-thought .item-text::after { content: '"'; color: var(--gray-3); }
+  .item-pain .marker { background: #C9483A; }
+  .item-pain ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .item-pain ul li {
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+  .item-pain ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gray-3);
+  }
+  .item-opp .marker { background: var(--amber); }
+  .item-opp {
+    background: var(--amber-tint);
+    padding: 12px 14px;
+    border-radius: 4px;
+    border-left: 2px solid var(--amber);
+  }
+  .item-opp .item-text { color: var(--amber-deep); font-size: 13px; }
+
+  .gap-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* Insights section */
+  .insights { padding: 96px 0; }
+  .insights .insight-block {
+    margin-bottom: 56px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .insights .insight-block:last-child { border-bottom: none; }
+  .insight-block h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+  .insight-block h3 em { color: var(--amber); }
+
+  .loop-grid, .friction-grid, .build-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .loop-grid, .friction-grid { grid-template-columns: repeat(2, 1fr); }
+    .build-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .loop, .friction, .build-item {
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    padding: 22px 24px;
+    background: var(--paper);
+  }
+  .loop .loop-num, .friction .f-num, .build-item .b-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .loop h4, .friction h4, .build-item h4 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    margin-bottom: 10px;
+  }
+  .loop p, .friction p, .build-item p {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .friction h4 em { color: #C9483A; }
+  .build-item .priority {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+  .priority.p-must { background: var(--ink); color: var(--paper); }
+  .priority.p-should { background: var(--amber-tint); color: var(--amber-deep); }
+  .priority.p-could { background: var(--gray-1); color: var(--gray-4); }
+
+  /* Footer */
+  footer {
+    padding: 64px 0 32px;
+    border-top: 1px solid var(--gray-1);
+    margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  footer .credit em { font-style: italic; color: var(--amber); font-family: var(--font-display); text-transform: none; letter-spacing: 0; font-size: 14px; }
+</style>
+</head>
+<body>
+<main class="container">
+
+  <div class="meta-bar">
+    <div><span class="dot"></span>Zili · Journey Map</div>
+    <div>v0.1 · May 2026</div>
+  </div>
+
+  <header class="hero">
+    <h1>Journey<em>.</em></h1>
+    <p class="tagline">End-to-end across every stakeholder. Where the product lives, where the loops live, where the gaps live.</p>
+    <div class="statement">
+      <div class="label">— Purpose</div>
+      <p>This map shows the path each user category takes through the product — from first encounter to advocacy or churn. It surfaces the moments that matter (the magic ones and the painful ones), the conversion points between categories, and the features the existing PRD has under-specified. It is the input to engineering scoping, not the output of it.</p>
+    </div>
+  </header>
+
+  <section class="overview">
+    <div class="section-head">
+      <div class="num">00 — Stakeholders</div>
+      <h2>Four <em>categories</em>. Four journeys.</h2>
+      <p class="desc">Every Zili user falls into one of four categories. Volume scales inversely with depth of relationship: many viewers, fewer customers, one operator.</p>
+    </div>
+    <div class="stakeholders">
+      <div class="stk">
+        <div class="stk-num">01</div>
+        <h3>Anonymous visitor</h3>
+        <p>Lands on zili.xyz without prior context. Marketing site is the entire surface. Goal: convert to signup.</p>
+        <div class="stk-volume">Volume — Medium</div>
+      </div>
+      <div class="stk">
+        <div class="stk-num">02</div>
+        <h3>Anonymous viewer</h3>
+        <p>Opens a public share link. Doesn't own an account. Largest user category. The watermark growth loop lives here.</p>
+        <div class="stk-volume">Volume — Highest</div>
+      </div>
+      <div class="stk">
+        <div class="stk-num">03</div>
+        <h3>Customer</h3>
+        <p>PM or consultant. Uploads, presents, shares. Core product. Sub-states: Free · Grandfather · Pro.</p>
+        <div class="stk-volume">Volume — Core</div>
+      </div>
+      <div class="stk">
+        <div class="stk-num">04</div>
+        <h3>Operator</h3>
+        <p>You. Then a small team. Watches, supports, moderates, decides. Few people, high consequence.</p>
+        <div class="stk-volume">Volume — Smallest</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="swatch lg-action"></span>Action — what they do</div>
+      <div class="legend-item"><span class="swatch lg-touch"></span>Touchpoint — where</div>
+      <div class="legend-item"><span class="swatch lg-thought"></span>Thought — internal voice</div>
+      <div class="legend-item"><span class="swatch lg-pain"></span>Friction — what hurts</div>
+      <div class="legend-item"><span class="swatch lg-opp"></span>Opportunity — what we ship</div>
+    </div>
+  </section>
+
+  <!-- JOURNEY 1: Anonymous visitor -->
+  <section class="journey">
+    <div class="journey-head">
+      <div class="label">Journey 01</div>
+      <h2>Anonymous <em>visitor</em></h2>
+      <p class="desc">Someone who lands on zili.xyz without prior context. Most arrive via the watermark on a deck they just viewed, a colleague's recommendation, or social. Goal of the journey: convert to signup within the first session.</p>
+    </div>
+
+    <div class="timeline">
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">01</div>
+          <div class="stage-name-mobile">Hear about Zili</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Hear about Zili</div>
+            <div class="stage-meta">External · No touchpoint yet</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Encounters the Zili watermark on a colleague's shared deck, sees a post on X / LinkedIn, hears it mentioned in a meeting.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Watermark element on a shared deck (the primary driver), social posts, word-of-mouth.</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">What's this Zili thing? Why does my colleague's deck look so much better than mine?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Watermark too subtle to register</li>
+                <li>No context for what Zili does</li>
+                <li>Click-through from social is friction-heavy</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Watermark links to a referrer-aware landing page that says: "Loved that deck? Make yours, free for 3 months." <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">02</div>
+          <div class="stage-name-mobile">Land on zili.xyz</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Land on zili.xyz</div>
+            <div class="stage-meta">Marketing site · Hero</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Visits the homepage. Scans for what it does, who it's for, how much it costs.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">zili.xyz homepage <span class="gap-tag">Not specified</span></div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Show me in five seconds. Don't make me read.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Generic SaaS hero doesn't differentiate</li>
+                <li>No way to see it in action without signing up</li>
+                <li>Vague value prop</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Lead with a live "drop an HTML file here" demo — no signup, instant render. The demo is the hero. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">03</div>
+          <div class="stage-name-mobile">Evaluate</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Evaluate fit</div>
+            <div class="stage-meta">Marketing site · Pricing, examples</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Scrolls. Tries the demo. Looks for example artifacts. Reads pricing.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Demo flow, examples gallery, pricing page <span class="gap-tag">Not specified</span></div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Will this work with the deck Claude just made for me?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>"3 months free then…?" post-promo pricing is unclear</li>
+                <li>No examples that match their use case</li>
+                <li>Skepticism it'll handle their specific artifact</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Curated examples gallery filtered by source LLM (Claude, ChatGPT, v0). Show "3 months free, then $12 or stay free with a watermark" in one sentence. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">04</div>
+          <div class="stage-name-mobile">Sign up</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Sign up</div>
+            <div class="stage-meta">/signup · Auth flow</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Clicks "Get started", creates account via Google or email.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">/signup (Feature 1 in Gherkin)</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Let me just try it. I'll commit if it works.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Email verification before first upload kills momentum</li>
+                <li>Asks for too much info upfront</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Defer email verification to after first session. Google OAuth as the primary path. Ask zero post-signup questions before showing /new. <span class="gap-tag">Refines existing</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">05</div>
+          <div class="stage-name-mobile">Activate</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Activate — first upload</div>
+            <div class="stage-meta">/new · Upload flow</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Drags an HTML file from Claude or paste, waits for render.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">/new, artifact detail page</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">If this doesn't look exactly like Claude made it, I'm out.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Wrong mode auto-detected (slides vs doc)</li>
+                <li>External asset blocked → visible breakage</li>
+                <li>Slow render = bad first impression</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Onboarding flow shows the artifact rendering live, with a "this look right?" toggle for mode in case detection misfired. Celebrate the moment if it works. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- JOURNEY 2: Anonymous viewer -->
+  <section class="journey">
+    <div class="journey-head">
+      <div class="label">Journey 02</div>
+      <h2>Anonymous <em>viewer</em></h2>
+      <p class="desc">Receives a share link from someone they know. Does not have an account. By volume, the largest user category — every shared deck has many viewers. This journey is where the watermark growth loop lives. Conversion from viewer → customer is the single most important loop in Zili.</p>
+    </div>
+
+    <div class="timeline">
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">01</div>
+          <div class="stage-name-mobile">Receive link</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Receive the link</div>
+            <div class="stage-meta">External · Slack / email / DM</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Sees a zili.xyz/p/{slug} link in Slack, email, iMessage, Notion, or another channel.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Open Graph unfurl in the receiving app</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">What did they send me? Is it worth opening now or later?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Bad OG card = looks like spam</li>
+                <li>Unbranded preview confuses recipient</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Beautiful OG cards (per brand canvas) drive the open. The card is the hook. Title prominent, slide count visible, Zili wordmark unmistakable.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">02</div>
+          <div class="stage-name-mobile">Open</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Open the link</div>
+            <div class="stage-meta">zili.xyz/p/{slug}</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Clicks. Waits for it to load. Possibly on mobile, possibly on desktop.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Edge-cached share page → presenter</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">It better load fast. If I'm on my phone, it better not be broken.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Cold-load &gt; 1s = bounce</li>
+                <li>Mobile renders poorly</li>
+                <li>Unbranded loading state feels cheap</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Edge cache for sub-1s loads. Branded loading state with the wordmark fading in. Mobile-first responsive scaling. <span class="gap-tag">NFR exists</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">03</div>
+          <div class="stage-name-mobile">Experience</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Experience the deck</div>
+            <div class="stage-meta">Presenter chrome · Slide or doc</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Reads, scrolls, navigates. Possibly fullscreens it. Possibly screenshots.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Presenter chrome (Feature 4/5)</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">This looks great. Wait, this wasn't made in PowerPoint? How?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Navigation conventions unclear (especially on mobile)</li>
+                <li>Hard to tell if there's more content</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">First-time tooltip on slide 1: "Tap right to advance, ESC to exit." Auto-hides after first interaction. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">04</div>
+          <div class="stage-name-mobile">React</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">React at the end</div>
+            <div class="stage-meta">End-of-deck moment</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Reaches the last slide / scrolls to bottom. Decides what to do next: close, share onward, or investigate.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">End-of-deck overlay <span class="gap-tag">Not specified</span></div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">That was good. How did they make it so fast?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>No call to action means they just close the tab</li>
+                <li>Watermark too subtle to convert</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">End-of-deck overlay: "Made with Zili — try it free for 3 months". Prominent but tasteful. Single CTA. <span class="gap-tag">New — high impact</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">05</div>
+          <div class="stage-name-mobile">Convert</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Convert to signup</div>
+            <div class="stage-meta">Referrer-aware landing → /signup</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Clicks the watermark or end-of-deck CTA. Lands on a context-aware page. Signs up.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Referrer-aware landing page → /signup with UTM</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">I just saw it work. Worth trying.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Generic landing page wastes warm intent</li>
+                <li>UTM tracking not captured</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Landing detects share-referrer context: "You just viewed [Quarterly Strategy]. Make yours, free for 3 months." Personalization → conversion. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- JOURNEY 3: Customer -->
+  <section class="journey">
+    <div class="journey-head">
+      <div class="label">Journey 03</div>
+      <h2>Customer <em>(PM / Consultant)</em></h2>
+      <p class="desc">The core product journey. PMs and Consultants share most stages but diverge in motivation (PM: internal velocity; Consultant: client polish + brand) and in distribution patterns (PM: Slack/Notion; Consultant: client email). Differences are noted inline.</p>
+    </div>
+
+    <div class="timeline">
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">01</div>
+          <div class="stage-name-mobile">First session</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">First session</div>
+            <div class="stage-meta">Onboarding · /new</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Signs up. Lands on /new. Uploads first artifact within 60 seconds.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">/new, artifact detail page</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Show me the magic. Don't make me read a tutorial.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Tutorial / wizard slows down the magic</li>
+                <li>Mode detection errors on the first try</li>
+                <li>Render delay on large files</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Zero-tutorial onboarding. Drop zone is the entire first screen. Render under 5s with an in-progress preview. <span class="gap-tag">Refines existing</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">02</div>
+          <div class="stage-name-mobile">Magic moment</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">The magic moment</div>
+            <div class="stage-meta">Artifact detail · First successful render</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Sees the artifact rendered perfectly. Compares to the original. Realises it actually works.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Artifact detail page · Present button</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">This is exactly what Claude made. I'm in.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Any fidelity gap kills the moment</li>
+                <li>Loading state on render breaks the wow</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Right after first render, prompt: "Share this with someone?" — strike while the moment is hot. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">03</div>
+          <div class="stage-name-mobile">First share</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">First share</div>
+            <div class="stage-meta">Share modal · Public link</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">PM: pastes link in Slack to team. Consultant: emails client with link.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Share modal (Feature 7)</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">PM: "Hope this works in our Slack." Consultant: "Hope this looks professional to my client."</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Unclear whether recipients need accounts</li>
+                <li>Consultant: worried about brand (Zili branding on client deliverable)</li>
+                <li>PM: worried about access control (anyone with link can view)</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Share modal says explicitly "Anyone with this link can view. No signup needed." Consultants see "Upgrade to Pro for unwatermarked sharing" CTA contextually. Password-protected links arrive in V1.5 for PM access concerns. <span class="gap-tag">Refines existing</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">04</div>
+          <div class="stage-name-mobile">First view</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">First recipient view</div>
+            <div class="stage-meta">Notification / dashboard</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Recipient opens the link. Owner sees a view count or notification.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Optional notification email · Library card view count <span class="gap-tag">View tracking not in V1 must-have</span></div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Someone opened my deck. Validation.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>V1 has no view tracking → no positive feedback loop</li>
+                <li>Habit formation suffers without this signal</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Even a simple "viewed" indicator in the library card creates massive habit-formation value. Worth promoting from V1.5 to V1. <span class="gap-tag">Scope decision</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">05</div>
+          <div class="stage-name-mobile">Habituate</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Habituate (weeks 2–12)</div>
+            <div class="stage-meta">Library · Recurring uploads</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Uploads weekly. Library grows to 5–15 artifacts. Re-uploads to iterate.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Library, artifact detail, re-upload</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">This is my default workflow now. How did I work before?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Library gets cluttered without search / tags</li>
+                <li>No version history on re-uploads (V2)</li>
+                <li>Hard to find an old deck</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Library search (full-text across titles) earns its place in V1. Tags and folders can wait. <span class="gap-tag">Scope decision</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">06</div>
+          <div class="stage-name-mobile">Pricing transition</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Pricing transition (month 3 → 4)</div>
+            <div class="stage-meta">Banner · Upgrade flow</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Sees countdown banner. Decides whether to upgrade.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Dashboard banner (Feature 9) · /pricing</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">$6/mo for life vs $12 later. The math is easy.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Banner too late / too quiet → grandfather window closes</li>
+                <li>Upgrade flow asks for too much info</li>
+                <li>Free downgrade with watermark feels punitive without good copy</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Banner sequence: T-30d, T-15d, T-7d, T-1d. Each escalates urgency without nagging. One-click upgrade with saved payment. For non-upgraders: "You're on Free — still amazing, just with a small watermark." <span class="gap-tag">Refines existing</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">07</div>
+          <div class="stage-name-mobile">Advocate</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Advocate</div>
+            <div class="stage-meta">External · Word-of-mouth</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">PM: tells colleagues in their PM Slack groups. Consultant: tells fellow consultants and clients. Possibly posts on X / LinkedIn.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">External · Shared decks (watermark loop)</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">This thing has changed how I work. Other people need to know.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>No referral incentive in V1</li>
+                <li>No share-to-social affordance from inside the product</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Referral program in V1.5: both sides get 1 month free Pro for a successful referral. Cheap to honor, high lifetime value. <span class="gap-tag">V1.5</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- JOURNEY 4: Operator -->
+  <section class="journey">
+    <div class="journey-head">
+      <div class="label">Journey 04</div>
+      <h2>Operator <em>(you)</em></h2>
+      <p class="desc">A small but high-consequence journey. The operator keeps the system healthy, the customers supported, and the business defensible. V1 means one person; the journey scales to a team over time.</p>
+    </div>
+
+    <div class="timeline">
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">01</div>
+          <div class="stage-name-mobile">Daily monitor</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Daily monitor</div>
+            <div class="stage-meta">Admin dashboard · Morning ritual</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Opens admin (Retool over Postgres + Stripe). Checks signups, active users, conversion, error rate, queue depth.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Admin metrics dashboard (Feature 13)</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Did anything fall off a cliff overnight? Is there anything urgent in the queue?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Without alerts, you'd miss anomalies between morning checks</li>
+                <li>Context-switching across multiple tools</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Slack channel as the single ops surface. Anomaly alerts, error spikes, abuse reports, all post here. Admin dashboard is consulted, not monitored. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">02</div>
+          <div class="stage-name-mobile">Triage</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Triage</div>
+            <div class="stage-meta">Admin queues</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Reviews security rejections, abuse reports, DMCA notices, refund requests. Prioritises by severity / SLA.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Admin queues (Features 10, 11, 12)</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">What needs my attention right now? What can wait?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Multiple queues = decision fatigue</li>
+                <li>No prioritisation logic = oldest stuff stays oldest</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Single unified inbox: DMCA &gt; security &gt; abuse reports &gt; refunds &gt; everything else. SLA timer on each. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">03</div>
+          <div class="stage-name-mobile">Resolve</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Resolve</div>
+            <div class="stage-meta">Admin tools · Audit log</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Takes action: suspend an account, take down a deck, issue a refund, grant a comp, update the CSP allow-list.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Admin tools, audit log</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Do this right. Document it. Don't break anything.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Inconsistent handling without playbooks</li>
+                <li>Hard to remember edge case policies</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Pre-written runbooks for each action type. Templated user comms (suspension notice, DMCA take-down notice, refund confirmation). Required reason codes prevent ad-hoc decisions. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">04</div>
+          <div class="stage-name-mobile">Strategic review</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Strategic review (weekly)</div>
+            <div class="stage-meta">PostHog · Cohort analysis</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Reviews growth, retention, conversion. Identifies what's working and what's not.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">PostHog · Admin metrics</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Where are we winning? Where are we losing? What's the next bet?</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>Hard to draw signal from small numbers early on</li>
+                <li>Cohort builds take time without pre-saved queries</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Pre-built cohorts for the four user categories. Pre-saved funnels for the journey stages. Pre-saved retention charts. Day-one setup, monthly payoff. <span class="gap-tag">New</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker">
+          <div class="stage-num">05</div>
+          <div class="stage-name-mobile">Incident response</div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head">
+            <div class="stage-name">Incident response</div>
+            <div class="stage-meta">Sentry · Status page · Runbook</div>
+          </div>
+          <div class="stage-grid">
+            <div class="item item-action">
+              <div class="item-label"><span class="marker"></span>Action</div>
+              <div class="item-text">Major incident: security event, viral abuse, render outage, payment failure. Contain → communicate → fix → postmortem.</div>
+            </div>
+            <div class="item item-touch">
+              <div class="item-label"><span class="marker"></span>Touchpoint</div>
+              <div class="item-text">Sentry, status page, customer comms</div>
+            </div>
+            <div class="item item-thought full">
+              <div class="item-label"><span class="marker"></span>Thought</div>
+              <div class="item-text">Don't panic. Follow the runbook. Communicate early.</div>
+            </div>
+            <div class="item item-pain">
+              <div class="item-label"><span class="marker"></span>Friction</div>
+              <ul>
+                <li>No runbooks → panic-driven decisions</li>
+                <li>No status page → angry users in the dark</li>
+                <li>No customer comms template → bad first response</li>
+              </ul>
+            </div>
+            <div class="item item-opp">
+              <div class="item-label"><span class="marker"></span>Opportunity</div>
+              <div class="item-text">Pre-written runbooks for likely scenarios: XSS report, DMCA, render outage, payment provider down, GDPR request. Each with a 4-step playbook and a customer-comms template. <span class="gap-tag">New — pre-launch</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section class="insights">
+    <div class="section-head">
+      <div class="num">05 — Insights</div>
+      <h2>What the map <em>reveals</em>.</h2>
+      <p class="desc">Cross-stakeholder patterns. Growth loops worth investing in. Friction points worth eliminating. New work surfaced that wasn't in the PRD or Gherkin.</p>
+    </div>
+
+    <!-- Growth loops -->
+    <div class="insight-block">
+      <h3>Growth <em>loops</em></h3>
+      <div class="loop-grid">
+        <div class="loop">
+          <div class="loop-num">LOOP 01 — Primary</div>
+          <h4>The watermark loop</h4>
+          <p>Customer creates share → Anonymous viewer sees the deck → Watermark and end-of-deck CTA convert viewer → Viewer signs up → Becomes Customer → Loop. This is the single most important loop. Every product decision should be evaluated against whether it strengthens or weakens this loop.</p>
+        </div>
+        <div class="loop">
+          <div class="loop-num">LOOP 02 — Secondary</div>
+          <h4>The demo loop</h4>
+          <p>Anonymous visitor lands on zili.xyz → tries the live demo without signup → magic moment → converts to signup. Cheaper top-of-funnel than waiting for a watermark exposure. Requires building the demo experience (currently unspecified).</p>
+        </div>
+        <div class="loop">
+          <div class="loop-num">LOOP 03 — V1.5</div>
+          <h4>The referral loop</h4>
+          <p>Customer advocates → invites colleague with a referral link → both get 1 month free Pro → colleague converts. Cheap, defensible, high-LTV. Not in V1 but should be designed for.</p>
+        </div>
+        <div class="loop">
+          <div class="loop-num">LOOP 04 — Passive</div>
+          <h4>The SEO loop</h4>
+          <p>Public shared decks are indexed by Google → some surface for relevant queries → traffic to zili.xyz/p/{slug} → conversion at deck-view stage. Requires SSR + good OG cards + structured data. Mostly free if architecture is right.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Friction points -->
+    <div class="insight-block">
+      <h3>Critical <em>friction</em></h3>
+      <div class="friction-grid">
+        <div class="friction">
+          <div class="f-num">FRICTION 01</div>
+          <h4>First-upload <em>mode failure</em></h4>
+          <p>If auto-detection picks the wrong mode on a user's first artifact, the magic moment dies. Recovery UX must be one click, prominent, and reassuring. Currently in Gherkin as a feature but the UX is undefined.</p>
+        </div>
+        <div class="friction">
+          <div class="f-num">FRICTION 02</div>
+          <h4>Anonymous viewer <em>discovery gap</em></h4>
+          <p>Viewers see beautiful decks but no obvious "what is this?" affordance. The single highest-volume user category is being under-served at the conversion moment. End-of-deck CTA + referrer-aware landing closes this.</p>
+        </div>
+        <div class="friction">
+          <div class="f-num">FRICTION 03</div>
+          <h4>Month-4 paywall <em>surprise</em></h4>
+          <p>If the grandfather window ends without sufficient warning, users churn at a high rate. Banner sequence (T-30d → T-1d) plus one-click upgrade with saved payment is required, not optional.</p>
+        </div>
+        <div class="friction">
+          <div class="f-num">FRICTION 04</div>
+          <h4>Operator <em>first incident</em></h4>
+          <p>The first DMCA, security event, or major bug will be high-stress. Without pre-written runbooks and customer-comms templates, the response will be slower and less consistent than it needs to be. Pre-launch work, not post-launch reaction.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- What to build -->
+    <div class="insight-block">
+      <h3>New work <em>this map surfaces</em></h3>
+      <p style="margin-bottom: 24px; color: var(--ink-soft); max-width: 720px;">Items below were not (or not fully) specified in the PRD or Gherkin. Engineering scoping should treat these as requirements, not nice-to-haves. Priority tags indicate V1 ranking.</p>
+      <div class="build-grid">
+
+        <div class="build-item">
+          <div class="b-num">BUILD 01</div>
+          <h4>Marketing site (zili.xyz)</h4>
+          <p>Homepage with live demo, examples gallery, pricing page, legal pages. Distinct from the application surface. Without this, the visitor and viewer journeys both stall.</p>
+          <div class="priority p-must">Must · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 02</div>
+          <h4>Live demo (no signup)</h4>
+          <p>"Drop your HTML here to try" widget on the homepage. Generates a render in real time, optionally promotes to signup to save. Drives the demo growth loop.</p>
+          <div class="priority p-must">Must · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 03</div>
+          <h4>End-of-deck CTA</h4>
+          <p>When an anonymous viewer reaches the last slide / scrolls to the bottom, show a tasteful overlay: "Made with Zili — make yours, free for 3 months." Closes the viewer → customer loop.</p>
+          <div class="priority p-must">Must · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 04</div>
+          <h4>Referrer-aware landing</h4>
+          <p>When a viewer clicks the watermark or end-of-deck CTA, the landing page personalises copy and CTA based on the referring deck. UTM tracking + contextual headline.</p>
+          <div class="priority p-must">Must · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 05</div>
+          <h4>View tracking (basic)</h4>
+          <p>Per-deck view counter visible to owners. No detailed analytics yet — just "12 views since you shared this." Drives habit formation. Promote from V1.5 to V1.</p>
+          <div class="priority p-must">Must · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 06</div>
+          <h4>Library search</h4>
+          <p>Full-text search across artifact titles. Tags and folders can wait. Earned its place as soon as power users hit 10+ artifacts.</p>
+          <div class="priority p-must">Must · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 07</div>
+          <h4>Grandfather countdown banner sequence</h4>
+          <p>T-30d, T-15d, T-7d, T-1d banners. Each tier escalates. One-click upgrade with saved payment. Gherkin Feature 9 specifies the trigger; UX needs design.</p>
+          <div class="priority p-must">Must · V1 ops</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 08</div>
+          <h4>Slack ops channel</h4>
+          <p>Single Slack channel for anomaly alerts, abuse reports, security rejections, DMCA. Beats checking three dashboards.</p>
+          <div class="priority p-must">Must · V1 ops</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 09</div>
+          <h4>Admin runbooks</h4>
+          <p>Pre-written, version-controlled playbooks for: DMCA, security incident, GDPR request, payment failure, mass abuse, render outage. Customer-comms templates included.</p>
+          <div class="priority p-must">Must · Pre-launch</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 10</div>
+          <h4>Unified admin inbox</h4>
+          <p>One queue, prioritised by severity and SLA. Reduces operator context-switching from day one.</p>
+          <div class="priority p-should">Should · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 11</div>
+          <h4>Mode-mismatch recovery UX</h4>
+          <p>When auto-detection misfires, the artifact detail page surfaces a prominent "Switch to slides / Switch to document" toggle with a one-click correction. Saves the magic moment.</p>
+          <div class="priority p-must">Must · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 12</div>
+          <h4>Examples gallery</h4>
+          <p>Curated showcase of example artifacts — filterable by source LLM and use case. Drives both evaluation (Journey 1) and inspiration for existing customers.</p>
+          <div class="priority p-should">Should · V1</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 13</div>
+          <h4>Referral program</h4>
+          <p>Both sides get 1 month free Pro. Cheap to honor, high LTV. Built for V1.5, not V1.</p>
+          <div class="priority p-could">Could · V1.5</div>
+        </div>
+
+        <div class="build-item">
+          <div class="b-num">BUILD 14</div>
+          <h4>Status page</h4>
+          <p>Public-facing status page for outages and incidents. Builds trust during inevitable incidents.</p>
+          <div class="priority p-should">Should · V1 ops</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Cross-journey conversion summary -->
+    <div class="insight-block">
+      <h3>The <em>conversion ladder</em></h3>
+      <p style="color: var(--ink-soft); max-width: 720px; margin-bottom: 24px;">Each user category converts upward, not downward. The journey map makes the ladder visible. Each rung is a moment we can either invest in or leave to chance.</p>
+      <div class="comp-card" style="border: 1px solid var(--gray-1); border-radius: 6px; padding: 28px; background: var(--paper);">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 16px; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft);">
+          <div><span style="color: var(--gray-4);">RUNG 01 →</span> &nbsp; Anonymous viewer becomes Anonymous visitor &nbsp; <span style="color: var(--amber);">(end-of-deck CTA, watermark, referrer landing)</span></div>
+          <div><span style="color: var(--gray-4);">RUNG 02 →</span> &nbsp; Anonymous visitor becomes Customer (Free) &nbsp; <span style="color: var(--amber);">(live demo, simple signup, first-upload magic)</span></div>
+          <div><span style="color: var(--gray-4);">RUNG 03 →</span> &nbsp; Customer (Free) becomes Customer (Pro) &nbsp; <span style="color: var(--amber);">(grandfather countdown, watermark removal, custom slug)</span></div>
+          <div><span style="color: var(--gray-4);">RUNG 04 →</span> &nbsp; Customer becomes Advocate &nbsp; <span style="color: var(--amber);">(referral program, share affordances, V1.5)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next steps -->
+    <div class="insight-block" style="border-bottom: none; padding-bottom: 0;">
+      <h3>What this <em>unblocks</em></h3>
+      <p style="color: var(--ink-soft); max-width: 720px;">With the journey map locked, engineering scoping has full context. The MVP sprint plan can now be built knowing: which features serve which stakeholders, where the magic moments live, where the growth loops are, what new work the PRD missed, and how operations supports the whole system from day one.</p>
+    </div>
+
+  </section>
+
+  <footer>
+    <div class="credit">Zili — Journey Map v0.1 · <em>End to end</em></div>
+    <div>Draft · Iterate · Lock</div>
+  </footer>
+
+</main>
+</body>
+</html>

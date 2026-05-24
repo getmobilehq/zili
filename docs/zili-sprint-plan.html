@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zili — MVP Sprint Plan v0.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F5;
+    --paper-deep: #F2F0E8;
+    --ink: #1A1815;
+    --ink-soft: #3A3733;
+    --gray-1: #ECE9E0;
+    --gray-2: #D6D2C7;
+    --gray-3: #A8A39A;
+    --gray-4: #6E6A62;
+    --amber: #D26B2C;
+    --amber-deep: #B25620;
+    --amber-tint: #F8E8D8;
+    --red: #C9483A;
+    --red-tint: #F5E2DE;
+    --green-ink: #4A6B3A;
+    --green-tint: #E6EDDE;
+    --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+    --gutter: clamp(20px, 5vw, 56px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: var(--font-ui);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.55;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  .container { max-width: 1180px; margin: 0 auto; padding: var(--gutter); }
+
+  /* Meta bar */
+  .meta-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--gray-4);
+    padding-bottom: 56px; border-bottom: 1px solid var(--gray-1);
+  }
+  .meta-bar .dot {
+    display: inline-block; width: 6px; height: 6px;
+    background: var(--amber); border-radius: 50%;
+    margin-right: 8px; vertical-align: middle;
+  }
+
+  /* Hero */
+  .hero { padding: 64px 0 88px; border-bottom: 1px solid var(--gray-1); }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(56px, 10vw, 120px);
+    line-height: 0.95; letter-spacing: -0.02em; font-weight: 400;
+  }
+  .hero h1 em { font-style: italic; color: var(--amber); }
+  .hero .tagline {
+    font-family: var(--font-display); font-style: italic;
+    font-size: clamp(18px, 2.2vw, 24px); color: var(--ink-soft);
+    margin-top: 20px; max-width: 720px;
+  }
+  .hero .statement {
+    margin-top: 48px; display: grid; grid-template-columns: 1fr; gap: 20px;
+    max-width: 720px; color: var(--ink-soft);
+  }
+  @media (min-width: 720px) {
+    .hero .statement { grid-template-columns: 140px 1fr; gap: 32px; align-items: start; }
+  }
+  .hero .statement .label {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--gray-4); padding-top: 4px;
+  }
+
+  /* Section heads */
+  section.block { padding: 72px 0; border-bottom: 1px solid var(--gray-1); }
+  section.block:last-of-type { border-bottom: none; }
+  .section-head {
+    display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 40px;
+  }
+  @media (min-width: 720px) {
+    .section-head { grid-template-columns: 140px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .section-head .num {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-4);
+  }
+  .section-head h2 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.01em; line-height: 1.1;
+  }
+  .section-head h2 em { color: var(--amber); font-style: italic; }
+  .section-head .desc {
+    grid-column: 1 / -1; max-width: 700px; color: var(--ink-soft); margin-top: 8px;
+  }
+  @media (min-width: 720px) {
+    .section-head .desc { grid-column: 2 / -1; margin-top: 14px; }
+  }
+
+  /* Assumption cards */
+  .assumption-grid {
+    display: grid; gap: 16px; grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) { .assumption-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .assumption-grid { grid-template-columns: repeat(3, 1fr); } }
+  .as {
+    border: 1px solid var(--gray-1); border-radius: 6px;
+    padding: 22px 24px; background: var(--paper);
+  }
+  .as .as-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+  .as h4 {
+    font-family: var(--font-display); font-style: italic; font-weight: 400;
+    font-size: 22px; letter-spacing: -0.005em; margin-bottom: 10px;
+  }
+  .as p { font-size: 13px; color: var(--ink-soft); }
+  .as .as-tag {
+    display: inline-block; font-family: var(--font-mono); font-size: 10px;
+    padding: 2px 6px; background: var(--amber-tint); color: var(--amber-deep);
+    border-radius: 3px; margin-top: 12px; letter-spacing: 0.04em;
+  }
+
+  /* Capacity table */
+  .capacity-grid {
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .capacity-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .cap {
+    border: 1px solid var(--gray-1); border-radius: 6px;
+    padding: 24px; background: var(--paper);
+  }
+  .cap h4 {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 22px; font-weight: 400; margin-bottom: 16px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--gray-1);
+  }
+  .cap-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 8px 0; font-size: 13px;
+  }
+  .cap-row span:first-child { color: var(--ink-soft); }
+  .cap-row span:last-child { font-family: var(--font-mono); color: var(--ink); }
+  .cap-row.total {
+    border-top: 1px solid var(--gray-1); margin-top: 8px; padding-top: 14px;
+    font-weight: 500;
+  }
+  .cap-row.total span:last-child { color: var(--amber-deep); font-weight: 500; }
+
+  /* Sprint cards */
+  .sprints { display: flex; flex-direction: column; gap: 24px; }
+  .sprint {
+    border: 1px solid var(--gray-1); border-radius: 8px;
+    overflow: hidden; background: var(--paper);
+  }
+  .sprint-head {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+    padding: 20px 24px; background: var(--paper-deep);
+    border-bottom: 1px solid var(--gray-1);
+  }
+  @media (min-width: 720px) {
+    .sprint-head {
+      grid-template-columns: 140px 1fr auto;
+      gap: 28px; align-items: center;
+    }
+  }
+  .sprint-num {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .sprint-num .num-big {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 38px; color: var(--ink); margin-right: 4px;
+    line-height: 1; letter-spacing: -0.01em;
+    text-transform: none;
+  }
+  .sprint-title {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 24px; letter-spacing: -0.005em;
+  }
+  .sprint-title em { color: var(--amber); }
+  .sprint-meta {
+    font-family: var(--font-mono); font-size: 11px; color: var(--gray-4);
+    letter-spacing: 0.04em; text-transform: uppercase;
+    text-align: right;
+  }
+  .sprint-meta .points {
+    color: var(--amber-deep); font-weight: 500;
+  }
+
+  .sprint-body { padding: 24px; }
+
+  .sprint-section {
+    margin-bottom: 20px; padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .sprint-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .sprint-section .ss-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .sprint-section p {
+    font-size: 13.5px; color: var(--ink-soft); margin-bottom: 4px;
+  }
+
+  .tasks { display: grid; gap: 8px; }
+  .task {
+    display: grid; grid-template-columns: 60px 1fr 60px; gap: 12px;
+    padding: 8px 0; align-items: baseline;
+    font-size: 13px; border-top: 1px dashed var(--gray-1);
+  }
+  .task:first-of-type { border-top: none; }
+  .task-id {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.04em;
+  }
+  .task-desc { color: var(--ink); }
+  .task-pts {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--amber-deep); text-align: right;
+  }
+
+  /* DoD list */
+  .dod {
+    background: var(--green-tint); border-left: 2px solid var(--green-ink);
+    padding: 12px 16px; border-radius: 0 4px 4px 0;
+  }
+  .dod .dod-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--green-ink); letter-spacing: 0.06em;
+    margin-bottom: 6px; font-weight: 600;
+  }
+  .dod ul { list-style: none; padding: 0; margin: 0; }
+  .dod ul li {
+    font-size: 13px; color: var(--ink); padding-left: 18px;
+    position: relative; line-height: 1.5;
+  }
+  .dod ul li::before {
+    content: '✓'; position: absolute; left: 0; top: 0;
+    color: var(--green-ink); font-weight: 600;
+  }
+
+  /* Risk callout */
+  .risk-callout {
+    background: var(--red-tint); border-left: 2px solid var(--red);
+    padding: 12px 16px; border-radius: 0 4px 4px 0; margin-top: 12px;
+  }
+  .risk-callout .rc-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--red); letter-spacing: 0.06em;
+    margin-bottom: 4px; font-weight: 600;
+  }
+  .risk-callout p { font-size: 13px; color: var(--ink); margin: 0; }
+
+  /* Demo callout */
+  .demo-callout {
+    background: var(--amber-tint); border-left: 2px solid var(--amber);
+    padding: 12px 16px; border-radius: 0 4px 4px 0;
+  }
+  .demo-callout .dc-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--amber-deep); letter-spacing: 0.06em;
+    margin-bottom: 4px; font-weight: 600;
+  }
+  .demo-callout p { font-size: 13px; color: var(--ink); margin: 0; }
+  .demo-callout p strong { color: var(--amber-deep); }
+
+  /* Milestone bands */
+  .milestone {
+    background: var(--ink); color: var(--paper);
+    padding: 24px 32px; border-radius: 6px;
+    margin: 8px 0;
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .milestone { grid-template-columns: 200px 1fr; gap: 32px; align-items: center; }
+  }
+  .milestone .m-label {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-3); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .milestone .m-body {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 20px; line-height: 1.3;
+  }
+  .milestone .m-body em { color: var(--amber); }
+
+  /* Risk register */
+  .risks {
+    display: grid; gap: 16px; grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) { .risks { grid-template-columns: 1fr 1fr; } }
+  .risk {
+    border: 1px solid var(--gray-1); border-radius: 6px;
+    padding: 22px 24px; background: var(--paper);
+  }
+  .risk .r-num {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+  .risk h4 {
+    font-family: var(--font-display); font-style: italic; font-weight: 400;
+    font-size: 20px; letter-spacing: -0.005em; margin-bottom: 8px;
+  }
+  .risk .r-level {
+    display: inline-block; font-family: var(--font-mono); font-size: 10px;
+    padding: 2px 8px; border-radius: 3px; letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .r-level.high { background: var(--red); color: var(--paper); }
+  .r-level.med { background: var(--amber); color: var(--paper); }
+  .r-level.low { background: var(--gray-2); color: var(--ink); }
+  .risk p { font-size: 13px; color: var(--ink-soft); margin-bottom: 8px; }
+  .risk .mitigation {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--ink); background: var(--paper-deep);
+    padding: 8px 12px; border-radius: 3px; margin-top: 8px;
+  }
+  .risk .mitigation strong {
+    color: var(--amber-deep); display: block; margin-bottom: 4px;
+    font-size: 10px; letter-spacing: 0.04em;
+  }
+
+  /* Contractor grid */
+  .contractor-grid {
+    display: grid; gap: 16px; grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) { .contractor-grid { grid-template-columns: repeat(2, 1fr); } }
+  .contractor {
+    border: 1px solid var(--gray-1); border-radius: 6px;
+    padding: 22px 24px; background: var(--paper);
+  }
+  .contractor h4 {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 22px; font-weight: 400; margin-bottom: 8px;
+  }
+  .contractor .c-when {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--amber-deep); letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .contractor p { font-size: 13px; color: var(--ink-soft); margin-bottom: 8px; }
+  .contractor .c-cost {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--ink); margin-top: 8px;
+    padding-top: 8px; border-top: 1px solid var(--gray-1);
+  }
+
+  /* Stack table */
+  .stack-table {
+    border: 1px solid var(--gray-1); border-radius: 6px;
+    overflow: hidden; background: var(--paper);
+  }
+  .stack-row {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 16px 20px; border-bottom: 1px solid var(--gray-1);
+  }
+  @media (min-width: 720px) {
+    .stack-row { grid-template-columns: 160px 1fr 200px; gap: 24px; align-items: baseline; }
+  }
+  .stack-row:last-child { border-bottom: none; }
+  .stack-row .sr-label {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .stack-row .sr-choice {
+    font-family: var(--font-display); font-style: italic; font-size: 18px;
+    color: var(--ink);
+  }
+  .stack-row .sr-rationale {
+    font-size: 12px; color: var(--ink-soft);
+  }
+
+  /* Footer */
+  footer {
+    padding: 56px 0 24px; border-top: 1px solid var(--gray-1);
+    margin-top: 64px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--gray-4); flex-wrap: wrap; gap: 12px;
+  }
+  footer .credit em {
+    font-style: italic; color: var(--amber);
+    font-family: var(--font-display); text-transform: none;
+    letter-spacing: 0; font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<main class="container">
+
+  <div class="meta-bar">
+    <div><span class="dot"></span>Zili · MVP Sprint Plan</div>
+    <div>v0.1 · May 2026</div>
+  </div>
+
+  <header class="hero">
+    <h1>Sprint<em>.</em></h1>
+    <p class="tagline">Twelve fortnights from empty repo to public launch. Outside-in. Risk-first. Vertical slices.</p>
+    <div class="statement">
+      <div class="label">— Posture</div>
+      <p>This plan assumes a serious side bet: roughly 20 productive engineering hours per week, a solo founder doing full-stack work, with selective contractor pulls for design polish, security review, and content. Every sprint produces a deployable, demoable slice. No sprint exists only to "set up infrastructure" — schema and tooling work attach to the feature that needs them.</p>
+    </div>
+  </header>
+
+  <!-- ============ ASSUMPTIONS ============ -->
+  <section class="block">
+    <div class="section-head">
+      <div class="num">01 — Assumptions</div>
+      <h2>What this plan <em>assumes</em>.</h2>
+      <p class="desc">Stated assumptions are the difference between a plan and a hope. Each item below can be challenged — but it must be challenged explicitly, not silently revised.</p>
+    </div>
+    <div class="assumption-grid">
+      <div class="as">
+        <div class="as-label">Posture</div>
+        <h4>Serious side bet</h4>
+        <p>Solo founder, ~20 productive engineering hours/week. Not full-time. Not weekends-only. Sprints scoped accordingly.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">Cadence</div>
+        <h4>2-week sprints</h4>
+        <p>Fortnight ending Friday. Demo Friday afternoon. Plan next sprint Monday. Twelve sprints = ~24 weeks to launch.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">Capacity</div>
+        <h4>~30 points per sprint</h4>
+        <p>Story points calibrated to roughly half-day per point. Capacity = 30 points × 12 sprints = 360 points total.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">Sequencing</div>
+        <h4>Outside-in, risk-first</h4>
+        <p>Marketing site + ingest pipeline first. Hard, unknown things tackled in Sprint 1. Vertical slices every fortnight.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">Quality bar</div>
+        <h4>Slice-then-deepen</h4>
+        <p>Every sprint produces a deployable slice. Polish is deferred but never forgotten. No "infrastructure sprints" allowed.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">Contractors</div>
+        <h4>Selective pulls</h4>
+        <p>Design polish at S4 and S10. Security review at S9. Content/copy at S11. Budgeted in §07 below.</p>
+        <span class="as-tag">~$8-12k total</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STACK ============ -->
+  <section class="block">
+    <div class="section-head">
+      <div class="num">02 — Stack</div>
+      <h2>Choices, <em>locked</em>.</h2>
+      <p class="desc">Each row picks one technology and commits to it. Lock these in S0 (week before Sprint 1). Changing the stack mid-flight is the single most common reason solo projects miss their launch window.</p>
+    </div>
+    <div class="stack-table">
+      <div class="stack-row">
+        <div class="sr-label">Framework</div>
+        <div class="sr-choice">Next.js 14+ (App Router)</div>
+        <div class="sr-rationale">SSR for shared links. Edge-runtime for OG images. Mature.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Hosting</div>
+        <div class="sr-choice">Vercel</div>
+        <div class="sr-rationale">Zero-config edge. Faster ship velocity. Migrate later if cost grows.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Database</div>
+        <div class="sr-choice">Supabase (Postgres)</div>
+        <div class="sr-rationale">Postgres + auth + storage in one. Cheap to start. No vendor lock.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Auth</div>
+        <div class="sr-choice">Supabase Auth</div>
+        <div class="sr-rationale">Bundled with DB. Google OAuth + email in one provider. One less account.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Object storage</div>
+        <div class="sr-choice">Cloudflare R2</div>
+        <div class="sr-rationale">S3-compatible. No egress fees. Better economics at any scale.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Renderer</div>
+        <div class="sr-choice">Sandboxed iframe</div>
+        <div class="sr-rationale">Strict CSP. sandbox="allow-scripts" only. Asset proxy through Workers.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Payments</div>
+        <div class="sr-choice">Stripe</div>
+        <div class="sr-rationale">Industry default. Stripe Billing for subscriptions. Webhook-driven state.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Analytics</div>
+        <div class="sr-choice">PostHog (self-hosted later)</div>
+        <div class="sr-rationale">Funnels, cohorts, feature flags in one. Generous free tier.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Error monitoring</div>
+        <div class="sr-choice">Sentry</div>
+        <div class="sr-rationale">Free for solo. Source-map upload. Replay for the hard bugs.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Admin UI</div>
+        <div class="sr-choice">Retool</div>
+        <div class="sr-rationale">Built on Postgres direct. Saves weeks of custom-admin work. ~$10/mo.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Email</div>
+        <div class="sr-choice">Resend</div>
+        <div class="sr-rationale">React Email components. Cheap. Good deliverability. One-line SDK.</div>
+      </div>
+      <div class="stack-row">
+        <div class="sr-label">Asset proxy / CSP enforcement</div>
+        <div class="sr-choice">Cloudflare Workers</div>
+        <div class="sr-rationale">For asset allow-list, CSP injection, edge caching of shared decks.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CAPACITY ============ -->
+  <section class="block">
+    <div class="section-head">
+      <div class="num">03 — Capacity</div>
+      <h2>Time, in <em>points</em>.</h2>
+      <p class="desc">Story points anchored to real time. One point ≈ half a day of focused engineering work. This calibration is the most important number in the plan — overestimate it and you'll under-deliver every sprint.</p>
+    </div>
+    <div class="capacity-grid">
+      <div class="cap">
+        <h4>Per sprint</h4>
+        <div class="cap-row"><span>Productive hours/week</span><span>~20h</span></div>
+        <div class="cap-row"><span>Hours per sprint (2 weeks)</span><span>~40h</span></div>
+        <div class="cap-row"><span>Points per sprint (at 4h/pt)</span><span>~30 pts</span></div>
+        <div class="cap-row"><span>Buffer for unknowns</span><span>~5 pts</span></div>
+        <div class="cap-row total"><span>Effective capacity</span><span>~25 committed pts</span></div>
+      </div>
+      <div class="cap">
+        <h4>To launch</h4>
+        <div class="cap-row"><span>Sprints planned</span><span>12</span></div>
+        <div class="cap-row"><span>Calendar weeks</span><span>~24 weeks</span></div>
+        <div class="cap-row"><span>Total points committed</span><span>~300 pts</span></div>
+        <div class="cap-row"><span>Total buffer</span><span>~60 pts</span></div>
+        <div class="cap-row total"><span>Effective budget</span><span>~360 pts</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MILESTONE 1 ============ -->
+  <section class="block">
+    <div class="section-head">
+      <div class="num">04 — The plan</div>
+      <h2>Twelve <em>fortnights</em>.</h2>
+      <p class="desc">Three milestones, four sprints each. Each milestone ends with a working artifact that can be demoed to a real user. Every sprint has explicit tasks, points, a Definition of Done, and a single demo deliverable.</p>
+    </div>
+
+    <div class="milestone">
+      <div class="m-label">Milestone 01 · S1 – S4</div>
+      <div class="m-body">The render works. <em>Faithfully.</em> Closed alpha with 5 hand-picked users.</div>
+    </div>
+
+    <div class="sprints">
+
+      <!-- ============ SPRINT 1 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">01</span> · Sprint</div>
+          <div class="sprint-title">The <em>render</em> works</div>
+          <div class="sprint-meta">~28 pts<br><span class="points">Risk-first</span></div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>Prove that a single HTML file can be uploaded, stored, and rendered in a sandboxed iframe with full visual fidelity. No auth, no UI polish, no sharing. Just: does the hardest technical bet work?</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S1.1</div><div class="task-desc">Repo, Next.js scaffold, deploy to Vercel, custom domain wired</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S1.2</div><div class="task-desc">Supabase project, schema for users + artifacts (minimal)</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S1.3</div><div class="task-desc">R2 bucket, signed-upload pipeline, file upload to storage</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S1.4</div><div class="task-desc">Sandboxed iframe renderer with strict CSP (no allow-same-origin)</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S1.5</div><div class="task-desc">Asset proxy worker for Tailwind CDN, Google Fonts, common CDNs</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S1.6</div><div class="task-desc">Visual-regression test harness (Playwright + screenshot diffs)</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S1.7</div><div class="task-desc">Seed 8 reference artifacts (Claude, ChatGPT, v0, Lovable, Bolt) for QA</div><div class="task-pts">3 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>I can curl-POST an HTML file to /api/upload and get back a URL.</li>
+                <li>Visiting that URL renders the artifact pixel-perfect for at least 7 of 8 reference artifacts.</li>
+                <li>External assets from the allow-list load. Anything else is blocked by CSP.</li>
+                <li>Visual-diff harness flags >2% pixel difference vs. native browser render.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="risk-callout">
+              <div class="rc-label">Risk this sprint resolves</div>
+              <p>Rendering fidelity is the entire product thesis. If S1 can't prove it works, the whole roadmap dies. Better to find out in week 2 than in week 22.</p>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>Five reference artifacts rendering side-by-side</strong> — Zili's render vs. the original browser. If they don't match, we don't ship S2 until they do.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 2 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">02</span> · Sprint</div>
+          <div class="sprint-title">Auth, library, and <em>mode detection</em></div>
+          <div class="sprint-meta">~28 pts</div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>Wrap the render in a real product. Users can sign up, upload, see their library, and the artifact gets auto-segmented into slide vs document mode. This is the second-hardest unknown: does mode detection work on a wide enough variety of LLM artifacts?</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S2.1</div><div class="task-desc">Supabase Auth — email + Google OAuth flows, session middleware</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S2.2</div><div class="task-desc">/library page — grid of cards, click to detail view</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S2.3</div><div class="task-desc">/new page — drag-drop + paste HTML + paste URL flows</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S2.4</div><div class="task-desc">DOM parser on ingest: detect slide-mode signals (section, .slide, .page, [data-slide], aspect-ratio)</div><div class="task-pts">6 pts</div></div>
+              <div class="task"><div class="task-id">S2.5</div><div class="task-desc">Manual mode override toggle on detail page</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S2.6</div><div class="task-desc">Library card thumbnails via Playwright headless screenshot</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S2.7</div><div class="task-desc">Mode-detection accuracy test against 25 sample artifacts (target: 90%)</div><div class="task-pts">2 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Sign up, upload, see my own artifact in the library.</li>
+                <li>Mode detection hits ≥90% accuracy on the 25-artifact test set.</li>
+                <li>Manual override works and persists.</li>
+                <li>Thumbnails generate within 30s of upload.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>End-to-end: signup → upload → see in library → open detail view → toggle mode.</strong> The product begins to feel like a product.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 3 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">03</span> · Sprint</div>
+          <div class="sprint-title">Presentation, <em>both modes</em></div>
+          <div class="sprint-meta">~26 pts</div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>The presenter chrome. Slide navigation in slide mode, vertical scroll in document mode. Keyboard, fullscreen, mobile swipe. This is where the "feels like a deck" promise gets tested.</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S3.1</div><div class="task-desc">Slide-mode presenter — slide counter, prev/next, animation discipline</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S3.2</div><div class="task-desc">Document-mode presenter — chrome that recedes during scroll</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S3.3</div><div class="task-desc">Keyboard navigation — Arrow / Space / PageDown / Home / End / F / Esc</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S3.4</div><div class="task-desc">Browser Fullscreen API integration</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S3.5</div><div class="task-desc">Mobile swipe gestures (left/right) + tap-edge nav</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S3.6</div><div class="task-desc">Aspect-ratio detection and viewport scaling (letterbox on mobile)</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S3.7</div><div class="task-desc">First-time tooltip on slide 1 — "Tap right to advance, ESC to exit"</div><div class="task-pts">3 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Slide-mode artifact navigates with keyboard, fullscreen works, slide counter accurate.</li>
+                <li>Mobile swipe works in both Safari iOS and Chrome Android.</li>
+                <li>Document-mode artifact scrolls naturally; chrome fades after 2s of inactivity.</li>
+                <li>Slide transitions complete in <100ms.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>Present a real Claude-generated 12-slide deck on a laptop, on a phone, and in fullscreen.</strong> First moment Zili looks and feels like a product.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 4 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">04</span> · Sprint</div>
+          <div class="sprint-title">Sharing, OG cards, <em>closed alpha</em></div>
+          <div class="sprint-meta">~26 pts<br><span class="points">M1 ends</span></div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>Public share links, edge-cached, with branded OG cards. This is the minimum core product. End the sprint with five hand-picked alpha users actively uploading and sharing. Brand and copy polish lands this sprint (first contractor pull).</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S4.1</div><div class="task-desc">Slug generation (hash-prefix + slugified title) + collision handling</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S4.2</div><div class="task-desc">/p/{slug} SSR route, edge-cached via Vercel/Cloudflare</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S4.3</div><div class="task-desc">OG card generation (1200×630) via @vercel/og — brand canvas spec</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S4.4</div><div class="task-desc">Share modal UI — copy link, OG preview, brief copy</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S4.5</div><div class="task-desc">Embed code generator + /p/{slug}/embed route (no chrome)</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S4.6</div><div class="task-desc">Brand-aligned UI polish across detail, library, present (designer pull)</div><div class="task-pts">6 pts</div></div>
+              <div class="task"><div class="task-id">S4.7</div><div class="task-desc">Alpha invite flow — manual invite list, recruitment of 5 users</div><div class="task-pts">2 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Share link works for anonymous viewers globally, sub-1s cold load.</li>
+                <li>OG card unfurls correctly in Slack, LinkedIn, X, iMessage (manually verified).</li>
+                <li>5 alpha users have signed up and uploaded at least 1 artifact each.</li>
+                <li>One alpha user has shared a link with their team.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="risk-callout">
+              <div class="rc-label">Risk: alpha quality cliff</div>
+              <p>Five users uploading real artifacts will surface fidelity bugs that the test set didn't. Reserve 5 buffer points specifically for alpha bug fixes; do not commit them to S4 scope.</p>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday — M1 milestone</div>
+              <p><strong>Walk through an alpha user's account end-to-end.</strong> They have artifacts, they have a shared link, that link was opened by their team. The core thesis is now testable.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ MILESTONE 2 ============ -->
+    <div class="milestone" style="margin-top: 32px;">
+      <div class="m-label">Milestone 02 · S5 – S8</div>
+      <div class="m-body">The funnel works. <em>Acquisition</em> is wired. Private beta with 50 users.</div>
+    </div>
+
+    <div class="sprints">
+
+      <!-- ============ SPRINT 5 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">05</span> · Sprint</div>
+          <div class="sprint-title">Marketing site, <em>live demo</em></div>
+          <div class="sprint-meta">~28 pts</div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>Per the swimlane Insight 01, the Customer lane is empty in Phases 1-2 — every customer originates as a Visitor or Viewer. Build the marketing site and the live demo, which is the entire top of the funnel.</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S5.1</div><div class="task-desc">Homepage with hero, value prop, brand voice (per brand canvas)</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S5.2</div><div class="task-desc">Live demo widget — drop HTML, render in 5s, no signup needed</div><div class="task-pts">7 pts</div></div>
+              <div class="task"><div class="task-id">S5.3</div><div class="task-desc">"Promote demo to account" flow — sign up to save what they just tried</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S5.4</div><div class="task-desc">Examples gallery — 12 curated artifacts, filterable by source LLM</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S5.5</div><div class="task-desc">Pricing page — 3 months free + post-promo structure clearly stated</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S5.6</div><div class="task-desc">Legal pages — Terms, Privacy, DMCA policy (templated, lawyer-reviewed)</div><div class="task-pts">4 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Anonymous visitor can land on zili.xyz, try the demo, and convert to signup.</li>
+                <li>Demo rendering succeeds for ≥90% of the alpha-tested artifact patterns.</li>
+                <li>Three legal pages live and reviewed.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>End-to-end stranger flow:</strong> someone who's never heard of Zili lands on the homepage, tries the demo, signs up, uploads their own artifact. Time-to-first-share under 5 minutes.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 6 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">06</span> · Sprint</div>
+          <div class="sprint-title">The <em>watermark loop</em></div>
+          <div class="sprint-meta">~26 pts</div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>Wire the primary growth loop. The watermark, end-of-deck CTA, and referrer-aware landing all in one sprint because they're the same loop — building them separately wastes effort. Note: watermark is dormant during the 3-month free promo; the infrastructure ships now.</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S6.1</div><div class="task-desc">"Made with Zili" watermark element in presenter chrome (feature-flagged)</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S6.2</div><div class="task-desc">End-of-deck overlay — appears on last slide / scroll-to-bottom</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S6.3</div><div class="task-desc">UTM-tracked attribution from watermark → landing → signup</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S6.4</div><div class="task-desc">Referrer-aware landing — personalises copy based on which deck sent them</div><div class="task-pts">6 pts</div></div>
+              <div class="task"><div class="task-id">S6.5</div><div class="task-desc">View tracking — anonymized counter per shared link</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S6.6</div><div class="task-desc">View count visible on library card and detail page</div><div class="task-pts">3 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Viewer reaches end of deck, sees overlay, clicks, lands on context-aware page.</li>
+                <li>UTM chain captured end-to-end in PostHog.</li>
+                <li>Owners see view counts in library, updating within 1 minute of a real view.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>Trace one user's path from anonymous viewer → signup,</strong> showing the personalised landing copy and the UTM attribution chain in PostHog.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 7 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">07</span> · Sprint</div>
+          <div class="sprint-title">Library polish, <em>search</em>, retention</div>
+          <div class="sprint-meta">~26 pts</div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>The habituation phase. Once a customer has 5+ artifacts, the library becomes a tool — and search + rename + delete + re-upload become essential. This sprint earns retention.</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S7.1</div><div class="task-desc">Library full-text search across titles (Postgres trigram)</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S7.2</div><div class="task-desc">Inline rename on library card and detail page</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S7.3</div><div class="task-desc">Re-upload flow — replaces content, preserves share URL, regenerates thumbnails</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S7.4</div><div class="task-desc">Soft-delete with 30-day grace period + restoration UI</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S7.5</div><div class="task-desc">Revoke share link — branded 404, no implication of wrongdoing</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S7.6</div><div class="task-desc">Email digest (weekly) — "Your decks were viewed N times this week"</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S7.7</div><div class="task-desc">Mode-mismatch recovery UX — prominent toggle on the detail page</div><div class="task-pts">2 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Library search returns matches in <200ms for 100 artifacts.</li>
+                <li>Re-upload preserves share URL — recipient sees new content on next load.</li>
+                <li>Weekly email digest sends with personalised view counts.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>The week-in-the-life demo</strong> — show a habituated user opening their library, searching for last quarter's deck, re-uploading an updated version, and getting the weekly digest email.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 8 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">08</span> · Sprint</div>
+          <div class="sprint-title">Admin baseline, <em>private beta</em></div>
+          <div class="sprint-meta">~28 pts<br><span class="points">M2 ends</span></div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>The operator surface goes live. Retool wired to Postgres + Stripe + Resend. Slack ops channel piping alerts. Open private beta to 50 users — this is the first time Zili meets real demand.</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S8.1</div><div class="task-desc">Retool workspace — users, artifacts, share links, security rejections views</div><div class="task-pts">6 pts</div></div>
+              <div class="task"><div class="task-id">S8.2</div><div class="task-desc">Account suspension flow — invalidate sessions, brand 404 on shares</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S8.3</div><div class="task-desc">Audit log — append-only, immutable, with admin viewer</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S8.4</div><div class="task-desc">Slack ops channel — anomaly alerts, signup pings, error spikes</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S8.5</div><div class="task-desc">Abuse-report widget on shared decks + admin queue</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S8.6</div><div class="task-desc">Onboarding email sequence — welcome, day-3 nudge, week-1 power-tip</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S8.7</div><div class="task-desc">Open private beta — invite 50 hand-picked PMs and consultants</div><div class="task-pts">2 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Operator can search any user, suspend them, refund them, audit-trace any admin action.</li>
+                <li>Slack alerts firing for new signups, errors, abuse reports.</li>
+                <li>50 private beta users invited, ≥25 activated.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday — M2 milestone</div>
+              <p><strong>Private beta open</strong> — show 25+ activated users in the admin view, the welcome-email funnel, and the Slack ops channel humming with live signups.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ MILESTONE 3 ============ -->
+    <div class="milestone" style="margin-top: 32px;">
+      <div class="m-label">Milestone 03 · S9 – S12</div>
+      <div class="m-body">Production-ready. <em>Public launch.</em></div>
+    </div>
+
+    <div class="sprints">
+
+      <!-- ============ SPRINT 9 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">09</span> · Sprint</div>
+          <div class="sprint-title">Billing, Stripe, <em>pricing state</em></div>
+          <div class="sprint-meta">~28 pts</div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>Wire the full pricing state machine even though the watermark and library cap don't activate until month 4. Build it now to test it thoroughly. Security review (second contractor pull) lands this sprint.</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S9.1</div><div class="task-desc">Stripe Billing — Pro $12/mo, Pro annual, grandfather 50% lifetime coupon</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S9.2</div><div class="task-desc">Webhook handler for subscription lifecycle (create/update/cancel)</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S9.3</div><div class="task-desc">Plan state model — free/grandfather-eligible/grandfather-locked/pro</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S9.4</div><div class="task-desc">Feature flags for watermark + library cap (off in promo, on post-promo)</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S9.5</div><div class="task-desc">Settings page — current plan, change plan, manage payment, cancel</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S9.6</div><div class="task-desc">Refund flow in admin (Retool → Stripe API)</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S9.7</div><div class="task-desc">Security review by external contractor — CSP, sandbox, ingest pipeline</div><div class="task-pts">4 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>End-to-end paid upgrade works in Stripe test mode.</li>
+                <li>Grandfather coupon applies correctly; can't be applied to non-eligible accounts.</li>
+                <li>Security review report shows no Critical or High findings.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="risk-callout">
+              <div class="rc-label">Risk: security finding requires re-architecture</div>
+              <p>If security review surfaces a Critical or High finding in the iframe sandbox, S10 may slip. This is acceptable — shipping insecure is not.</p>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>Walk through a complete upgrade flow</strong> — free signup → grandfather banner → click upgrade → Stripe checkout → return to product with Pro features unlocked.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 10 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">10</span> · Sprint</div>
+          <div class="sprint-title">Speaker view, polish, <em>brand sweep</em></div>
+          <div class="sprint-meta">~26 pts</div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>The "should-have" from the PRD that elevates Zili from MVP to product. Speaker view, mobile QA, brand sweep (third contractor pull — designer reviews every screen against the brand canvas). This is the polish sprint.</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S10.1</div><div class="task-desc">Speaker view — separate window, current/next slide, notes, elapsed timer</div><div class="task-pts">7 pts</div></div>
+              <div class="task"><div class="task-id">S10.2</div><div class="task-desc">Speaker notes extraction from <code>&lt;aside class="notes"&gt;</code> + HTML comments</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S10.3</div><div class="task-desc">Mobile QA pass — Safari iOS, Chrome Android, top 5 phone viewports</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S10.4</div><div class="task-desc">Brand sweep — designer reviews every screen against brand canvas</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S10.5</div><div class="task-desc">Accessibility audit — keyboard nav, ARIA labels, WCAG AA contrast</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S10.6</div><div class="task-desc">Performance pass — Lighthouse 90+ on homepage and /p/{slug}</div><div class="task-pts">3 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Speaker view opens in a separate window, stays in sync, displays notes.</li>
+                <li>Lighthouse: Performance 90+, Accessibility 95+, on both key routes.</li>
+                <li>Designer sign-off on every primary screen.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>The "feels finished" demo.</strong> Open a deck in speaker view on a second monitor, present the main view on the primary monitor, and walk through 12 slides with notes.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 11 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">11</span> · Sprint</div>
+          <div class="sprint-title">Runbooks, status page, <em>launch prep</em></div>
+          <div class="sprint-meta">~26 pts</div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>Per the swimlane Insight 03, the Operator is active in every phase. Pre-write the runbooks for incidents that will happen — not "might" happen. Status page, DMCA flow, GDPR flow, customer-comms templates. Content/copy pass (fourth contractor pull).</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S11.1</div><div class="task-desc">Six runbooks — DMCA, GDPR, security incident, payment outage, mass abuse, render outage</div><div class="task-pts">6 pts</div></div>
+              <div class="task"><div class="task-id">S11.2</div><div class="task-desc">Templated customer comms — suspension, refund, DMCA, take-down, restoration</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S11.3</div><div class="task-desc">Public status page (status.zili.xyz)</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S11.4</div><div class="task-desc">DMCA take-down flow in admin — counter-notice path included</div><div class="task-pts">5 pts</div></div>
+              <div class="task"><div class="task-id">S11.5</div><div class="task-desc">GDPR deletion flow — 30-day purge, do-not-recreate list</div><div class="task-pts">4 pts</div></div>
+              <div class="task"><div class="task-id">S11.6</div><div class="task-desc">Marketing copy review by external writer — homepage, pricing, emails</div><div class="task-pts">2 pts</div></div>
+              <div class="task"><div class="task-id">S11.7</div><div class="task-desc">Load testing — 1000 concurrent shared-link views, ingest under spike</div><div class="task-pts">2 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>All six runbooks reviewed and stored in a versioned location.</li>
+                <li>Status page deployed, integrated with Sentry alerts.</li>
+                <li>DMCA flow tested end-to-end with a synthetic notice.</li>
+                <li>Load test: 1000 concurrent views with p95 latency &lt;1.2s.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Demo Friday</div>
+              <p><strong>Simulate a DMCA incident end-to-end</strong> — receive notice, take down deck, notify owner, log audit trail, update status page. Time to resolution: under 10 minutes.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ SPRINT 12 ============ -->
+      <div class="sprint">
+        <div class="sprint-head">
+          <div class="sprint-num"><span class="num-big">12</span> · Sprint</div>
+          <div class="sprint-title">Launch <em>readiness</em></div>
+          <div class="sprint-meta">~24 pts<br><span class="points">LAUNCH</span></div>
+        </div>
+        <div class="sprint-body">
+
+          <div class="sprint-section">
+            <div class="ss-label">Goal</div>
+            <p>The pre-launch sprint. Open beta to public-launch transition. Bug fixes, marketing assets, launch comms. Reserve the last week as pure buffer.</p>
+          </div>
+
+          <div class="sprint-section">
+            <div class="ss-label">Tasks</div>
+            <div class="tasks">
+              <div class="task"><div class="task-id">S12.1</div><div class="task-desc">Bug fixes from beta feedback (capacity reserved, not pre-allocated)</div><div class="task-pts">8 pts</div></div>
+              <div class="task"><div class="task-id">S12.2</div><div class="task-desc">Launch announcement copy — X, LinkedIn, blog post, email to waitlist</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S12.3</div><div class="task-desc">Producthunt / Hacker News kit — screenshots, GIF demo, FAQ</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S12.4</div><div class="task-desc">Cohort dashboard in PostHog — pre-built funnels for launch-day tracking</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S12.5</div><div class="task-desc">Final security and accessibility re-test</div><div class="task-pts">2 pts</div></div>
+              <div class="task"><div class="task-id">S12.6</div><div class="task-desc">Launch day pre-flight checklist execution</div><div class="task-pts">3 pts</div></div>
+              <div class="task"><div class="task-id">S12.7</div><div class="task-desc">Buffer week — fire-fighting, last-minute fixes, breathing room</div><div class="task-pts">2 pts</div></div>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="dod">
+              <div class="dod-label">Definition of done</div>
+              <ul>
+                <li>Zero P0 bugs open. P1 bugs all have owners and ETAs.</li>
+                <li>Launch announcements scheduled and previewed.</li>
+                <li>PostHog dashboards loaded with launch-day cohorts.</li>
+                <li>Status page green. Sentry quiet. Stripe webhooks healthy.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sprint-section">
+            <div class="demo-callout">
+              <div class="dc-label">Launch Day</div>
+              <p><strong>Public launch.</strong> Beta cohort gets a thank-you email. Waitlist gets opened to all. ProductHunt and X posts go live. Operator monitors the Slack ops channel.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ============ RISK REGISTER ============ -->
+  <section class="block">
+    <div class="section-head">
+      <div class="num">05 — Risks</div>
+      <h2>What can <em>break</em> this plan.</h2>
+      <p class="desc">Risks are not a "if this happens" list — they're an "expect this to happen, plan for it" list. Each has a mitigation. If a mitigation isn't ready, the risk is unmitigated.</p>
+    </div>
+    <div class="risks">
+
+      <div class="risk">
+        <div class="r-num">RISK 01</div>
+        <h4>Fidelity test fails in S1</h4>
+        <span class="r-level high">Critical · High likelihood</span>
+        <p>The visual-diff harness flags >2% pixel drift on too many reference artifacts. Either the sandbox is too restrictive or the CSP is blocking necessary CDNs.</p>
+        <div class="mitigation"><strong>Mitigation</strong>Defer S2 by one sprint and dedicate time to widening the asset allow-list and tuning iframe permissions. Better one slipped sprint than a broken core thesis.</div>
+      </div>
+
+      <div class="risk">
+        <div class="r-num">RISK 02</div>
+        <h4>Mode-detection accuracy below 90%</h4>
+        <span class="r-level med">High · Medium</span>
+        <p>S2's 25-artifact test set might reveal that the heuristic-based mode detection misclassifies more than 10% of inputs.</p>
+        <div class="mitigation"><strong>Mitigation</strong>Lean on the manual override UX in S2.5 to reduce the cost of false negatives. Track misclassification on real beta uploads and re-tune in S7.</div>
+      </div>
+
+      <div class="risk">
+        <div class="r-num">RISK 03</div>
+        <h4>Solo founder burnout</h4>
+        <span class="r-level high">Critical · Medium</span>
+        <p>20h/week over 24 weeks of consistent context-switching with a day job is the failure mode of most serious side bets.</p>
+        <div class="mitigation"><strong>Mitigation</strong>Strict sprint cadence with mandatory demo Fridays. Two "rest week" sprints allowed in the plan (S6 and S10 are protected at 26 pts, below capacity). No sprint exceeds 30 committed points.</div>
+      </div>
+
+      <div class="risk">
+        <div class="r-num">RISK 04</div>
+        <h4>Security finding requires re-architecture</h4>
+        <span class="r-level high">High · Medium</span>
+        <p>S9 security review may surface a critical issue with the iframe sandbox or CSP. Worst case: redesign the renderer.</p>
+        <div class="mitigation"><strong>Mitigation</strong>Run a smaller pre-review at end of S5 with a single security-savvy friend to catch obvious issues early. Reserve S12 buffer if the formal review surfaces work.</div>
+      </div>
+
+      <div class="risk">
+        <div class="r-num">RISK 05</div>
+        <h4>Alpha doesn't share</h4>
+        <span class="r-level med">Medium · Medium</span>
+        <p>S4 ends with 5 alpha users but only one has shared a link. The product is being used but the loop isn't firing.</p>
+        <div class="mitigation"><strong>Mitigation</strong>Pre-recruit alpha users who have a use case that demands sharing (consultants delivering to clients). If still no shares, treat as a real product signal and re-design the share moment in S6.</div>
+      </div>
+
+      <div class="risk">
+        <div class="r-num">RISK 06</div>
+        <h4>Stripe billing edge cases</h4>
+        <span class="r-level med">Medium · High</span>
+        <p>The grandfather lifetime discount is custom logic. Stripe's coupon system handles 90% of cases — the other 10% (downgrade then re-upgrade, plan switches mid-cycle, refunds with coupons) are where bugs hide.</p>
+        <div class="mitigation"><strong>Mitigation</strong>Test 12 explicit scenarios end-to-end in S9 against Stripe test mode. Document each. Make the test suite a regression check.</div>
+      </div>
+
+      <div class="risk">
+        <div class="r-num">RISK 07</div>
+        <h4>LLM-platform shipping native presentation</h4>
+        <span class="r-level med">Medium · Low this window</span>
+        <p>Claude.ai or ChatGPT adds a "present this artifact" button mid-build. The competitive moat narrows.</p>
+        <div class="mitigation"><strong>Mitigation</strong>Ship anyway. Zili's moat is the share graph, the multi-LLM agnosticism, and the operator surface — not the renderer alone. The first integration won't have those.</div>
+      </div>
+
+      <div class="risk">
+        <div class="r-num">RISK 08</div>
+        <h4>Launch-day traffic exceeds capacity</h4>
+        <span class="r-level low">Medium · Low</span>
+        <p>HN front page sends 50k uniques in 4 hours and the ingest pipeline or the rate limits buckle.</p>
+        <div class="mitigation"><strong>Mitigation</strong>S11.7 load test simulates 1000 concurrent views. Vercel + Cloudflare scale automatically. The likely failure is Supabase free-tier limits — pre-upgrade to Pro before launch.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ CONTRACTORS ============ -->
+  <section class="block">
+    <div class="section-head">
+      <div class="num">06 — Contractor pulls</div>
+      <h2>When to <em>hire</em>, briefly.</h2>
+      <p class="desc">Four targeted contractor engagements. Each is scoped tight enough to avoid scope creep, and each lands in a specific sprint with a specific deliverable. Total budget estimate at the bottom.</p>
+    </div>
+    <div class="contractor-grid">
+
+      <div class="contractor">
+        <h4>Brand designer (~10–15h)</h4>
+        <div class="c-when">SPRINT 4</div>
+        <p>Apply the brand canvas to the product surface. Polish library, detail, present, share modal. Logo finalisation if needed. Deliver Figma file with all primary screens.</p>
+        <div class="c-cost">Est. $1,500 – $2,500</div>
+      </div>
+
+      <div class="contractor">
+        <h4>Security reviewer (~8–10h)</h4>
+        <div class="c-when">SPRINT 9</div>
+        <p>External review of iframe sandbox, CSP, ingest pipeline, auth, and Stripe integration. Look for XSS, CSRF, data leakage, privilege escalation. Written report.</p>
+        <div class="c-cost">Est. $2,000 – $3,000</div>
+      </div>
+
+      <div class="contractor">
+        <h4>Designer — polish sweep (~10–12h)</h4>
+        <div class="c-when">SPRINT 10</div>
+        <p>Same designer as S4. Brand sweep across every screen. Accessibility colour-contrast pass. Final brand canvas alignment. Sign-off.</p>
+        <div class="c-cost">Est. $1,500 – $2,500</div>
+      </div>
+
+      <div class="contractor">
+        <h4>Marketing copywriter (~6–8h)</h4>
+        <div class="c-when">SPRINT 11</div>
+        <p>Homepage copy, pricing copy, onboarding emails, launch announcements. One brief, one revision round, final delivery.</p>
+        <div class="c-cost">Est. $800 – $1,500</div>
+      </div>
+
+    </div>
+    <div class="cap" style="margin-top: 24px;">
+      <div class="cap-row total"><span>Total contractor budget (estimate)</span><span>$5,800 – $9,500</span></div>
+      <div class="cap-row"><span>Plus ongoing infra (Vercel, Supabase, R2, Retool, Resend, PostHog)</span><span>~$120/mo</span></div>
+    </div>
+  </section>
+
+  <!-- ============ OPEN QUESTIONS ============ -->
+  <section class="block">
+    <div class="section-head">
+      <div class="num">07 — Decisions to lock</div>
+      <h2>Lock these before <em>Sprint 1</em>.</h2>
+      <p class="desc">Each of these is a small decision that, left open, becomes a big delay mid-sprint. None block this document, but all should be answered in the next 7 days.</p>
+    </div>
+    <div class="assumption-grid">
+      <div class="as">
+        <div class="as-label">D-01</div>
+        <h4>Pricing confirmation</h4>
+        <p>Confirm $12/mo Pro, $108/yr annual, 50% lifetime grandfather. Recommended in PRD §9 but not formally locked.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">D-02</div>
+        <h4>Domain final state</h4>
+        <p>zili.xyz primary, but do we register zili.app / .com defensively? Cheap insurance.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">D-03</div>
+        <h4>Launch geography</h4>
+        <p>Global from day one or English-speaking markets first? Affects legal scope (GDPR vs CCPA vs both) and copy localisation.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">D-04</div>
+        <h4>Alpha cohort recruitment</h4>
+        <p>Five hand-picked alpha users by end of S3. Who are they? Recruit in parallel with S1-S2.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">D-05</div>
+        <h4>Brand designer choice</h4>
+        <p>Who's the designer for S4 and S10? Recruit and brief by end of S2.</p>
+      </div>
+      <div class="as">
+        <div class="as-label">D-06</div>
+        <h4>Wordmark final state</h4>
+        <p>Brand canvas shows "Zili." with amber period. Lock the wordmark before any marketing asset is built.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="credit">Zili — MVP Sprint Plan v0.1 · <em>Twelve fortnights</em></div>
+    <div>Plan · Iterate · Ship</div>
+  </footer>
+
+</main>
+</body>
+</html>

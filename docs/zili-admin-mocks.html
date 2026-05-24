@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zili — Admin UI Mocks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F5;
+    --paper-deep: #F2F0E8;
+    --ink: #1A1815;
+    --ink-soft: #3A3733;
+    --gray-1: #ECE9E0;
+    --gray-2: #D6D2C7;
+    --gray-3: #A8A39A;
+    --gray-4: #6E6A62;
+    --amber: #D26B2C;
+    --amber-deep: #B25620;
+    --amber-tint: #F8E8D8;
+    --red: #C9483A;
+    --red-tint: #F5E2DE;
+    --green-ink: #4A6B3A;
+    --green-tint: #E6EDDE;
+    --blue-ink: #3B5B7B;
+    --blue-tint: #E2EBF2;
+    --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+    --gutter: clamp(20px, 5vw, 56px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: var(--font-ui);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .container { max-width: 1280px; margin: 0 auto; padding: var(--gutter); }
+
+  /* Top meta */
+  .meta-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--gray-4);
+    padding-bottom: 48px; border-bottom: 1px solid var(--gray-1);
+  }
+  .meta-bar .dot {
+    display: inline-block; width: 6px; height: 6px;
+    background: var(--amber); border-radius: 50%;
+    margin-right: 8px; vertical-align: middle;
+  }
+
+  /* Hero */
+  .hero { padding: 64px 0 64px; border-bottom: 1px solid var(--gray-1); }
+  .hero h1 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.95; letter-spacing: -0.02em;
+  }
+  .hero h1 em { color: var(--amber); font-style: italic; }
+  .hero .tagline {
+    font-family: var(--font-display); font-style: italic;
+    font-size: clamp(18px, 2.2vw, 24px); color: var(--ink-soft);
+    margin-top: 20px; max-width: 720px;
+  }
+  .hero .statement {
+    margin-top: 40px; max-width: 720px; color: var(--ink-soft);
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .hero .statement { grid-template-columns: 120px 1fr; gap: 32px; align-items: start; }
+  }
+  .hero .statement .label {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.06em; text-transform: uppercase;
+    padding-top: 4px;
+  }
+
+  /* Screen sections */
+  section.screen {
+    padding: 64px 0; border-bottom: 1px solid var(--gray-1);
+  }
+  section.screen:last-of-type { border-bottom: none; }
+
+  .screen-head {
+    display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 32px;
+  }
+  @media (min-width: 720px) {
+    .screen-head { grid-template-columns: 160px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .screen-head .label {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .screen-head h2 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.01em; line-height: 1.05;
+  }
+  .screen-head h2 em { color: var(--amber); font-style: italic; }
+  .screen-head .desc {
+    grid-column: 1 / -1; max-width: 640px; color: var(--ink-soft);
+    font-size: 14px; margin-top: 8px;
+  }
+  @media (min-width: 720px) {
+    .screen-head .desc { grid-column: 2 / -1; margin-top: 16px; }
+  }
+
+  /* Admin frame */
+  .admin-frame {
+    background: var(--paper);
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  /* Admin nav bar */
+  .admin-nav {
+    background: var(--ink); color: var(--paper);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .admin-nav .left {
+    display: flex; align-items: center; gap: 32px;
+  }
+  .admin-nav .wordmark {
+    font-family: var(--font-display);
+    font-size: 22px; letter-spacing: -0.01em;
+  }
+  .admin-nav .wordmark em { color: var(--amber); font-style: italic; }
+  .admin-nav .nav-tag {
+    font-family: var(--font-mono); font-size: 10px;
+    background: var(--amber); color: var(--paper);
+    padding: 2px 8px; border-radius: 3px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 500;
+  }
+  .admin-nav .nav-links {
+    display: flex; gap: 24px;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--gray-3);
+  }
+  .admin-nav .nav-links a { transition: color 150ms; cursor: pointer; }
+  .admin-nav .nav-links a:hover { color: var(--paper); }
+  .admin-nav .nav-links a.active { color: var(--paper); border-bottom: 1px solid var(--amber); padding-bottom: 4px; }
+  .admin-nav .right {
+    display: flex; align-items: center; gap: 14px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-3);
+  }
+  .admin-nav .right .health-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green-tint); border: 1px solid var(--green-ink);
+    display: inline-block; margin-right: 4px;
+  }
+
+  /* Page header */
+  .page-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--gray-1);
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .page-header h1 {
+    font-family: var(--font-display); font-style: italic;
+    font-weight: 400; font-size: 32px;
+    letter-spacing: -0.01em; line-height: 1;
+  }
+  .page-header h1 em { color: var(--amber); }
+  .page-header .ph-meta {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .page-header .ph-meta span { color: var(--ink); }
+
+  /* ============ DASHBOARD ============ */
+  .dashboard-body { padding: 24px 32px; }
+
+  .kpi-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+    margin-bottom: 32px;
+  }
+  @media (min-width: 720px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1000px) {
+    .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .kpi {
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    padding: 18px 20px;
+    background: var(--paper);
+  }
+  .kpi.featured {
+    background: var(--ink); color: var(--paper);
+    border-color: var(--ink);
+  }
+  .kpi .kpi-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .kpi.featured .kpi-label { color: var(--gray-3); }
+  .kpi .kpi-value {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 44px; line-height: 1;
+    letter-spacing: -0.02em; margin: 8px 0;
+  }
+  .kpi.featured .kpi-value { color: var(--amber); }
+  .kpi .kpi-delta {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--ink-soft); letter-spacing: 0.04em;
+  }
+  .kpi.featured .kpi-delta { color: var(--gray-3); }
+  .kpi .kpi-delta .pos { color: var(--green-ink); }
+  .kpi .kpi-delta .neg { color: var(--red); }
+  .kpi.featured .kpi-delta .pos { color: #95C076; }
+
+  /* Two-column layout */
+  .two-col {
+    display: grid; grid-template-columns: 1fr; gap: 24px;
+    margin-bottom: 32px;
+  }
+  @media (min-width: 1000px) {
+    .two-col { grid-template-columns: 1.5fr 1fr; }
+  }
+
+  /* Funnel widget */
+  .widget {
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .widget-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-1);
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px;
+  }
+  .widget-head h3 {
+    font-family: var(--font-display); font-style: italic;
+    font-weight: 400; font-size: 18px;
+    letter-spacing: -0.005em;
+  }
+  .widget-head .w-meta {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.06em;
+  }
+  .widget-body { padding: 20px; }
+
+  .funnel-row {
+    display: grid; grid-template-columns: 140px 1fr 60px 60px;
+    gap: 12px; padding: 10px 0;
+    border-bottom: 1px dashed var(--gray-1);
+    align-items: center;
+    font-size: 13px;
+  }
+  .funnel-row:last-child { border-bottom: none; }
+  .funnel-row .f-label { color: var(--ink); }
+  .funnel-row .f-bar {
+    height: 18px; background: var(--gray-1);
+    border-radius: 2px; overflow: hidden;
+    position: relative;
+  }
+  .funnel-row .f-fill {
+    height: 100%; background: var(--ink);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .funnel-row .f-fill.amber { background: var(--amber); }
+  .funnel-row .f-count {
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--ink); text-align: right;
+  }
+  .funnel-row .f-pct {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); text-align: right;
+  }
+
+  /* Inbox widget */
+  .inbox-row {
+    display: grid; grid-template-columns: 18px 1fr 100px;
+    gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid var(--gray-1);
+    align-items: flex-start;
+    cursor: pointer;
+    transition: background 150ms;
+  }
+  .inbox-row:last-child { border-bottom: none; }
+  .inbox-row:hover { background: var(--paper-deep); margin: 0 -12px; padding: 12px 12px; }
+  .inbox-row .pri {
+    width: 6px; height: 6px; border-radius: 50%;
+    margin-top: 5px;
+  }
+  .inbox-row .pri.high { background: var(--red); }
+  .inbox-row .pri.med { background: var(--amber); }
+  .inbox-row .pri.low { background: var(--gray-3); }
+  .inbox-row .body { font-size: 13px; }
+  .inbox-row .body .type {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--ink); font-weight: 500; letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 2px;
+  }
+  .inbox-row .body .desc { color: var(--ink-soft); font-size: 13px; }
+  .inbox-row .time {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); text-align: right;
+    white-space: nowrap;
+  }
+
+  /* Recent users widget */
+  .user-row {
+    display: grid; grid-template-columns: 28px 1fr 80px;
+    gap: 12px; padding: 10px 0;
+    border-bottom: 1px solid var(--gray-1);
+    align-items: center;
+    font-size: 13px;
+  }
+  .user-row:last-child { border-bottom: none; }
+  .user-row .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--paper-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-style: italic;
+    font-size: 14px; color: var(--ink-soft);
+  }
+  .user-row .info .name {
+    color: var(--ink); font-weight: 500;
+  }
+  .user-row .info .meta {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .user-row .badge {
+    text-align: right;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .user-row .badge.gf { color: var(--amber-deep); }
+  .user-row .badge.pro { color: var(--green-ink); }
+  .user-row .badge.free { color: var(--gray-4); }
+
+  /* ============ USER DETAIL ============ */
+  .user-detail-body { padding: 24px 32px; }
+
+  .user-header {
+    display: grid; grid-template-columns: 1fr; gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--gray-1);
+    margin-bottom: 24px;
+  }
+  @media (min-width: 720px) {
+    .user-header { grid-template-columns: 64px 1fr auto; gap: 24px; align-items: center; }
+  }
+  .user-header .big-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--paper-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-style: italic;
+    font-size: 28px; color: var(--ink);
+  }
+  .user-header .ident .name {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 28px; letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+  .user-header .ident .email {
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--gray-4); margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+  .user-header .actions {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 4px;
+    font-family: var(--font-ui); font-size: 13px;
+    font-weight: 500; border: none; cursor: pointer;
+    transition: all 150ms; line-height: 1;
+  }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-primary:hover { background: var(--ink-soft); }
+  .btn-secondary {
+    background: transparent; color: var(--ink);
+    border: 1px solid var(--gray-2);
+  }
+  .btn-secondary:hover { border-color: var(--ink); }
+  .btn-danger {
+    background: transparent; color: var(--red);
+    border: 1px solid var(--gray-2);
+  }
+  .btn-danger:hover { border-color: var(--red); background: var(--red-tint); }
+  .btn-amber {
+    background: var(--amber); color: var(--paper);
+  }
+  .btn-amber:hover { background: var(--amber-deep); }
+
+  /* Fact grid */
+  .facts {
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    border: 1px solid var(--gray-1); border-radius: 6px;
+    background: var(--paper);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  @media (min-width: 720px) {
+    .facts { grid-template-columns: repeat(3, 1fr); }
+  }
+  .fact {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  @media (min-width: 720px) {
+    .fact { border-bottom: none; border-right: 1px solid var(--gray-1); }
+    .fact:nth-child(3n) { border-right: none; }
+    .fact:nth-last-child(-n+3) { border-bottom: none; }
+  }
+  .fact .f-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .fact .f-value {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 22px; letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .fact .f-sub {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); margin-top: 2px;
+  }
+  .fact .f-tag {
+    display: inline-block;
+    font-family: var(--font-mono); font-size: 10px;
+    padding: 2px 6px; border-radius: 3px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    background: var(--amber-tint); color: var(--amber-deep);
+    margin-top: 4px;
+  }
+
+  /* Activity table */
+  .table {
+    border: 1px solid var(--gray-1); border-radius: 6px;
+    background: var(--paper); overflow: hidden;
+  }
+  .table-head {
+    padding: 12px 20px;
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--gray-1);
+    display: grid; grid-template-columns: 140px 1fr 100px 80px;
+    gap: 12px;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.06em;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .table-row {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--gray-1);
+    display: grid; grid-template-columns: 140px 1fr 100px 80px;
+    gap: 12px;
+    font-size: 13px;
+    align-items: center;
+  }
+  .table-row:last-child { border-bottom: none; }
+  .table-row:hover { background: var(--paper-deep); }
+  .table-row .t-when {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4);
+  }
+  .table-row .t-action {
+    color: var(--ink);
+  }
+  .table-row .t-action .a-type {
+    display: inline-block;
+    font-family: var(--font-mono); font-size: 10px;
+    padding: 1px 6px; border-radius: 2px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    margin-right: 8px;
+    background: var(--paper-deep); color: var(--ink-soft);
+  }
+  .table-row .t-views {
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--ink);
+  }
+  .table-row .t-status {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .t-status.shared { color: var(--amber-deep); }
+  .t-status.private { color: var(--gray-4); }
+
+  /* ============ MODERATION QUEUE ============ */
+  .mod-body { padding: 24px 32px; }
+
+  .mod-filters {
+    display: flex; gap: 8px;
+    margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .mod-filter {
+    padding: 6px 12px;
+    border: 1px solid var(--gray-2);
+    border-radius: 3px;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-soft); cursor: pointer;
+    background: var(--paper);
+    transition: all 150ms;
+  }
+  .mod-filter.active {
+    background: var(--ink); color: var(--paper);
+    border-color: var(--ink);
+  }
+  .mod-filter.danger.active {
+    background: var(--red); border-color: var(--red);
+  }
+  .mod-filter .count {
+    display: inline-block; margin-left: 6px;
+    padding: 0 4px; background: rgba(255,255,255,0.2);
+    border-radius: 2px; font-weight: 600;
+  }
+  .mod-filter:not(.active) .count {
+    background: var(--gray-1); color: var(--ink);
+  }
+
+  /* Queue items */
+  .queue-item {
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    background: var(--paper);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .queue-item.high { border-left: 3px solid var(--red); }
+  .queue-item.med { border-left: 3px solid var(--amber); }
+
+  .queue-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--gray-1);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .queue-head .left {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .queue-head .qtype {
+    font-family: var(--font-mono); font-size: 10px;
+    padding: 3px 8px; border-radius: 3px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 600;
+  }
+  .qtype.dmca { background: var(--red); color: var(--paper); }
+  .qtype.security { background: var(--amber); color: var(--paper); }
+  .qtype.abuse { background: var(--blue-tint); color: var(--blue-ink); }
+  .qtype.refund { background: var(--paper-deep); color: var(--ink-soft); }
+
+  .queue-head .qtitle {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 17px; letter-spacing: -0.005em;
+  }
+  .queue-head .right {
+    display: flex; align-items: center; gap: 16px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4);
+  }
+  .queue-head .right .sla {
+    color: var(--red); font-weight: 600;
+  }
+
+  .queue-body {
+    padding: 16px 20px;
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  @media (min-width: 720px) {
+    .queue-body { grid-template-columns: 1fr 220px; gap: 24px; }
+  }
+  .queue-body .qdetails {
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .queue-body .qdetails strong {
+    color: var(--ink); font-weight: 500;
+  }
+  .queue-body .qdetails .qquote {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--paper-deep);
+    border-left: 2px solid var(--gray-2);
+    font-style: italic;
+    color: var(--ink); font-size: 13px;
+  }
+  .queue-body .qactions {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .queue-body .qactions .btn { width: 100%; justify-content: center; }
+
+  /* ============ AUDIT LOG ============ */
+  .audit-body { padding: 24px 32px; }
+
+  .audit-filters {
+    display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .audit-filters .filter-group {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .audit-filters .filter-group .label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .audit-filters select, .audit-filters input {
+    padding: 6px 10px; border: 1px solid var(--gray-2);
+    border-radius: 3px; background: var(--paper);
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--ink);
+  }
+
+  .audit-table {
+    border: 1px solid var(--gray-1); border-radius: 6px;
+    background: var(--paper); overflow: hidden;
+  }
+  .audit-row {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--gray-1);
+    display: grid; grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  @media (min-width: 720px) {
+    .audit-row { grid-template-columns: 140px 100px 1fr 1fr 150px; gap: 16px; align-items: baseline; }
+  }
+  .audit-row:last-child { border-bottom: none; }
+  .audit-row .a-when {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--gray-4); letter-spacing: 0.02em;
+  }
+  .audit-row .a-actor {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--ink);
+  }
+  .audit-row .a-action {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .audit-row .a-action .a-type {
+    font-family: var(--font-mono); font-size: 10px;
+    padding: 2px 6px; border-radius: 2px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    font-weight: 500;
+  }
+  .a-type.create { background: var(--green-tint); color: var(--green-ink); }
+  .a-type.update { background: var(--blue-tint); color: var(--blue-ink); }
+  .a-type.delete { background: var(--red-tint); color: var(--red); }
+  .a-type.suspend { background: var(--amber-tint); color: var(--amber-deep); }
+  .audit-row .a-target {
+    font-size: 13px; color: var(--ink); line-height: 1.4;
+  }
+  .audit-row .a-reason {
+    font-size: 12px; color: var(--ink-soft); line-height: 1.4;
+    font-style: italic;
+  }
+  .audit-row .a-meta {
+    text-align: right;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--gray-4); letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Annotations (smaller, simpler) */
+  .annotations {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+    margin-top: 24px;
+  }
+  @media (min-width: 720px) {
+    .annotations { grid-template-columns: repeat(3, 1fr); }
+  }
+  .ann {
+    background: var(--paper);
+    border: 1px solid var(--gray-1);
+    border-left: 2px solid var(--amber);
+    padding: 14px 16px;
+    border-radius: 0 4px 4px 0;
+  }
+  .ann .ann-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--amber-deep); letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .ann h4 {
+    font-family: var(--font-display); font-style: italic;
+    font-weight: 400; font-size: 16px; margin-bottom: 4px;
+    letter-spacing: -0.005em;
+  }
+  .ann p { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+
+  /* Footer */
+  footer {
+    padding: 56px 0 24px;
+    border-top: 1px solid var(--gray-1);
+    margin-top: 64px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--gray-4); flex-wrap: wrap; gap: 12px;
+  }
+  footer .credit em {
+    font-style: italic; color: var(--amber);
+    font-family: var(--font-display); text-transform: none;
+    letter-spacing: 0; font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<main class="container">
+
+  <div class="meta-bar">
+    <div><span class="dot"></span>Zili · Admin UI Mocks</div>
+    <div>v0.1 · May 2026</div>
+  </div>
+
+  <header class="hero">
+    <h1>Operator<em>.</em></h1>
+    <p class="tagline">Four surfaces. Active in every phase of every user journey. Built in Retool — designed for clarity.</p>
+    <div class="statement">
+      <div class="label">— Purpose</div>
+      <p>Per swimlane Insight 03, the Operator lane has no empty cells. Admin tooling is load-bearing infrastructure, not a side concern. The four screens below define the operator's working surface: a dashboard that shows whether anything is wrong, a user detail page for support and intervention, a unified moderation queue for the queues that would otherwise live in three separate tools, and an immutable audit log that protects against disputes. Implementation lives in Retool wired to Postgres, Stripe, and the application API.</p>
+    </div>
+  </header>
+
+  <!-- ============ SCREEN 01 — DASHBOARD ============ -->
+  <section class="screen">
+    <div class="screen-head">
+      <div class="label">— Screen 01</div>
+      <h2>Dashboard. <em>The morning ritual.</em></h2>
+      <p class="desc">Single-screen answer to "did anything fall off a cliff overnight?" Headline KPIs, activation funnel, the unified inbox, recent signups. No scrolling required for the daily glance.</p>
+    </div>
+
+    <div class="admin-frame">
+      <div class="admin-nav">
+        <div class="left">
+          <span class="wordmark">Zili<em>.</em></span>
+          <span class="nav-tag">Operator</span>
+          <div class="nav-links">
+            <a class="active">Dashboard</a>
+            <a>Users</a>
+            <a>Moderation</a>
+            <a>Billing</a>
+            <a>Audit log</a>
+          </div>
+        </div>
+        <div class="right">
+          <span><span class="health-dot"></span>All systems healthy</span>
+          <span>alex@zili.xyz</span>
+        </div>
+      </div>
+
+      <div class="page-header">
+        <h1>Today, <em>at a glance</em></h1>
+        <div class="ph-meta">Showing: <span>Last 24 hours</span></div>
+      </div>
+
+      <div class="dashboard-body">
+        <div class="kpi-grid">
+          <div class="kpi featured">
+            <div class="kpi-label">North-star · Shared decks viewed</div>
+            <div class="kpi-value">2,847</div>
+            <div class="kpi-delta">This week · <span class="pos">+34% vs. last week</span></div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">New signups</div>
+            <div class="kpi-value">47</div>
+            <div class="kpi-delta">24h · <span class="pos">+12%</span></div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Active users</div>
+            <div class="kpi-value">312</div>
+            <div class="kpi-delta">DAU · <span class="pos">+6%</span></div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Artifacts uploaded</div>
+            <div class="kpi-value">128</div>
+            <div class="kpi-delta">24h · <span class="neg">−4%</span></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="widget">
+            <div class="widget-head">
+              <h3>Activation funnel — last 7 days</h3>
+              <div class="w-meta">Cohort: All signups</div>
+            </div>
+            <div class="widget-body">
+              <div class="funnel-row">
+                <div class="f-label">Signups</div>
+                <div class="f-bar"><div class="f-fill" style="width: 100%"></div></div>
+                <div class="f-count">312</div>
+                <div class="f-pct">100%</div>
+              </div>
+              <div class="funnel-row">
+                <div class="f-label">First upload</div>
+                <div class="f-bar"><div class="f-fill" style="width: 64%"></div></div>
+                <div class="f-count">200</div>
+                <div class="f-pct">64%</div>
+              </div>
+              <div class="funnel-row">
+                <div class="f-label">First share link</div>
+                <div class="f-bar"><div class="f-fill amber" style="width: 51%"></div></div>
+                <div class="f-count">159</div>
+                <div class="f-pct">51%</div>
+              </div>
+              <div class="funnel-row">
+                <div class="f-label">First viewer</div>
+                <div class="f-bar"><div class="f-fill amber" style="width: 42%"></div></div>
+                <div class="f-count">131</div>
+                <div class="f-pct">42%</div>
+              </div>
+              <div class="funnel-row">
+                <div class="f-label">Week-2 return</div>
+                <div class="f-bar"><div class="f-fill amber" style="width: 28%"></div></div>
+                <div class="f-count">87</div>
+                <div class="f-pct">28%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="widget">
+            <div class="widget-head">
+              <h3>Recent signups</h3>
+              <div class="w-meta">Last 24h</div>
+            </div>
+            <div class="widget-body">
+              <div class="user-row">
+                <div class="avatar">M</div>
+                <div class="info">
+                  <div class="name">Maya Chen</div>
+                  <div class="meta">PM · Stripe · 2H AGO</div>
+                </div>
+                <div class="badge gf">GF · Free</div>
+              </div>
+              <div class="user-row">
+                <div class="avatar">R</div>
+                <div class="info">
+                  <div class="name">Rashid Mensah</div>
+                  <div class="meta">Consultant · 4H AGO</div>
+                </div>
+                <div class="badge gf">GF · Free</div>
+              </div>
+              <div class="user-row">
+                <div class="avatar">J</div>
+                <div class="info">
+                  <div class="name">Julia Park</div>
+                  <div class="meta">PM · Notion · 7H AGO</div>
+                </div>
+                <div class="badge gf">GF · Free</div>
+              </div>
+              <div class="user-row">
+                <div class="avatar">E</div>
+                <div class="info">
+                  <div class="name">Eli Vandermeer</div>
+                  <div class="meta">Consultant · 11H AGO</div>
+                </div>
+                <div class="badge gf">GF · Free</div>
+              </div>
+              <div class="user-row">
+                <div class="avatar">S</div>
+                <div class="info">
+                  <div class="name">Sofia Ramos</div>
+                  <div class="meta">PM · 14H AGO</div>
+                </div>
+                <div class="badge gf">GF · Free</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="widget">
+          <div class="widget-head">
+            <h3>Unified inbox — prioritised by severity & SLA</h3>
+            <div class="w-meta">3 open · 1 overdue</div>
+          </div>
+          <div class="widget-body">
+            <div class="inbox-row">
+              <div class="pri high"></div>
+              <div class="body">
+                <div class="type">DMCA · OVERDUE 2H</div>
+                <div class="desc">Take-down notice from Acme Studios re: zili.xyz/p/qx7-strategy-deck. Owner: rashid@example.com.</div>
+              </div>
+              <div class="time">4h ago</div>
+            </div>
+            <div class="inbox-row">
+              <div class="pri med"></div>
+              <div class="body">
+                <div class="type">Security · Auto-flagged</div>
+                <div class="desc">Upload from maya@stripe.com matched known XSS pattern. Auto-rejected. Review for false positive.</div>
+              </div>
+              <div class="time">6h ago</div>
+            </div>
+            <div class="inbox-row">
+              <div class="pri med"></div>
+              <div class="body">
+                <div class="type">Abuse report</div>
+                <div class="desc">3 reports on zili.xyz/p/spam-deck-72 for "Spam or misleading". Owner has only 1 artifact total.</div>
+              </div>
+              <div class="time">9h ago</div>
+            </div>
+            <div class="inbox-row">
+              <div class="pri low"></div>
+              <div class="body">
+                <div class="type">Refund request</div>
+                <div class="desc">julia@notion.com requesting refund within 7-day policy window. Charge: $12 (Pro monthly).</div>
+              </div>
+              <div class="time">18h ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">North-star at the top</div>
+        <h4>One KPI gets visual privilege</h4>
+        <p>Shared decks viewed per week is the north-star. It's the dark-ink card with the amber number. Everything else is supporting context.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Unified inbox</div>
+        <h4>One queue, prioritised</h4>
+        <p>DMCA, security, abuse, refunds in one place sorted by severity then SLA. Beats hunting across three dashboards. Red dot = high, amber = med, gray = low.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Health indicator</div>
+        <h4>Always visible in the top-right</h4>
+        <p>Green dot = all systems healthy. Amber = degraded. Red = incident. Click drills into Sentry / status page. Glanceable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 02 — USER DETAIL ============ -->
+  <section class="screen">
+    <div class="screen-head">
+      <div class="label">— Screen 02</div>
+      <h2>User detail. <em>The intervention surface.</em></h2>
+      <p class="desc">Everything an operator needs about one user, on one page. Identity at the top. Facts (plan, grandfather status, counts) in the middle. Recent activity at the bottom. Actions (suspend, comp, refund, delete) always one click away from the header.</p>
+    </div>
+
+    <div class="admin-frame">
+      <div class="admin-nav">
+        <div class="left">
+          <span class="wordmark">Zili<em>.</em></span>
+          <span class="nav-tag">Operator</span>
+          <div class="nav-links">
+            <a>Dashboard</a>
+            <a class="active">Users</a>
+            <a>Moderation</a>
+            <a>Billing</a>
+            <a>Audit log</a>
+          </div>
+        </div>
+        <div class="right">
+          <span><span class="health-dot"></span>All systems healthy</span>
+          <span>alex@zili.xyz</span>
+        </div>
+      </div>
+
+      <div class="page-header">
+        <h1>User <em>profile</em></h1>
+        <div class="ph-meta">Users · <span>maya@stripe.com</span></div>
+      </div>
+
+      <div class="user-detail-body">
+        <div class="user-header">
+          <div class="big-avatar">M</div>
+          <div class="ident">
+            <div class="name">Maya Chen</div>
+            <div class="email">maya@stripe.com · ID #ZL-08214</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary">Send email</button>
+            <button class="btn btn-amber">Comp Pro 3mo</button>
+            <button class="btn btn-secondary">Suspend</button>
+            <button class="btn btn-danger">Delete (GDPR)</button>
+          </div>
+        </div>
+
+        <div class="facts">
+          <div class="fact">
+            <div class="f-label">Plan</div>
+            <div class="f-value">Free</div>
+            <span class="f-tag">Grandfather eligible</span>
+          </div>
+          <div class="fact">
+            <div class="f-label">Signed up</div>
+            <div class="f-value">14 days ago</div>
+            <div class="f-sub">May 10, 2026 · Google OAuth</div>
+          </div>
+          <div class="fact">
+            <div class="f-label">Last active</div>
+            <div class="f-value">2 hours ago</div>
+            <div class="f-sub">Library view</div>
+          </div>
+          <div class="fact">
+            <div class="f-label">Artifacts</div>
+            <div class="f-value">7</div>
+            <div class="f-sub">4 shared publicly</div>
+          </div>
+          <div class="fact">
+            <div class="f-label">Total views</div>
+            <div class="f-value">328</div>
+            <div class="f-sub">87 unique · across 4 decks</div>
+          </div>
+          <div class="fact">
+            <div class="f-label">Suspended</div>
+            <div class="f-value">No</div>
+            <div class="f-sub">No prior incidents</div>
+          </div>
+        </div>
+
+        <div class="table">
+          <div class="table-head">
+            <div>When</div>
+            <div>Activity</div>
+            <div>Views</div>
+            <div>Status</div>
+          </div>
+          <div class="table-row">
+            <div class="t-when">2h ago</div>
+            <div class="t-action"><span class="a-type">Library</span>Opened library — searched "Q2"</div>
+            <div class="t-views">—</div>
+            <div class="t-status private">—</div>
+          </div>
+          <div class="table-row">
+            <div class="t-when">Yesterday</div>
+            <div class="t-action"><span class="a-type">Share</span>Generated link for "Q2 product strategy"</div>
+            <div class="t-views">42</div>
+            <div class="t-status shared">Shared</div>
+          </div>
+          <div class="table-row">
+            <div class="t-when">Yesterday</div>
+            <div class="t-action"><span class="a-type">Upload</span>Uploaded "Q2 product strategy.html" — 14 slides</div>
+            <div class="t-views">—</div>
+            <div class="t-status private">Private</div>
+          </div>
+          <div class="table-row">
+            <div class="t-when">3 days ago</div>
+            <div class="t-action"><span class="a-type">Re-upload</span>Updated "Roadmap exec summary" — preserved share URL</div>
+            <div class="t-views">156</div>
+            <div class="t-status shared">Shared</div>
+          </div>
+          <div class="table-row">
+            <div class="t-when">5 days ago</div>
+            <div class="t-action"><span class="a-type">Share</span>Generated link for "Roadmap exec summary"</div>
+            <div class="t-views">156</div>
+            <div class="t-status shared">Shared</div>
+          </div>
+          <div class="table-row">
+            <div class="t-when">7 days ago</div>
+            <div class="t-action"><span class="a-type">Upload</span>Uploaded "Roadmap exec summary.html" — 8 slides</div>
+            <div class="t-views">—</div>
+            <div class="t-status private">Private</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Actions at the top</div>
+        <h4>One click away from the header</h4>
+        <p>Suspend, comp, delete are always visible. No drill-down to find them. Reduces operator time on routine support actions.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Privacy boundary</div>
+        <h4>Operator sees activity types, not contents</h4>
+        <p>Activity shows "uploaded artifact, 14 slides" — not the deck contents. Opening contents from this view is a separately-logged action (see audit log).</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Grandfather visibility</div>
+        <h4>Status tag on the plan fact</h4>
+        <p>"Grandfather eligible" tag makes the cohort status obvious at a glance. Enables operator to anticipate conversion opportunities and answer support questions instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 03 — MODERATION QUEUE ============ -->
+  <section class="screen">
+    <div class="screen-head">
+      <div class="label">— Screen 03</div>
+      <h2>Moderation queue. <em>One inbox.</em></h2>
+      <p class="desc">Three formerly-separate queues (security rejections, abuse reports, DMCA take-downs) collapsed into one. Filters along the top. Each item carries its own context and a focused set of actions. No tab-switching, no losing place.</p>
+    </div>
+
+    <div class="admin-frame">
+      <div class="admin-nav">
+        <div class="left">
+          <span class="wordmark">Zili<em>.</em></span>
+          <span class="nav-tag">Operator</span>
+          <div class="nav-links">
+            <a>Dashboard</a>
+            <a>Users</a>
+            <a class="active">Moderation</a>
+            <a>Billing</a>
+            <a>Audit log</a>
+          </div>
+        </div>
+        <div class="right">
+          <span><span class="health-dot"></span>All systems healthy</span>
+          <span>alex@zili.xyz</span>
+        </div>
+      </div>
+
+      <div class="page-header">
+        <h1>Moderation <em>queue</em></h1>
+        <div class="ph-meta">Open items: <span>14</span> · Overdue: <span>1</span></div>
+      </div>
+
+      <div class="mod-body">
+        <div class="mod-filters">
+          <button class="mod-filter active">All <span class="count">14</span></button>
+          <button class="mod-filter danger">DMCA <span class="count">2</span></button>
+          <button class="mod-filter">Security <span class="count">5</span></button>
+          <button class="mod-filter">Abuse reports <span class="count">4</span></button>
+          <button class="mod-filter">Refunds <span class="count">3</span></button>
+        </div>
+
+        <div class="queue-item high">
+          <div class="queue-head">
+            <div class="left">
+              <span class="qtype dmca">DMCA · Overdue</span>
+              <span class="qtitle">Acme Studios — take-down for "Series A pitch deck"</span>
+            </div>
+            <div class="right">
+              <span>Owner: <strong>rashid@example.com</strong></span>
+              <span class="sla">SLA breached 2h</span>
+            </div>
+          </div>
+          <div class="queue-body">
+            <div class="qdetails">
+              <strong>Complaint:</strong> Acme Studios LLC alleges <strong>zili.xyz/p/qx7-strategy-deck</strong> includes copyrighted brand assets and Q3 financials disclosed in confidence. Notice received via dmca@zili.xyz at 04:18 today.
+              <div class="qquote">"The presentation contains our company logo, proprietary financial projections from our confidential Q3 board pack, and reproduces verbatim sections of our internal strategy memo."</div>
+            </div>
+            <div class="qactions">
+              <button class="btn btn-primary">Open deck</button>
+              <button class="btn btn-danger">Take down</button>
+              <button class="btn btn-secondary">Request more info</button>
+              <button class="btn btn-secondary">Dismiss</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="queue-item med">
+          <div class="queue-head">
+            <div class="left">
+              <span class="qtype security">Security · Auto-rejected</span>
+              <span class="qtitle">XSS pattern match in upload from maya@stripe.com</span>
+            </div>
+            <div class="right">
+              <span>Rejected: <strong>6h ago</strong></span>
+              <span>Pattern: <strong>onerror_eval</strong></span>
+            </div>
+          </div>
+          <div class="queue-body">
+            <div class="qdetails">
+              <strong>Pattern matched:</strong> Inline event handler containing eval() call. Common XSS vector but also legitimate in some chart libraries.
+              <div class="qquote">&lt;img src="x" onerror="eval(atob('...'))"&gt;</div>
+              <strong>User context:</strong> Active 14 days, 6 prior successful uploads, no prior security flags. Likely false positive — possibly a chart library output.
+            </div>
+            <div class="qactions">
+              <button class="btn btn-primary">View full source</button>
+              <button class="btn btn-amber">Confirm malicious</button>
+              <button class="btn btn-secondary">Mark false positive</button>
+              <button class="btn btn-secondary">Needs review</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="queue-item med">
+          <div class="queue-head">
+            <div class="left">
+              <span class="qtype abuse">Abuse report</span>
+              <span class="qtitle">3 reports on "spam-deck-72" — Spam or misleading</span>
+            </div>
+            <div class="right">
+              <span>Owner: <strong>burner_98342@tempmail.com</strong></span>
+              <span>3 reports / 9h</span>
+            </div>
+          </div>
+          <div class="queue-body">
+            <div class="qdetails">
+              <strong>Account signal:</strong> Signed up 11h ago via email (not Google), no Google OAuth, single artifact, single shared link, 3 unique IPs reporting the same deck within 9 hours.
+              <strong>Reporter context:</strong> All 3 reports from different IPs and ISPs. One left a free-text note: "Just a long ad for a sketchy crypto thing."
+              <div class="qquote">Note from reporter #2: "Just a long ad for a sketchy crypto thing."</div>
+            </div>
+            <div class="qactions">
+              <button class="btn btn-primary">Open deck</button>
+              <button class="btn btn-danger">Suspend account</button>
+              <button class="btn btn-amber">Take down deck</button>
+              <button class="btn btn-secondary">Dismiss reports</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Why one queue</div>
+        <h4>Reduces context-switching</h4>
+        <p>Three separate tools = decision fatigue. One unified inbox sorted by severity and SLA = one focused work session. Per swimlane Insight 03.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Context inline</div>
+        <h4>Decision-relevant info on the row</h4>
+        <p>Each item carries enough context to decide without a click. User signals (account age, Google vs email, prior flags) shown next to the reported content.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">SLA visibility</div>
+        <h4>Overdue is red, calls itself out</h4>
+        <p>DMCA has the strictest SLA. Visible breach as a red flag in the row header. Operator sees the overdue count in the page header too.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 04 — AUDIT LOG ============ -->
+  <section class="screen">
+    <div class="screen-head">
+      <div class="label">— Screen 04</div>
+      <h2>Audit log. <em>Immutable. Searchable.</em></h2>
+      <p class="desc">Every admin action recorded with timestamp, actor, action, target, and reason. Append-only — entries cannot be edited or deleted, including by operators. Filterable by actor, action type, target, date range. The defence against disputes and the proof of operator discipline.</p>
+    </div>
+
+    <div class="admin-frame">
+      <div class="admin-nav">
+        <div class="left">
+          <span class="wordmark">Zili<em>.</em></span>
+          <span class="nav-tag">Operator</span>
+          <div class="nav-links">
+            <a>Dashboard</a>
+            <a>Users</a>
+            <a>Moderation</a>
+            <a>Billing</a>
+            <a class="active">Audit log</a>
+          </div>
+        </div>
+        <div class="right">
+          <span><span class="health-dot"></span>All systems healthy</span>
+          <span>alex@zili.xyz</span>
+        </div>
+      </div>
+
+      <div class="page-header">
+        <h1>Audit <em>log</em></h1>
+        <div class="ph-meta">Showing: <span>Last 7 days · 142 entries</span></div>
+      </div>
+
+      <div class="audit-body">
+        <div class="audit-filters">
+          <div class="filter-group">
+            <span class="label">Actor</span>
+            <select><option>All operators</option></select>
+          </div>
+          <div class="filter-group">
+            <span class="label">Action</span>
+            <select><option>All actions</option></select>
+          </div>
+          <div class="filter-group">
+            <span class="label">Target</span>
+            <input type="text" placeholder="email or ID...">
+          </div>
+          <div class="filter-group">
+            <span class="label">Range</span>
+            <select><option>Last 7 days</option></select>
+          </div>
+        </div>
+
+        <div class="audit-table">
+          <div class="audit-row">
+            <div class="a-when">2026-05-24 14:32</div>
+            <div class="a-actor">alex@zili.xyz</div>
+            <div class="a-action"><span class="a-type delete">Take down</span></div>
+            <div class="a-target">Deck: zili.xyz/p/qx7-strategy<br><span style="color: var(--gray-4); font-size: 11px;">Owner: rashid@example.com</span></div>
+            <div class="a-meta">DMCA · ACME STUDIOS</div>
+          </div>
+          <div class="audit-row">
+            <div class="a-when">2026-05-24 12:18</div>
+            <div class="a-actor">alex@zili.xyz</div>
+            <div class="a-action"><span class="a-type update">Update</span></div>
+            <div class="a-target">CSP allow-list: added cdn.newchartlib.com<br><span style="color: var(--gray-4); font-size: 11px;">Requested by 3+ users</span></div>
+            <div class="a-meta">Asset allow-list</div>
+          </div>
+          <div class="audit-row">
+            <div class="a-when">2026-05-24 09:47</div>
+            <div class="a-actor">alex@zili.xyz</div>
+            <div class="a-action"><span class="a-type create">Grant</span></div>
+            <div class="a-target">User: julia@notion.com<br><span style="color: var(--gray-4); font-size: 11px;">Complimentary Pro · 3 months</span></div>
+            <div class="a-meta">BETA EARLY ACCESS</div>
+          </div>
+          <div class="audit-row">
+            <div class="a-when">2026-05-23 18:04</div>
+            <div class="a-actor">alex@zili.xyz</div>
+            <div class="a-action"><span class="a-type create">Refund</span></div>
+            <div class="a-target">User: julia@notion.com<br><span style="color: var(--gray-4); font-size: 11px;">$12.00 · within 7-day policy</span></div>
+            <div class="a-meta">CUSTOMER REQUEST</div>
+          </div>
+          <div class="audit-row">
+            <div class="a-when">2026-05-23 11:22</div>
+            <div class="a-actor">alex@zili.xyz</div>
+            <div class="a-action"><span class="a-type suspend">Suspend</span></div>
+            <div class="a-target">User: burner_98342@tempmail.com<br><span style="color: var(--gray-4); font-size: 11px;">3 abuse reports confirmed</span></div>
+            <div class="a-meta">SPAM · CRYPTO</div>
+          </div>
+          <div class="audit-row">
+            <div class="a-when">2026-05-22 16:50</div>
+            <div class="a-actor">alex@zili.xyz</div>
+            <div class="a-action"><span class="a-type create">Grant</span></div>
+            <div class="a-target">User: oliver@latebloomer.io<br><span style="color: var(--gray-4); font-size: 11px;">Grandfather eligibility · referred by valid grandfather user</span></div>
+            <div class="a-meta">MANUAL OVERRIDE</div>
+          </div>
+          <div class="audit-row">
+            <div class="a-when">2026-05-21 09:08</div>
+            <div class="a-actor">alex@zili.xyz</div>
+            <div class="a-action"><span class="a-type delete">Delete</span></div>
+            <div class="a-target">User: testacct@disposable.com<br><span style="color: var(--gray-4); font-size: 11px;">GDPR deletion · all data purged</span></div>
+            <div class="a-meta">GDPR · USER REQUEST</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Immutable</div>
+        <h4>Operators cannot edit or delete entries</h4>
+        <p>Even with full admin privileges. This is what makes the log trustworthy in disputes. The Postgres table has no UPDATE or DELETE grant for operator role.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Every action requires a reason</div>
+        <h4>Structured reason codes</h4>
+        <p>Right-most column shows the reason. Reasons come from a structured list (DMCA, GDPR, abuse, beta access, etc.) — prevents ad-hoc decisions and makes pattern analysis possible.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Filter, filter, filter</div>
+        <h4>Investigation surface</h4>
+        <p>When a dispute arrives, the audit log answers it. Filters by actor, action, target, date range. CSV export for legal review.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ IMPLEMENTATION NOTES ============ -->
+  <section class="screen">
+    <div class="screen-head">
+      <div class="label">— For engineering</div>
+      <h2>Implementation <em>notes</em>.</h2>
+      <p class="desc">Per the sprint plan, the admin surface is built in Retool wired to Postgres direct + Stripe API + the application API. The mocks above show the target UX; Retool implements approximations.</p>
+    </div>
+
+    <div class="annotations">
+      <div class="ann">
+        <div class="ann-label">Retool, not custom</div>
+        <h4>S8 implementation, weeks not months</h4>
+        <p>Custom admin UI would consume 2-3 sprints. Retool gives 80% of this UX in 1 sprint by composing tables, queries, and forms over Postgres + Stripe APIs.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">2FA enforcement</div>
+        <h4>Required from day one</h4>
+        <p>Retool workspace locked to operator email + Google OAuth + 2FA. No exceptions. Single-account compromise is the worst-case admin scenario.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Audit log enforcement</div>
+        <h4>Postgres-level, not application-level</h4>
+        <p>Audit log table has triggers on INSERT only. UPDATE and DELETE grants revoked even from operator role. Even Retool can't modify entries — only insert.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Action wrappers</div>
+        <h4>All actions go through audit-logging wrappers</h4>
+        <p>No raw INSERT/UPDATE/DELETE buttons in Retool. Every action button calls a Postgres function that performs the action AND writes the audit row in one transaction.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Reason codes</div>
+        <h4>Structured enum, not free text</h4>
+        <p>reason_code is a Postgres enum: DMCA_TAKEDOWN, GDPR_DELETE, ABUSE_CONFIRMED, BETA_GRANT, etc. Free-text notes optional. Forces consistency for cross-reporting.</p>
+      </div>
+      <div class="ann">
+        <div class="ann-label">Slack ops channel</div>
+        <h4>Mirror critical events to Slack</h4>
+        <p>Every entry in the audit log with a "critical" severity (suspend, delete, DMCA action, refund > $50) posts to #zili-ops Slack channel in real time. Operator sees changes happening even when not in Retool.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="credit">Zili — Admin UI Mocks v0.1 · <em>Operator surface</em></div>
+    <div>Built in Retool · Designed for clarity</div>
+  </footer>
+
+</main>
+</body>
+</html>

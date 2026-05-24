@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zili — Brand Direction v0.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Paper & ink */
+    --paper: #FAF9F5;
+    --paper-deep: #F2F0E8;
+    --ink: #1A1815;
+    --ink-soft: #3A3733;
+
+    /* Gray scale (warm-tinted) */
+    --gray-1: #ECE9E0;
+    --gray-2: #D6D2C7;
+    --gray-3: #A8A39A;
+    --gray-4: #6E6A62;
+
+    /* Accent */
+    --amber: #D26B2C;
+    --amber-deep: #B25620;
+    --amber-tint: #F8E8D8;
+
+    /* Type */
+    --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+
+    /* Scale */
+    --gutter: clamp(24px, 5vw, 64px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+  body {
+    font-family: var(--font-ui);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.55;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: var(--gutter);
+  }
+
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: reveal 0.6s ease-out forwards;
+  }
+  .reveal:nth-child(1) { animation-delay: 0.05s; }
+  .reveal:nth-child(2) { animation-delay: 0.15s; }
+  .reveal:nth-child(3) { animation-delay: 0.25s; }
+  .reveal:nth-child(4) { animation-delay: 0.35s; }
+  .reveal:nth-child(5) { animation-delay: 0.45s; }
+  .reveal:nth-child(6) { animation-delay: 0.55s; }
+  .reveal:nth-child(7) { animation-delay: 0.65s; }
+
+  @keyframes reveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Top meta bar */
+  .meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    padding-bottom: 80px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+
+  .meta-bar .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 96px 0 120px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .hero .wordmark {
+    font-family: var(--font-display);
+    font-size: clamp(72px, 14vw, 168px);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  .hero .wordmark em {
+    font-style: italic;
+    color: var(--amber);
+  }
+  .hero .tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(20px, 2.4vw, 28px);
+    color: var(--ink-soft);
+    margin-top: 32px;
+    max-width: 540px;
+  }
+  .hero .statement {
+    margin-top: 64px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 640px;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  @media (min-width: 720px) {
+    .hero .statement { grid-template-columns: 120px 1fr; gap: 32px; align-items: start; }
+  }
+  .hero .statement .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    padding-top: 4px;
+  }
+
+  /* Section */
+  section.block {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  section.block:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  @media (min-width: 720px) {
+    .section-head { grid-template-columns: 120px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .section-head .num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+  }
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .section-head h2 em { color: var(--amber); font-style: italic; }
+  .section-head .desc {
+    grid-column: 1 / -1;
+    max-width: 580px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+  @media (min-width: 720px) {
+    .section-head .desc { grid-column: 2 / -1; margin-top: 16px; }
+  }
+
+  /* Principles */
+  .principles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--gray-1);
+  }
+  @media (min-width: 720px) {
+    .principles { grid-template-columns: 1fr 1fr; }
+  }
+  .principle {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--gray-1);
+    padding-right: 24px;
+  }
+  @media (min-width: 720px) {
+    .principle:nth-child(odd) { border-right: 1px solid var(--gray-1); padding-right: 32px; }
+    .principle:nth-child(even) { padding-left: 32px; }
+  }
+  .principle .p-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    letter-spacing: 0.04em;
+  }
+  .principle h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 24px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .principle p {
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  /* Palette */
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .palette { grid-template-columns: repeat(4, 1fr); }
+  }
+  .swatch {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--gray-1);
+  }
+  .swatch .chip {
+    height: 120px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .swatch .info {
+    padding: 12px 14px;
+    background: var(--paper);
+  }
+  .swatch .name {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .swatch .hex {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    margin-top: 2px;
+  }
+
+  /* Typography specimen */
+  .type-rows { display: grid; gap: 48px; }
+  .type-row {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .type-row:last-child { border-bottom: none; }
+  @media (min-width: 720px) {
+    .type-row { grid-template-columns: 180px 1fr; gap: 32px; }
+  }
+  .type-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+  }
+  .type-label span {
+    display: block;
+    color: var(--ink);
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .type-display {
+    font-family: var(--font-display);
+    font-size: 56px;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+  }
+  .type-display em { color: var(--amber); font-style: italic; }
+  .type-body {
+    font-family: var(--font-ui);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 540px;
+  }
+  .type-mono {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+    background: var(--paper-deep);
+    padding: 12px 14px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* Components */
+  .components {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) {
+    .components { grid-template-columns: 1fr 1fr; }
+  }
+  .comp-card {
+    background: var(--paper);
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    padding: 28px;
+  }
+  .comp-card .comp-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    margin-bottom: 20px;
+  }
+
+  /* Button */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background 150ms ease-out, transform 150ms ease-out;
+  }
+  .btn-primary:hover { background: var(--ink-soft); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--ink);
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--gray-2);
+    cursor: pointer;
+    transition: border-color 150ms ease-out;
+    margin-left: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--ink); }
+
+  .btn-accent {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--amber);
+    color: var(--paper);
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background 150ms ease-out;
+    margin-left: 8px;
+  }
+  .btn-accent:hover { background: var(--amber-deep); }
+
+  /* Share URL */
+  .share-row {
+    display: flex;
+    align-items: center;
+    background: var(--paper-deep);
+    border: 1px solid var(--gray-1);
+    border-radius: 4px;
+    padding: 0;
+    overflow: hidden;
+  }
+  .share-row .url {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+  .share-row .url .domain { color: var(--gray-4); }
+  .share-row button {
+    background: var(--paper);
+    border: none;
+    border-left: 1px solid var(--gray-1);
+    padding: 0 16px;
+    height: 38px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 150ms ease-out;
+  }
+  .share-row button:hover { background: var(--paper-deep); }
+
+  /* Slide counter / presenter chrome */
+  .presenter-chrome {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .presenter-chrome .left {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .presenter-chrome .left .slash { color: var(--gray-3); }
+  .presenter-chrome .left .total { color: var(--gray-3); }
+  .presenter-chrome .controls {
+    display: flex; gap: 4px;
+  }
+  .presenter-chrome .ctrl {
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 150ms ease-out;
+  }
+  .presenter-chrome .ctrl:hover { background: rgba(255,255,255,0.12); }
+
+  /* File card */
+  .file-card {
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--paper);
+    transition: border-color 150ms ease-out, transform 150ms ease-out;
+    cursor: pointer;
+  }
+  .file-card:hover { border-color: var(--ink); transform: translateY(-1px); }
+  .file-card .thumb {
+    height: 140px;
+    background: var(--paper-deep);
+    background-image:
+      linear-gradient(135deg, transparent 49%, var(--gray-1) 49%, var(--gray-1) 51%, transparent 51%);
+    background-size: 12px 12px;
+    border-bottom: 1px solid var(--gray-1);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 32px;
+    color: var(--ink);
+  }
+  .file-card .info { padding: 14px 16px; }
+  .file-card .title { font-size: 14px; font-weight: 500; }
+  .file-card .meta-line {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-4);
+    margin-top: 4px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .file-card .badge {
+    display: inline-block;
+    padding: 2px 6px;
+    background: var(--amber-tint);
+    color: var(--amber-deep);
+    border-radius: 3px;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Share preview (OG card mock) */
+  .og-card {
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 580px;
+  }
+  .og-card .og-image {
+    height: 240px;
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .og-card .og-image .corner {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .og-card .og-image .title {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    max-width: 80%;
+  }
+  .og-card .og-image .title em { color: var(--amber); font-style: italic; }
+  .og-card .og-image .footer {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-3);
+  }
+  .og-card .og-meta {
+    padding: 14px 18px;
+    background: var(--paper-deep);
+    border-top: 1px solid var(--gray-1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .og-card .og-meta .domain {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-4);
+  }
+
+  /* Anti-patterns */
+  .anti {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--gray-1);
+  }
+  .anti-row {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--gray-1);
+    align-items: baseline;
+  }
+  .anti-row .x {
+    color: var(--gray-3);
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+  .anti-row .what {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink);
+  }
+  .anti-row .why {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 64px 0 32px;
+    border-top: 1px solid var(--gray-1);
+    margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+  }
+  footer .credit em { font-style: italic; color: var(--amber); }
+</style>
+</head>
+<body>
+<main class="container">
+
+  <div class="meta-bar reveal">
+    <div><span class="dot"></span>Zili · Brand Direction</div>
+    <div>v0.1 · May 2026</div>
+  </div>
+
+  <header class="hero reveal">
+    <div class="wordmark">Zili<em>.</em></div>
+    <p class="tagline">Editorial minimal. A frame for content, not the content itself.</p>
+    <div class="statement">
+      <div class="label">— Brand Essence</div>
+      <p>Zili is the last-mile presenter for LLM-generated artifacts. The interface recedes so the artifact can speak. Typography carries the personality. Negative space carries the confidence. A single warm accent carries the action.</p>
+    </div>
+  </header>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <div class="num">01 — Principles</div>
+      <h2>Five rules we <em>don't</em> break.</h2>
+      <p class="desc">These are the constraints that make the brand cohere. When in doubt, return to these.</p>
+    </div>
+    <div class="principles">
+      <div class="principle">
+        <div class="p-num">01</div>
+        <h3>Fidelity is sacred.</h3>
+        <p>The user's artifact is the picture. Our UI is the frame. Never style anything that competes with the rendered content.</p>
+      </div>
+      <div class="principle">
+        <div class="p-num">02</div>
+        <h3>Restraint over polish.</h3>
+        <p>One accent color. One serif moment per view. No second-order decoration. Subtraction is the design move.</p>
+      </div>
+      <div class="principle">
+        <div class="p-num">03</div>
+        <h3>Editorial, not corporate.</h3>
+        <p>We borrow from book design and broadsheet papers, not from SaaS dashboards. Type leads. Color follows.</p>
+      </div>
+      <div class="principle">
+        <div class="p-num">04</div>
+        <h3>Warm, not cold.</h3>
+        <p>Pure white and pure black read as generic. Warm paper and warm ink read as considered. Always tilt warm.</p>
+      </div>
+      <div class="principle">
+        <div class="p-num">05</div>
+        <h3>Confident in silence.</h3>
+        <p>Motion is rare and purposeful. Empty space is intentional. We don't fill the screen because we can.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <div class="num">02 — Palette</div>
+      <h2>Paper, ink, and a <em>single warm spark</em>.</h2>
+      <p class="desc">Achromatic by default. Amber appears only on primary actions, brand moments, and the wordmark accent.</p>
+    </div>
+    <div class="palette">
+      <div class="swatch">
+        <div class="chip" style="background: var(--paper);"></div>
+        <div class="info"><div class="name">Paper</div><div class="hex">#FAF9F5</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--paper-deep);"></div>
+        <div class="info"><div class="name">Paper Deep</div><div class="hex">#F2F0E8</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--ink);"></div>
+        <div class="info"><div class="name">Ink</div><div class="hex">#1A1815</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--ink-soft);"></div>
+        <div class="info"><div class="name">Ink Soft</div><div class="hex">#3A3733</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--gray-1);"></div>
+        <div class="info"><div class="name">Gray Faint</div><div class="hex">#ECE9E0</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--gray-2);"></div>
+        <div class="info"><div class="name">Gray Soft</div><div class="hex">#D6D2C7</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--gray-3);"></div>
+        <div class="info"><div class="name">Gray Mid</div><div class="hex">#A8A39A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--gray-4);"></div>
+        <div class="info"><div class="name">Gray Deep</div><div class="hex">#6E6A62</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--amber);"></div>
+        <div class="info"><div class="name">Amber</div><div class="hex">#D26B2C</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--amber-deep);"></div>
+        <div class="info"><div class="name">Amber Deep</div><div class="hex">#B25620</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--amber-tint);"></div>
+        <div class="info"><div class="name">Amber Tint</div><div class="hex">#F8E8D8</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: linear-gradient(180deg, var(--paper) 0%, var(--ink) 100%);"></div>
+        <div class="info"><div class="name">Range</div><div class="hex">Paper → Ink</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <div class="num">03 — Typography</div>
+      <h2>Geist for the work. <em>Instrument Serif</em> for the soul.</h2>
+      <p class="desc">A geometric sans for everything functional. A characterful serif for everything memorable. Mono for technical truth.</p>
+    </div>
+    <div class="type-rows">
+      <div class="type-row">
+        <div class="type-label">Display<span>Instrument Serif</span></div>
+        <div class="type-display">Present every <em>pixel</em>.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Body<span>Geist</span></div>
+        <p class="type-body">Upload your HTML. We render it faithfully, generate a shareable link, and give your audience a presentation experience that does justice to the work you and your LLM put in.</p>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Mono<span>Geist Mono</span></div>
+        <div class="type-mono">zili.xyz/p/quarterly-strategy-q2</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <div class="num">04 — Components</div>
+      <h2>The pieces of the <em>frame</em>.</h2>
+      <p class="desc">A small set of well-considered components. Each one disappears when not in use.</p>
+    </div>
+    <div class="components">
+
+      <div class="comp-card">
+        <div class="comp-label">Buttons</div>
+        <div>
+          <button class="btn-primary">Upload artifact <span style="font-family: var(--font-mono); font-size: 11px; opacity: 0.6;">⏎</span></button>
+          <button class="btn-secondary">Preview</button>
+        </div>
+        <div style="margin-top: 14px;">
+          <button class="btn-accent">Generate share link</button>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-label">Share URL</div>
+        <div class="share-row">
+          <div class="url"><span class="domain">zili.xyz/p/</span>quarterly-strategy-q2</div>
+          <button>Copy</button>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--gray-4); margin-top: 12px; letter-spacing: 0.02em;">
+          PUBLIC · NO EXPIRY · 0 VIEWS
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-label">Presenter chrome</div>
+        <div class="presenter-chrome">
+          <div class="left">
+            <span style="color: var(--paper); font-weight: 500;">04</span>
+            <span class="slash">/</span>
+            <span class="total">12</span>
+          </div>
+          <div style="font-family: var(--font-display); font-style: italic; font-size: 15px; color: var(--gray-3);">Quarterly strategy</div>
+          <div class="controls">
+            <button class="ctrl" aria-label="Previous">←</button>
+            <button class="ctrl" aria-label="Next">→</button>
+            <button class="ctrl" aria-label="Fullscreen">⛶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-label">Library card</div>
+        <div class="file-card">
+          <div class="thumb">Aa</div>
+          <div class="info">
+            <div class="title">Quarterly strategy — Q2</div>
+            <div class="meta-line">
+              <span>12 SLIDES</span>
+              <span>·</span>
+              <span>UPDATED 2H AGO</span>
+              <span class="badge">Shared</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <div class="num">05 — Share preview</div>
+      <h2>The card that travels.</h2>
+      <p class="desc">Every shared deck has an Open Graph preview. This is where Zili earns its growth loop.</p>
+    </div>
+    <div class="og-card">
+      <div class="og-image">
+        <div class="corner">Zili · Shared presentation</div>
+        <div class="title">Quarterly <em>strategy</em> — Q2 2026</div>
+        <div class="footer">
+          <span>12 slides</span>
+          <span>zili.xyz</span>
+        </div>
+      </div>
+      <div class="og-meta">
+        <div class="domain">zili.xyz</div>
+        <div style="font-family: var(--font-ui); font-size: 13px; color: var(--ink); font-weight: 500;">Present every pixel.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <div class="num">06 — Anti-patterns</div>
+      <h2>What we <em>never</em> do.</h2>
+      <p class="desc">A short list. Each of these would compromise the editorial frame. We don't argue with the list.</p>
+    </div>
+    <div class="anti">
+      <div class="anti-row">
+        <div class="x">✕</div>
+        <div>
+          <div class="what">Gradients.</div>
+          <div class="why">Flat color reads as confident. Gradients read as decoration.</div>
+        </div>
+      </div>
+      <div class="anti-row">
+        <div class="x">✕</div>
+        <div>
+          <div class="what">Bright or saturated palettes.</div>
+          <div class="why">Our users' artifacts already carry the color. We don't add more.</div>
+        </div>
+      </div>
+      <div class="anti-row">
+        <div class="x">✕</div>
+        <div>
+          <div class="what">Drop shadows beyond 1px.</div>
+          <div class="why">Depth is suggested with hairline borders and warm tone, not blur.</div>
+        </div>
+      </div>
+      <div class="anti-row">
+        <div class="x">✕</div>
+        <div>
+          <div class="what">Rounded-everything (radius > 6px).</div>
+          <div class="why">Sharp corners are more editorial. Soft corners are more consumer.</div>
+        </div>
+      </div>
+      <div class="anti-row">
+        <div class="x">✕</div>
+        <div>
+          <div class="what">Emoji in UI chrome.</div>
+          <div class="why">Emoji belong to the user's content. Our chrome stays typographic.</div>
+        </div>
+      </div>
+      <div class="anti-row">
+        <div class="x">✕</div>
+        <div>
+          <div class="what">Glassmorphism, neumorphism, any -ism.</div>
+          <div class="why">Aesthetic trends date the product. Editorial minimalism is harder to date.</div>
+        </div>
+      </div>
+      <div class="anti-row">
+        <div class="x">✕</div>
+        <div>
+          <div class="what">Illustrations or mascots.</div>
+          <div class="why">A serious tool for serious work. Personality lives in the wordmark and the prose.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="credit">Zili — Brand Direction v0.1 · Editorial <em>Minimal</em></div>
+    <div>Draft · Iterate · Lock</div>
+  </footer>
+
+</main>
+</body>
+</html>

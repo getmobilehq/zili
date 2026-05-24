@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zili — Swimlane Journey Map v0.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F5;
+    --paper-deep: #F2F0E8;
+    --ink: #1A1815;
+    --ink-soft: #3A3733;
+    --gray-1: #ECE9E0;
+    --gray-2: #D6D2C7;
+    --gray-3: #A8A39A;
+    --gray-4: #6E6A62;
+    --amber: #D26B2C;
+    --amber-deep: #B25620;
+    --amber-tint: #F8E8D8;
+    --red: #C9483A;
+    --red-tint: #F5E2DE;
+    --font-ui: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+
+    /* Lane row colors */
+    --lane-visitor: #EFF2F0;
+    --lane-viewer: #F3F0EA;
+    --lane-customer: #F5EFE6;
+    --lane-operator: #ECEAE4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+  body {
+    font-family: var(--font-ui);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.55;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  .container {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: var(--gutter);
+  }
+
+  /* Meta bar */
+  .meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .meta-bar .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  /* Hero */
+  .hero { padding: 56px 0 72px; border-bottom: 1px solid var(--gray-1); }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 9vw, 104px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  .hero h1 em { font-style: italic; color: var(--amber); }
+  .hero .tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(18px, 2.2vw, 24px);
+    color: var(--ink-soft);
+    margin-top: 20px;
+    max-width: 720px;
+  }
+  .hero .reading-note {
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: var(--paper-deep);
+    border-radius: 6px;
+    border-left: 2px solid var(--amber);
+    max-width: 720px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .hero .reading-note strong {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  /* Legend */
+  .legend-section { padding: 48px 0 32px; }
+  .legend {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 20px 24px;
+    background: var(--paper-deep);
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  @media (min-width: 720px) {
+    .legend { grid-template-columns: repeat(2, 1fr); gap: 8px 32px; }
+  }
+  @media (min-width: 1100px) {
+    .legend { grid-template-columns: repeat(4, 1fr); }
+  }
+  .legend-item { display: flex; align-items: center; gap: 10px; color: var(--ink-soft); }
+  .legend-item .lswatch {
+    width: 18px; height: 18px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .ls-touchpoint { background: var(--paper); border: 1px solid var(--ink); color: var(--ink); }
+  .ls-magic { background: var(--amber-tint); border: 1px solid var(--amber); color: var(--amber-deep); }
+  .ls-pain { background: var(--red-tint); border: 1px solid var(--red); color: var(--red); }
+  .ls-handoff { background: var(--ink); color: var(--paper); }
+
+  .legend-arrow {
+    display: inline-block;
+    width: 18px; height: 1px;
+    background: var(--amber);
+    position: relative;
+    flex-shrink: 0;
+    margin: 0 2px;
+  }
+  .legend-arrow::after {
+    content: '';
+    position: absolute;
+    right: -1px; top: -3px;
+    width: 0; height: 0;
+    border-left: 5px solid var(--amber);
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+  }
+
+  /* The swimlane itself */
+  .swimlane-wrapper {
+    margin: 32px 0 64px;
+    overflow-x: auto;
+    border: 1px solid var(--gray-1);
+    border-radius: 8px;
+    background: var(--paper);
+  }
+  .swimlane-wrapper::-webkit-scrollbar { height: 10px; }
+  .swimlane-wrapper::-webkit-scrollbar-track { background: var(--paper-deep); }
+  .swimlane-wrapper::-webkit-scrollbar-thumb { background: var(--gray-2); border-radius: 5px; }
+
+  .swimlane {
+    min-width: 1400px;
+    display: grid;
+    grid-template-columns: 180px repeat(6, 1fr);
+  }
+
+  /* Phase headers (top row) */
+  .phase-header-corner {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 20px 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-right: 1px solid var(--gray-1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .phase-header-corner .corner-label {
+    color: var(--gray-3);
+    margin-bottom: 4px;
+  }
+  .phase-header-corner .corner-axis {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--paper);
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  .phase-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 20px 18px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .phase-header:last-child { border-right: none; }
+  .phase-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-3);
+    letter-spacing: 0.08em;
+  }
+  .phase-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.05;
+    margin-top: 4px;
+    letter-spacing: -0.005em;
+  }
+  .phase-desc {
+    font-size: 11px;
+    color: var(--gray-3);
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+
+  /* Lane label cells (left column) */
+  .lane-label {
+    padding: 24px 16px;
+    border-right: 1px solid var(--gray-1);
+    border-top: 1px solid var(--gray-1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .lane-label.lane-1 { background: var(--lane-visitor); }
+  .lane-label.lane-2 { background: var(--lane-viewer); }
+  .lane-label.lane-3 { background: var(--lane-customer); }
+  .lane-label.lane-4 { background: var(--lane-operator); }
+
+  .lane-label .lane-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .lane-label .lane-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .lane-label .lane-volume {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--amber-deep);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+
+  /* Lane cells */
+  .cell {
+    border-right: 1px solid var(--gray-1);
+    border-top: 1px solid var(--gray-1);
+    padding: 14px 12px;
+    position: relative;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cell:last-child { border-right: none; }
+  .cell.lane-1 { background: var(--lane-visitor); }
+  .cell.lane-2 { background: var(--lane-viewer); }
+  .cell.lane-3 { background: var(--lane-customer); }
+  .cell.lane-4 { background: var(--lane-operator); }
+
+  .cell.empty {
+    background: repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 6px,
+      rgba(0,0,0,0.02) 6px,
+      rgba(0,0,0,0.02) 7px
+    );
+  }
+  .cell.empty .empty-text {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: auto;
+  }
+
+  /* Action chip — what they do */
+  .action {
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--ink);
+    font-weight: 500;
+    padding: 2px 0;
+  }
+
+  /* Touchpoint chip — where */
+  .touchpoint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--paper);
+    border: 1px solid var(--gray-2);
+    border-radius: 3px;
+    padding: 3px 7px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    width: fit-content;
+    max-width: 100%;
+  }
+  .touchpoint .tp-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--ink);
+    flex-shrink: 0;
+  }
+
+  /* Magic moment — opportunity callout */
+  .magic {
+    background: var(--amber-tint);
+    border-left: 2px solid var(--amber);
+    padding: 6px 8px;
+    border-radius: 0 3px 3px 0;
+    font-size: 10.5px;
+    color: var(--amber-deep);
+    line-height: 1.35;
+  }
+  .magic .magic-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  /* Pain — friction callout */
+  .pain {
+    background: var(--red-tint);
+    border-left: 2px solid var(--red);
+    padding: 6px 8px;
+    border-radius: 0 3px 3px 0;
+    font-size: 10.5px;
+    color: var(--red);
+    line-height: 1.35;
+  }
+  .pain .pain-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  /* Thought bubble — italic quote */
+  .thought {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.3;
+    padding-left: 8px;
+    border-left: 1px dashed var(--gray-3);
+  }
+  .thought::before { content: '"'; color: var(--gray-3); }
+  .thought::after { content: '"'; color: var(--gray-3); }
+
+  /* Handoff indicators (between lanes) */
+  .handoff-zone {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 18px 16px;
+    margin: 32px 0 0;
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  @media (min-width: 720px) {
+    .handoff-zone { grid-template-columns: 160px 1fr; gap: 24px; align-items: center; }
+  }
+  .handoff-zone .h-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .handoff-zone .h-body {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .handoff-zone .h-body em { color: var(--amber); }
+
+  /* Handoffs grid */
+  .handoffs {
+    margin-top: 48px;
+    padding-top: 48px;
+    border-top: 1px solid var(--gray-1);
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  @media (min-width: 720px) {
+    .section-head { grid-template-columns: 120px 1fr; gap: 32px; align-items: baseline; }
+  }
+  .section-head .num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+  }
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 40px);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .section-head h2 em { color: var(--amber); font-style: italic; }
+  .section-head .desc {
+    grid-column: 1 / -1;
+    max-width: 700px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+  @media (min-width: 720px) {
+    .section-head .desc { grid-column: 2 / -1; margin-top: 14px; }
+  }
+
+  .handoff-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .handoff-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .ho {
+    border: 1px solid var(--gray-1);
+    border-radius: 6px;
+    padding: 22px 24px;
+    background: var(--paper);
+  }
+  .ho .ho-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .ho .ho-flow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gray-1);
+  }
+  .ho .ho-flow .arr { color: var(--amber); margin: 0 4px; }
+  .ho h4 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    margin-bottom: 10px;
+  }
+  .ho p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .ho .ho-mech {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--amber-deep);
+    background: var(--amber-tint);
+    padding: 6px 10px;
+    border-radius: 3px;
+    margin-top: 8px;
+    display: inline-block;
+  }
+
+  /* Footer */
+  footer {
+    padding: 56px 0 24px;
+    border-top: 1px solid var(--gray-1);
+    margin-top: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  footer .credit em { font-style: italic; color: var(--amber); font-family: var(--font-display); text-transform: none; letter-spacing: 0; font-size: 14px; }
+
+  /* Scroll hint for mobile */
+  .scroll-hint {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-4);
+    text-align: center;
+    margin: 12px 0 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  @media (min-width: 1500px) {
+    .scroll-hint { display: none; }
+  }
+
+</style>
+</head>
+<body>
+<main class="container">
+
+  <div class="meta-bar">
+    <div><span class="dot"></span>Zili · Swimlane Journey Map</div>
+    <div>v0.1 · May 2026</div>
+  </div>
+
+  <header class="hero">
+    <h1>Swimlane<em>.</em></h1>
+    <p class="tagline">Four lanes. Six phases. One product-stage axis. Where stakeholders cross paths is where the loops live.</p>
+    <div class="reading-note">
+      <strong>How to read this</strong>
+      The horizontal axis is product-stage, not literal time. Each lane is a stakeholder. Each cell shows what that stakeholder is doing during that phase — and where cells are empty, it means that stakeholder isn't active in that phase. The handoffs between lanes (Phase → Phase) are the conversion mechanisms.
+    </div>
+  </header>
+
+  <section class="legend-section">
+    <div class="legend">
+      <div class="legend-item">
+        <div class="lswatch ls-touchpoint">T</div>
+        <div>Touchpoint — the surface they meet</div>
+      </div>
+      <div class="legend-item">
+        <div class="lswatch ls-magic">!</div>
+        <div>Magic — the moment we earn the next step</div>
+      </div>
+      <div class="legend-item">
+        <div class="lswatch ls-pain">×</div>
+        <div>Friction — what hurts or risks falling off</div>
+      </div>
+      <div class="legend-item">
+        <div class="lswatch ls-handoff">→</div>
+        <div>Handoff — where one stakeholder becomes another</div>
+      </div>
+    </div>
+  </section>
+
+  <p class="scroll-hint">↔ Scroll horizontally to view the full swimlane</p>
+
+  <div class="swimlane-wrapper">
+    <div class="swimlane">
+
+      <!-- ============ PHASE HEADER ROW ============ -->
+      <div class="phase-header-corner">
+        <div class="corner-label">Stakeholder ↓</div>
+        <div class="corner-axis">Phase →</div>
+      </div>
+
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">PHASE 01</div>
+          <div class="phase-name">Discovery</div>
+        </div>
+        <div class="phase-desc">First exposure to Zili. No product touch yet.</div>
+      </div>
+
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">PHASE 02</div>
+          <div class="phase-name">Evaluation</div>
+        </div>
+        <div class="phase-desc">Considering whether to try. The decision moment.</div>
+      </div>
+
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">PHASE 03</div>
+          <div class="phase-name">Activation</div>
+        </div>
+        <div class="phase-desc">First successful use. The magic moment.</div>
+      </div>
+
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">PHASE 04</div>
+          <div class="phase-name">Habituation</div>
+        </div>
+        <div class="phase-desc">Becomes a default workflow tool.</div>
+      </div>
+
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">PHASE 05</div>
+          <div class="phase-name">Monetisation</div>
+        </div>
+        <div class="phase-desc">Free → paid transition.</div>
+      </div>
+
+      <div class="phase-header">
+        <div>
+          <div class="phase-num">PHASE 06</div>
+          <div class="phase-name">Advocacy</div>
+        </div>
+        <div class="phase-desc">Tells others. Becomes a source of new users.</div>
+      </div>
+
+      <!-- ============ LANE 1: ANONYMOUS VISITOR ============ -->
+      <div class="lane-label lane-1">
+        <div class="lane-num">Lane 01</div>
+        <div class="lane-name">Anonymous visitor</div>
+        <div class="lane-volume">Volume — Medium</div>
+      </div>
+
+      <!-- Visitor · Phase 1 -->
+      <div class="cell lane-1">
+        <div class="action">Encounters watermark on a colleague's deck. Sees social post or word-of-mouth.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>External · Watermark / social</div>
+        <div class="thought">What's this Zili thing? Why does that deck look so good?</div>
+      </div>
+
+      <!-- Visitor · Phase 2 -->
+      <div class="cell lane-1">
+        <div class="action">Lands on zili.xyz. Tries the live demo. Scans pricing. Reads examples.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>zili.xyz homepage</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          Live demo proves it works in 10 seconds, no signup.
+        </div>
+        <div class="pain">
+          <div class="pain-label">Friction</div>
+          Skeptical it'll handle their LLM's specific output.
+        </div>
+      </div>
+
+      <!-- Visitor · Phase 3 -->
+      <div class="cell lane-1">
+        <div class="action">Signs up via Google OAuth. Hits /new immediately.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>/signup</div>
+        <div class="thought">Just let me try it.</div>
+      </div>
+
+      <!-- Visitor · Phase 4 -->
+      <div class="cell lane-1 empty"><div class="empty-text">— Becomes Customer —</div></div>
+
+      <!-- Visitor · Phase 5 -->
+      <div class="cell lane-1 empty"><div class="empty-text">N/A</div></div>
+
+      <!-- Visitor · Phase 6 -->
+      <div class="cell lane-1 empty"><div class="empty-text">N/A</div></div>
+
+
+      <!-- ============ LANE 2: ANONYMOUS VIEWER ============ -->
+      <div class="lane-label lane-2">
+        <div class="lane-num">Lane 02</div>
+        <div class="lane-name">Anonymous viewer</div>
+        <div class="lane-volume">Volume — Highest</div>
+      </div>
+
+      <!-- Viewer · Phase 1 -->
+      <div class="cell lane-2">
+        <div class="action">Receives a zili.xyz/p/{slug} link in Slack, email, iMessage, Notion.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>External · OG unfurl</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          Beautiful OG card drives the open.
+        </div>
+      </div>
+
+      <!-- Viewer · Phase 2 -->
+      <div class="cell lane-2">
+        <div class="action">Opens the link. Reads / scrolls / navigates. Sub-1s load required.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>zili.xyz/p/{slug}</div>
+        <div class="pain">
+          <div class="pain-label">Friction</div>
+          Slow cold-load on mobile = silent bounce.
+        </div>
+      </div>
+
+      <!-- Viewer · Phase 3 -->
+      <div class="cell lane-2">
+        <div class="action">Reaches end of deck. Sees end-of-deck CTA: "Make yours, free for 3 months."</div>
+        <div class="touchpoint"><span class="tp-dot"></span>End-of-deck overlay</div>
+        <div class="thought">How did they make that so fast?</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          Strike-while-hot CTA on the last screen.
+        </div>
+      </div>
+
+      <!-- Viewer · Phase 4 -->
+      <div class="cell lane-2">
+        <div class="action">Clicks watermark / CTA. Lands on referrer-aware page: "You just viewed [Title] — make yours."</div>
+        <div class="touchpoint"><span class="tp-dot"></span>Referrer-aware landing</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          Personalised copy converts warm intent.
+        </div>
+      </div>
+
+      <!-- Viewer · Phase 5 -->
+      <div class="cell lane-2 empty"><div class="empty-text">— Becomes Visitor → Customer —</div></div>
+
+      <!-- Viewer · Phase 6 -->
+      <div class="cell lane-2 empty"><div class="empty-text">N/A</div></div>
+
+
+      <!-- ============ LANE 3: CUSTOMER ============ -->
+      <div class="lane-label lane-3">
+        <div class="lane-num">Lane 03</div>
+        <div class="lane-name">Customer (PM / Consultant)</div>
+        <div class="lane-volume">Volume — Core</div>
+      </div>
+
+      <!-- Customer · Phase 1 -->
+      <div class="cell lane-3 empty"><div class="empty-text">— Originates as Visitor or Viewer —</div></div>
+
+      <!-- Customer · Phase 2 -->
+      <div class="cell lane-3 empty"><div class="empty-text">— Pre-signup as Visitor —</div></div>
+
+      <!-- Customer · Phase 3 -->
+      <div class="cell lane-3">
+        <div class="action">Uploads first artifact. Sees perfect render. Triggered to share immediately.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>/new · Artifact detail</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          "Exactly what Claude made." First share prompt.
+        </div>
+        <div class="pain">
+          <div class="pain-label">Friction</div>
+          Wrong mode detection kills the moment.
+        </div>
+      </div>
+
+      <!-- Customer · Phase 4 -->
+      <div class="cell lane-3">
+        <div class="action">Weekly uploads. Library grows. Re-uploads to iterate. Sees view counts climb.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>Library · Re-upload</div>
+        <div class="thought">This is my workflow now.</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          View counter on library card = habit loop.
+        </div>
+      </div>
+
+      <!-- Customer · Phase 5 -->
+      <div class="cell lane-3">
+        <div class="action">Hits grandfather countdown banner. One-click upgrade at $6/mo for life.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>Banner · /pricing</div>
+        <div class="thought">$6 for life vs $12 later — math is easy.</div>
+        <div class="pain">
+          <div class="pain-label">Friction</div>
+          Banner too quiet or too late = window closes.
+        </div>
+      </div>
+
+      <!-- Customer · Phase 6 -->
+      <div class="cell lane-3">
+        <div class="action">Recommends to PM Slack groups / fellow consultants. Posts on X / LinkedIn.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>External · Word-of-mouth</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          Referral program (V1.5): 1 month free both sides.
+        </div>
+      </div>
+
+
+      <!-- ============ LANE 4: OPERATOR ============ -->
+      <div class="lane-label lane-4">
+        <div class="lane-num">Lane 04</div>
+        <div class="lane-name">Operator (you)</div>
+        <div class="lane-volume">Volume — Smallest</div>
+      </div>
+
+      <!-- Operator · Phase 1 -->
+      <div class="cell lane-4">
+        <div class="action">Watches acquisition channels. Tracks where new visitors come from.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>PostHog · UTM dashboard</div>
+        <div class="thought">Which loop is firing?</div>
+      </div>
+
+      <!-- Operator · Phase 2 -->
+      <div class="cell lane-4">
+        <div class="action">Monitors landing-page conversion. A/B tests demo placement and pricing copy.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>PostHog · Funnel</div>
+        <div class="pain">
+          <div class="pain-label">Friction</div>
+          Small numbers make A/B signal weak early on.
+        </div>
+      </div>
+
+      <!-- Operator · Phase 3 -->
+      <div class="cell lane-4">
+        <div class="action">Triages security rejections, render errors. Tunes CSP allow-list. Welcomes new signups in Slack ops channel.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>Admin queues · Slack</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          Slack ops channel = single ops surface.
+        </div>
+      </div>
+
+      <!-- Operator · Phase 4 -->
+      <div class="cell lane-4">
+        <div class="action">Daily metrics. Weekly cohort review. Handles abuse reports, DMCA, refunds.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>Retool · Stripe · Sentry</div>
+        <div class="thought">Anything fall off a cliff overnight?</div>
+        <div class="pain">
+          <div class="pain-label">Friction</div>
+          Multiple queues without unified inbox = fatigue.
+        </div>
+      </div>
+
+      <!-- Operator · Phase 5 -->
+      <div class="cell lane-4">
+        <div class="action">Watches grandfather conversion. Triggers banner cadence. Handles edge cases via manual grandfather grants.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>Admin · Announcements</div>
+        <div class="magic">
+          <div class="magic-label">Magic</div>
+          Pre-built grandfather cohort + saved funnels.
+        </div>
+      </div>
+
+      <!-- Operator · Phase 6 -->
+      <div class="cell lane-4">
+        <div class="action">Identifies advocates. Considers a private community / power-user program. Reviews referral program performance.</div>
+        <div class="touchpoint"><span class="tp-dot"></span>Admin · Top users view</div>
+        <div class="thought">Who are my best evangelists?</div>
+      </div>
+
+    </div>
+  </div>
+
+  <p class="scroll-hint">↔ Scroll horizontally to view the full swimlane</p>
+
+  <!-- HANDOFFS — where lanes cross -->
+  <section class="handoffs">
+    <div class="section-head">
+      <div class="num">02 — Handoffs</div>
+      <h2>Where lanes <em>cross</em>.</h2>
+      <p class="desc">The most important moments in the swimlane are where one stakeholder becomes another. Each handoff is a conversion mechanism — and each one is either a designed moment or an accidental one. Designed moments win.</p>
+    </div>
+
+    <div class="handoff-grid">
+
+      <div class="ho">
+        <div class="ho-num">HANDOFF 01</div>
+        <div class="ho-flow">Viewer <span class="arr">→</span> Visitor</div>
+        <h4>Watermark + end-of-deck CTA</h4>
+        <p>The viewer reaches the end of a shared deck. The watermark and the overlay CTA convert curiosity into a homepage visit. Highest-volume conversion path in the entire product.</p>
+        <div class="ho-mech">Mechanism — End-of-deck overlay · Referrer-aware landing</div>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">HANDOFF 02</div>
+        <div class="ho-flow">Visitor <span class="arr">→</span> Customer (Free)</div>
+        <h4>Live demo + magic first upload</h4>
+        <p>Visitor lands, tries the demo without signup, sees it work, signs up. Then on first upload, the artifact renders perfectly — the moment that earns retention.</p>
+        <div class="ho-mech">Mechanism — Live demo on homepage · Zero-tutorial onboarding</div>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">HANDOFF 03</div>
+        <div class="ho-flow">Customer (Free) <span class="arr">→</span> Customer (Pro)</div>
+        <h4>Grandfather countdown</h4>
+        <p>The 3-month free window closes. Grandfather discount creates urgency without coercion. One-click upgrade with saved payment converts at the moment of decision.</p>
+        <div class="ho-mech">Mechanism — T-30/T-15/T-7/T-1 banner cadence · 50% for life</div>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">HANDOFF 04</div>
+        <div class="ho-flow">Customer <span class="arr">→</span> Advocate</div>
+        <h4>Referral program (V1.5)</h4>
+        <p>Customer recommends Zili to colleagues. Without a structured referral mechanism, this happens organically but isn't measured or rewarded. With a referral program, it becomes a primary growth channel.</p>
+        <div class="ho-mech">Mechanism — V1.5 referral program · 1 month free both sides</div>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">HANDOFF 05</div>
+        <div class="ho-flow">Customer <span class="arr">→</span> Viewer (their audience)</div>
+        <h4>Every share is a recursive loop</h4>
+        <p>Every customer share creates new viewers. The watermark loop closes here — each share is the input to Handoff 01 again. This is the compounding mechanism that makes Zili a growth product, not just a tool.</p>
+        <div class="ho-mech">Mechanism — Share modal · OG card · Watermark on free tier</div>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">HANDOFF 06</div>
+        <div class="ho-flow">Operator <span class="arr">→</span> Customer (support)</div>
+        <h4>Reactive support across phases</h4>
+        <p>The operator intervenes when customers hit edge cases — failed uploads, billing issues, DMCA notices, account suspensions. The runbooks and templated comms determine whether this is a quiet competence or a public fire.</p>
+        <div class="ho-mech">Mechanism — Pre-written runbooks · Templated user comms · Audit log</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHAT THE SWIMLANE REVEALS -->
+  <section class="handoffs">
+    <div class="section-head">
+      <div class="num">03 — What this view adds</div>
+      <h2>What the swimlane <em>uniquely</em> shows.</h2>
+      <p class="desc">Insights that only become visible when stakeholders are placed on a shared horizontal axis, that weren't apparent in the per-stakeholder journey map.</p>
+    </div>
+
+    <div class="handoff-grid">
+
+      <div class="ho">
+        <div class="ho-num">INSIGHT 01</div>
+        <h4>Customer doesn't exist in Phase 1 or 2</h4>
+        <p>Lane 3 (Customer) is empty in Discovery and Evaluation. Every customer originates as a Visitor or a Viewer first. This means the marketing site, the watermark, and the OG card are not "marketing" — they're the actual top of the funnel. They must be a V1 priority, not a V1.5 priority.</p>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">INSIGHT 02</div>
+        <h4>Viewer never enters Phases 5 or 6 directly</h4>
+        <p>The Anonymous viewer must convert to Visitor → Customer before they ever appear in Monetisation or Advocacy. Every cell where the Viewer is active must service the conversion to the next phase, or that volume is wasted.</p>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">INSIGHT 03</div>
+        <h4>Operator is active in every phase</h4>
+        <p>Unlike the other three lanes, the Operator has no empty cells. Every phase of every other lane has an Operator dependency — monitoring, supporting, intervening. Admin tooling is not a side concern; it's the load-bearing infrastructure for everything else.</p>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">INSIGHT 04</div>
+        <h4>Phase 6 has no Viewer or Visitor presence</h4>
+        <p>Advocacy is a closed loop between Customer and Operator. There's no direct path from Visitor → Advocate; they have to traverse the full lane first. This validates the sequencing: get the core Customer journey right before investing in advocacy programs.</p>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">INSIGHT 05</div>
+        <h4>Three magic moments cluster in Phase 3</h4>
+        <p>The end-of-deck CTA (Viewer), the first signup OAuth (Visitor), and the first-upload magic (Customer) all sit in Activation. A bad Phase 3 breaks three lanes simultaneously. This is where engineering effort compounds.</p>
+      </div>
+
+      <div class="ho">
+        <div class="ho-num">INSIGHT 06</div>
+        <h4>Recursive loop visible in Customer Phase 6 → Viewer Phase 1</h4>
+        <p>The diagonal flow from "Customer · Advocacy" back up to "Viewer · Discovery" is the compounding mechanism. Every product decision should be evaluated against whether it strengthens or weakens this diagonal arrow. If it doesn't strengthen it, it competes with it.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="credit">Zili — Swimlane Journey Map v0.1 · <em>End to end</em></div>
+    <div>Draft · Iterate · Lock</div>
+  </footer>
+
+</main>
+</body>
+</html>
