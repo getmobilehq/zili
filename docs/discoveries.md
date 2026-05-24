@@ -37,4 +37,14 @@ When Claude Code finds a bug, missing feature, or improvement that isn't in the 
 
 ## Entries
 
-*No entries yet. Sprint 1 hasn't started.*
+## 2026-05-24 · Sprint 1 · `_render` URL collides with Next.js private folders
+
+**What:** Handoff §4/§5 specify the renderer URL `/_render/{artifact_id}`. In the Next.js App Router, any folder whose name starts with `_` is a *private folder* and is excluded from routing — so an `app/_render/` directory produces no route and the URL 404s. Resolved in S1.4 by naming the on-disk folder `app/%5Frender/` (URL-encoded underscore), which Next maps to the literal URL segment `/_render`. The public URL is exactly as the handoff mandates; only the folder name differs from the §5 tree diagram.
+
+**Why it matters:** The §5 repo-structure diagram shows `_render/[artifact_id]/`, which would silently fail if recreated literally. Anyone reading §5 (or regenerating the tree) needs to know the folder is `%5Frender`. The underlying URL contract is unaffected.
+
+**Recommended priority:** Next sprint (doc fix) — not urgent; the renderer works.
+
+**Suggested approach:** Update the §5 tree in `docs/zili-claude-code-handoff.md` to show `%5Frender/[artifact_id]/` with a one-line note, or pick a non-underscore internal prefix if the literal `/_render/` URL isn't essential. SKILLS.md could gain a one-liner on Next private folders.
+
+**Found by:** Claude Code

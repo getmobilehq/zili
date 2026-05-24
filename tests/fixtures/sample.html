@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sample artifact</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --fg: #e2e8f0;
+        --accent: #38bdf8;
+      }
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 4rem 2rem;
+      }
+      .card {
+        max-width: 40rem;
+        text-align: center;
+      }
+      h1 {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+      .accent {
+        color: var(--accent);
+      }
+      p {
+        margin-top: 1rem;
+        font-size: 1.125rem;
+        opacity: 0.85;
+      }
+      .badge {
+        margin-top: 2rem;
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--accent);
+        border-radius: 999px;
+        font-size: 0.875rem;
+      }
+      svg {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 1.5rem;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+        <path d="M3 7l9-4 9 4-9 4-9-4z" />
+        <path d="M3 12l9 4 9-4" />
+        <path d="M3 17l9 4 9-4" />
+      </svg>
+      <h1>Render fidelity <span class="accent">works</span>.</h1>
+      <p>
+        This is a self-contained HTML artifact — inline CSS, an inline SVG, a CSS
+        custom property, and a fluid <code>clamp()</code> headline. If it looks
+        right inside the sandbox, the hardest bet holds.
+      </p>
+      <span class="badge">Sprint 1 · sandboxed render</span>
+    </div>
+    <script>
+      // Proves the sandbox allows scripts (allow-scripts) while CSP allows inline.
+      document.querySelector('.badge').textContent =
+        'Sprint 1 · sandboxed render · JS ran at ' + new Date().toISOString().slice(11, 19);
+    </script>
+  </body>
+</html>

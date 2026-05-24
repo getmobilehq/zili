@@ -39,7 +39,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     const artifactId = asArtifactId(crypto.randomUUID());
     await putArtifactHtml(artifactId, content);
 
-    return Response.json({ id: artifactId, url: `/_render/${artifactId}` }, { status: 201 });
+    // Viewer hosts the sandboxed iframe; /_render is the iframe's content src.
+    return Response.json({ id: artifactId, url: `/a/${artifactId}` }, { status: 201 });
   } catch (error) {
     if (error instanceof ZiliError) {
       return errorResponse(error);
