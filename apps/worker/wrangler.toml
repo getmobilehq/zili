@@ -1,0 +1,10 @@
+name = "zili-asset-proxy"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+# Secrets, set via `wrangler secret put` (not committed):
+#   SUPABASE_URL        — project REST base, e.g. https://xxxx.supabase.co
+#   SUPABASE_ANON_KEY   — anon key; asset_allowlist is public-readable (RLS)
+#
+# Deploy is deferred until the Cloudflare account exists. `wrangler dev` runs
+# the worker locally against those secrets in .dev.vars.
