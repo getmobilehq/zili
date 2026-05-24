@@ -54,9 +54,9 @@ describe('validateUpload', () => {
   });
 
   it('rejects a file over the 10MB limit', () => {
-    expect(thrownCode(() => validateUpload({ content: html, byteLength: MAX_UPLOAD_BYTES + 1 }))).toBe(
-      'FILE_TOO_LARGE',
-    );
+    expect(
+      thrownCode(() => validateUpload({ content: html, byteLength: MAX_UPLOAD_BYTES + 1 })),
+    ).toBe('FILE_TOO_LARGE');
   });
 
   it('rejects non-HTML content', () => {
